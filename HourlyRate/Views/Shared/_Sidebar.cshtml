@@ -1,0 +1,107 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    var menuController = (ViewContext.RouteData.Values["controller"] != null) ? ViewContext.RouteData.Values["controller"]!.ToString() : null;
+    var menuAction = (ViewContext.RouteData.Values["action"] != null) ? ViewContext.RouteData.Values["action"]!.ToString() : null;
+    var sidebarMenu = Configuration.GetSection("sidebarMenu").GetChildren().ToArray();
+}
+
+<!-- BEGIN #sidebar -->
+<div id="sidebar" class="app-sidebar">
+    <!-- BEGIN scrollbar -->
+    <div class="app-sidebar-content" data-scrollbar="true" data-height="100%">
+        <!-- BEGIN menu -->
+        <div class="menu">
+            @foreach (var menu in sidebarMenu)
+            {
+                var menuChildren = menu.GetSection("children").GetChildren().ToArray();
+
+                @if (menu["is_header"] != null)
+                {
+                    <div class="menu-header">
+                        @menu["text"]
+                    </div>
+                }
+                else if (menu["is_divider"] != null)
+                {
+                    <div class="menu-divider"></div>
+                }
+                else
+                {
+                    <div class="menu-item @(menuController == @menu["controller"] ? "active" : "") @(menuChildren.Length > 0 ? "has-sub" : "")">
+                        @if (menu["action"] != null && menu["controller"] != null)
+                        {
+                            <a asp-controller="@menu["controller"]" asp-action="@menu["action"]" asp-area="@menu["area"]" class="menu-link">
+                                <span class="menu-icon">
+                                    @if (menu["icon"] != null)
+                                    {
+                                        <i class="@menu["icon"]"></i>
+                                    }
+                                    @if (menu["label"] != null)
+                                    {
+                                        <span class="menu-icon-label">@menu["label"]</span>
+                                    }
+                                </span>
+                                <span class="menu-text">@menu["text"]</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="#" class="menu-link">
+                                <span class="menu-icon">
+                                    @if (menu["icon"] != null)
+                                    {
+                                        <i class="@menu["icon"]"></i>
+                                    }
+                                    @if (menu["label"] != null)
+                                    {
+                                        <span class="menu-icon-label">@menu["label"]</span>
+                                    }
+                                </span>
+                                <span class="menu-text">@menu["text"]</span>
+                                @if (menuChildren.Length > 0)
+                                {
+                                    <span class="menu-caret"><b class="caret"></b></span>
+                                }
+                            </a>
+                        }
+                        @if (menuChildren.Length > 0)
+                        {
+                            <div class="menu-submenu">
+                                @foreach (var submenu in menuChildren)
+                                {
+                                    <div class="menu-item @(menuAction == @submenu["action"] ? "active" : "")">
+                                        <a asp-controller="@submenu["controller"]" asp-action="@submenu["action"]" asp-area="@submenu["area"]" class="menu-link">
+                                            <span class="menu-text">@submenu["text"]</span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                }
+
+            }
+            <div class="menu-item">
+@*                <a href="/Identity/Account/Manage" class="menu-link">
+                    <span class="menu-icon">
+                        <i class="fa fa-fingerprint"></i>
+                    </span>
+                    <span class="menu-text">ASP Identity</span>
+                </a>*@
+            </div>
+            <div class="p-3 px-4 mt-auto hide-on-minified">
+                <a href="#" class="btn d-block w-100 btn-secondary font-weight-600 rounded-pill">
+                    <i class="fa fa-code-branch me-1 ms-n1 opacity-5"></i> Documentation
+                </a>
+            </div>
+        </div>
+        <!-- END menu -->
+    </div>
+    <!-- END scrollbar -->
+    <!-- BEGIN mobile-sidebar-backdrop -->
+    <button class="app-sidebar-mobile-backdrop" data-dismiss="sidebar-mobile"></button>
+    <!-- END mobile-sidebar-backdrop -->
+</div>
+<!-- END #sidebar -->

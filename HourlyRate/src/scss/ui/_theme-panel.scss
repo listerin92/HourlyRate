@@ -1,0 +1,78 @@
+.theme-panel {
+	position: fixed;
+	z-index: $app-header-zindex + 10;
+	right: rem(-238px);
+	top: rem(200px);
+	width: rem(238px);
+	
+	border-radius: $border-radius 0 0 $border-radius;
+	transition: right .2s linear;
+	
+	&.active {
+		right: 0;
+		box-shadow: 0 0 16px rgba($black,.15);
+	}
+	& .theme-collapse-btn {
+    position: absolute;
+    left: rem(-40px);
+    top: 50%;
+    margin-top: rem(-20px);
+    width: rem(40px);
+    height: rem(40px);
+    line-height: rem(40px);
+    font-size: $font-size-lg;
+    color: var(--app-component-color);
+    background: var(--app-component-bg);
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 0 16px rgba($black, .15);
+    border-radius: $border-radius 0 0 $border-radius;
+	}
+	& .theme-panel-content {
+		padding: rem(10px);
+		background: var(--app-component-bg);
+		position: relative;
+		border-radius: $border-radius 0 0 $border-radius;
+	}
+	& .theme-list {
+		list-style-type: none;
+		margin: 0 rem(-5px) rem(-5px) 0;
+		padding: 0;
+		
+		& > li {
+			float: left;
+			margin-right: rem(5px);
+			margin-bottom: rem(5px);
+		
+			& > a {
+				width: rem(32px);
+				height: rem(32px);
+				display: block;
+				text-decoration: none;
+				position: relative;
+				overflow: hidden;
+				border-radius: $border-radius;	
+				transition: all .2s linear;
+			}
+			&.active {
+				& > a {
+					&:before {
+						content: '\f00c';
+						position: absolute;
+						left: 0;
+						right: 0;
+						top: 0;
+						bottom: 0;
+						font-size: $font-size-base;
+						color: $white;
+						opacity: .75;
+						line-height: rem(36px);
+						text-align: center;
+						
+						@include fontawesome();
+					}
+				}
+			}
+		}
+	}
+}

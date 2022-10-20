@@ -1,0 +1,47 @@
+@page
+@model HourlyRate.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
+    ViewData["AppWithoutHeader"] = true;
+    ViewData["AppWithoutSidebar"] = true;
+    ViewData["AppWithoutContainer"] = true;
+}
+
+<!-- BEGIN register -->
+<div class="register">
+	<!-- BEGIN register-content -->
+	<div class="register-content">
+		<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+			<h1 class="text-center">Sign Up</h1>
+			<p class="text-muted text-center">One Admin ID is all you need to access all the Admin services.</p>
+      <div asp-validation-summary="All" class="text-danger"></div>
+			<div class="mb-3">
+				<label asp-for="Input.Email" class="form-label"></label>
+				<input asp-for="Input.Email" class="form-control form-control-lg fs-15px" placeholder="e.g John Smith" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<label asp-for="Input.Password" class="form-label"></label>
+				<input asp-for="Input.Password" class="form-control form-control-lg fs-15px" value="" />
+			</div>
+			<div class="mb-3">
+				<label asp-for="Input.ConfirmPassword" class="form-label"></label>
+				<input asp-for="Input.ConfirmPassword" class="form-control form-control-lg fs-15px" value="" />
+        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<button type="submit" class="btn btn-primary btn-lg fs-15px fw-500 d-block w-100">Sign Up</button>
+			</div>
+			<div class="text-muted text-center">
+				Already have an Admin ID? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Sign In</a>
+			</div>
+		</form>
+	</div>
+	<!-- END register-content -->
+</div>
+<!-- END register -->
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

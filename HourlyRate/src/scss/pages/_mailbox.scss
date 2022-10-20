@@ -1,0 +1,322 @@
+.mailbox {
+	background: var(--app-component-bg);
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	
+	& .mailbox-toolbar {
+		padding: rem(10px);
+		display: flex;
+		
+		@include media-breakpoint-down(lg) {
+			position: fixed;
+			top: $app-header-height;
+			left: 0;
+			right: 0;
+			background: var(--app-component-bg);
+			border-bottom: 1px solid var(--app-component-border-color);
+			z-index: 10;
+			overflow: scroll;
+			white-space: nowrap;
+			flex-wrap: nowrap;
+		}
+		& .mailbox-toolbar-text {
+			color: $gray-500;
+			padding: rem(5px);
+		}
+		& .mailbox-toolbar-link {
+			padding: rem(5px) rem(10px);
+		}
+		& .mailbox-toolbar-item {
+			padding: rem(5px);
+		}
+		& .mailbox-toolbar-link {
+			color: var(--app-component-color);
+			text-decoration: none;
+			border-radius: $border-radius;
+			
+			&:hover {
+				background: var(--bs-light);
+			}
+			&.active {
+				background: var(--app-component-active-bg);
+				color: var(--app-component-active-color);
+			}
+		}
+	}
+	& .mailbox-body {
+		border-top: 1px solid var(--app-component-border-color);
+		overflow: hidden;
+		flex: 1;
+		display: flex;
+		
+		@include media-breakpoint-down(lg) {
+			padding-top: rem(50px);
+		}
+		
+		& .mailbox-sidebar {
+			max-width: rem(360px);
+			height: 100%;
+			
+			@include media-breakpoint-down(lg) {
+				max-width: 100%;
+				height: auto;
+			}
+			
+			& + .mailbox-content {
+				@if $enable-rtl {
+					border-right: 1px solid var(--app-component-border-color);
+				} @else {
+					border-left: 1px solid var(--app-component-border-color);
+				}
+				
+				@include media-breakpoint-down(lg) {
+					@if $enable-rtl {
+						border-right: none;
+					} @else {
+						border-left: none;
+					}
+				}
+			}
+		}
+		& .mailbox-content {
+			height: 100%;
+			flex: 1;
+		}
+	}
+	& .mailbox-empty-message {
+		min-height: 100%;
+		width: 100%;
+		padding: rem(20px);
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		
+		& .mailbox-empty-message-img {
+			width: 100%;
+			text-align: center;
+			margin-bottom: rem(15px);
+			
+			& img {
+				width: 100%;
+				height: 100%;
+				max-width: rem(480px);
+				max-height: rem(480px);
+				opacity: 0.5
+			}
+		}
+		& .mailbox-empty-message-title {
+			font-size: rem(20px);
+			font-weight: $font-weight-bold;
+			color: $gray-300;
+		}
+	}
+	& .mailbox-list {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	
+		& .mailbox-list-item {
+			padding: rem(15px) rem(20px);
+			display: flex;
+			
+			& + .mailbox-list-item {
+				border-top: 1px solid var(--app-component-border-color);
+			}
+			&:hover {
+				background-color: var(--app-component-hover-bg);
+			}
+			&.unread {
+				& .mailbox-message {
+					& .mailbox-title {
+						font-weight: $font-weight-bold;
+						color: var(--app-component-color);
+					}
+				}
+			}
+			&.active {
+				background: var(--bs-light);
+				
+				.dark-mode & {
+					background: $gray-900;
+				}
+			}
+			&.has-attachment {
+				& .mailbox-checkbox:after {
+					content: '\f0c1';
+					position: absolute;
+					top: rem(25px);
+					text-align: center;
+					color: $gray-500;
+					width: rem(18px);
+					
+					@include fontawesome();
+					@if $enable-rtl {
+						right: 0;
+					} @else {
+						left: 0;
+					}
+				}
+			}
+		}
+		& .mailbox-checkbox {
+			position: relative;
+			
+			& + .mailbox-message {
+				@if $enable-rtl {
+					padding-right: rem(5px);
+				} @else {
+					padding-left: rem(5px);
+				}
+			}
+		}
+		& .mailbox-message {
+			flex: 1;
+		
+			& .mailbox-list-item-link {
+				display: block;
+				color: var(--app-component-color);
+				text-decoration: none;
+				position: relative;
+			}
+			& .mailbox-sender {
+				position: relative;
+				
+				display: flex;
+				align-items: center;
+				
+				& .mailbox-sender-name {
+					font-weight: $font-weight-bold;
+					flex: 1;
+					
+					@if $enable-rtl {
+						margin-left: auto;
+					} @else {
+						margin-right: auto;
+					}
+				}
+				& .mailbox-time {
+					font-size: $font-size-base - rem(2px);
+					color: rgba(var(--app-component-color-rgb), .5);
+					font-weight: $font-weight-semi-bold;
+					
+					@if $enable-rtl {
+						padding-right: rem(5px);
+					} @else {
+						padding-left: rem(5px);
+					}
+				}
+			}
+			& .mailbox-title {
+				color: var(--app-component-color);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: rem(290px);
+			}
+			& .mailbox-desc {
+				position: relative;
+				font-size: $font-size-base - rem(1px);
+				color: rgba(var(--app-component-color-rgb), .5);
+				max-height: rem(42px);
+				overflow: hidden;
+			}
+		}
+	}
+	& .mailbox-detail {
+		padding: rem(30px);
+		
+		@include media-breakpoint-down(lg) {
+			padding: rem(20px);
+		}
+		
+		& .mailbox-detail-header {
+			border-bottom: 1px solid var(--app-component-border-color);
+			padding: 0 0 rem(20px);
+		}
+		& .mailbox-detail-content {
+			padding: rem(20px) 0;
+		}
+		& .mailbox-detail-body {
+			font-size: $font-size-base;
+		}
+		& .mailbox-detail-attachment {
+			display: flex;
+			
+			& .mailbox-attachment {
+				background: $gray-200;
+				width: rem(120px);
+				overflow: hidden;
+				margin-bottom: rem(10px);
+				border-radius: $border-radius;
+				
+				.dark-mode & {
+					background: $gray-900;
+				}
+				
+				@if $enable-rtl {
+					margin-left: rem(10px);
+				} @else {
+					margin-right: rem(10px);
+				}
+				
+				& a {
+					display: block;
+					text-decoration: none;
+				}
+				& .document-file {
+					height: rem(60px);
+					overflow: hidden;
+					text-align: center;
+					background: var(--bs-light);
+					
+					& i {
+						display: block;
+						line-height: rem(60px);
+						font-size: rem(32px);
+						color: $gray-500;
+					}
+					& img {
+						max-width: 100%;
+					}
+				}
+				& .document-name {
+					color: rgba(var(--app-component-color-rgb), .75);
+					padding: rem(2px) rem(10px);
+					font-size: $font-size-base - rem(1px);
+					font-weight: $font-weight-semi-bold;
+					text-align: center;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+			}
+		}
+	}
+	& .mailbox-form {
+		background: lighten($gray-900, 80%);
+		
+		.dark-mode & {
+			background: darken($gray-100, 80%);
+		}
+		& .mailbox-form-header {
+			padding: rem(20px);
+		}
+		& .note-editor {
+			border: none;
+			border-radius: 0;
+			
+			& .note-toolbar {
+				border-top: 1px solid var(--app-component-border-color);
+				border-bottom: 1px solid var(--app-component-border-color);
+			}
+			& .note-editing-area {
+				background: var(--app-component-bg);
+			}
+		}
+	}
+}

@@ -1,0 +1,48 @@
+.app-footer {
+	left: 0;
+	right: 0;
+	bottom: 0;
+	line-height: rem(20px);
+	padding: rem(20px) $app-content-padding-x;
+	border-top: 1px solid var(--app-component-border-color);
+	background: var(--bs-body-bg);
+	font-weight: $font-weight-semi-bold;
+	
+	@if $enable-rtl {
+		margin-right: $app-sidebar-width;
+	} @else {
+		margin-left: $app-sidebar-width;
+	}
+	@include media-breakpoint-down(md) {
+		padding-left: $app-content-sm-padding-x;
+		padding-right: $app-content-sm-padding-x;
+		
+		@if $enable-rtl {
+			margin-right: 0 !important;
+		} @else {
+			margin-left: 0 !important;
+		}
+	}
+}
+.app-content-full-width .app-footer {
+	@if $enable-rtl {
+		margin-right: 0;
+	} @else {
+		margin-left: 0;
+	}
+}
+.app-sidebar-minified .app-footer {
+	@if $enable-rtl {
+		margin-right: $app-sidebar-minify-width;
+	} @else {
+		margin-left: $app-sidebar-minify-width;
+	}
+}
+.app-footer-fixed {
+	& .app-content {
+		padding-bottom: rem(60px);
+	}
+	& .app-footer {
+		position: fixed;
+	}
+}

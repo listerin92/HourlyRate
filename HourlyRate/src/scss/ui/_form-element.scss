@@ -1,0 +1,16 @@
+.form-switch .form-check-input {
+	background-image: var(--form-switch-bg-image);
+}
+.form-control,
+.form-select {
+	border-color: var(--app-component-border-color);
+}
+.form-select:not([multiple]) {
+	& option {
+		color: $black;
+	}
+}
+.form-check-input:checked {
+	background-color: var(--app-component-active-bg);
+	border-color: var(--app-component-active-bg);
+}

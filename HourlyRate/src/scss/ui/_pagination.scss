@@ -1,0 +1,14 @@
+.pagination {
+	& .page-item {
+		& .page-link {
+			border-radius: rem($border-radius);
+		}
+		& + .page-item {
+			@if $enable-rtl {
+				margin-right: $spacer * .15;
+			} @else {
+				margin-left: $spacer * .15;
+			}
+		}
+	}
+}

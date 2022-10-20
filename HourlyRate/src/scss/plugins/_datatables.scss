@@ -1,0 +1,206 @@
+.dataTables_wrapper {
+	& .dataTables_length {
+		@include media-breakpoint-down(sm) {
+			margin-bottom: $spacer * .5;
+		}
+	}
+	& .dataTables_scroll {
+		& .dataTables_scrollHead {
+			& .dataTables_scrollHeadInner {
+				& .dataTable {
+					margin-bottom: 0 !important;
+					
+					& > :not(caption) > * {
+						border-bottom: 2px solid var(--app-component-table-separator-color);
+					}
+				}
+			}
+		}
+		& .dataTables_scrollFootInner,
+		&	.dataTables_scrollHeadInner {
+			& table.table-bordered tr th:first-child {
+				border-color: var(--app-component-table-border-color) !important;
+			}
+		}
+		& .dataTables_scrollBody {
+			border-color: var(--app-component-table-border-color) !important;
+			
+			& > .dataTable {
+				margin-top: rem(-4px) !important;
+				background: var(--app-component-bg);
+			}
+		}
+		& table.dataTable th,
+		& tr.even td {
+			background: none !important;
+			border-color: var(--app-component-table-border-color) !important;
+		}
+		& tr.odd td {
+			background: var(--bs-table-striped-bg) !important;
+			border-color: var(--app-component-table-border-color) !important;
+		}
+		& div.dtfc-right-top-blocker, 
+		& div.dtfc-left-top-blocker {
+			margin-top: rem(12px) !important;
+			background-color: var(--app-component-table-border-color) !important;
+		}
+	}
+}
+
+table.dataTable {
+	body & {
+		border-collapse: collapse !important;
+		margin: $spacer * .85 0 !important;
+	
+		&.dtfc-has-left {
+			margin: -1px 0 !important;
+		}
+		& thead { 
+			& tr {
+				& th {
+					border-bottom: $table-border-width solid $table-group-separator-color;
+					
+					&.sorting,
+					&.sorting_asc,
+					&.sorting_desc {
+						overflow: hidden;
+					
+						&:before {
+							display: none;
+						}
+						&:after {
+							opacity: 1;
+							color: $gray-300;
+							top: 0;
+							bottom: 0;
+							font-size: $font-size-base;
+							display: flex;
+							align-items: center;
+						
+							@include fontawesome();
+							
+							.dark-mode & {
+								color: $gray-700;
+							}
+						}
+					}
+		
+					&.sorting {
+						&:after {
+							content: '\f0dc';
+						}
+					}
+					&.sorting_asc {
+						&:after {
+							content: '\f0dd';
+							color: var(--app-component-active-bg);
+						}
+					}
+					&.sorting_desc {
+						&:after {
+							content: '\f0de';
+							color: var(--app-component-active-bg);
+						}
+					}
+					&:focus {
+						outline: none;
+					}
+				}
+			}
+		}
+		& tbody {
+			& tr {
+				& td {
+					&.focus {
+						outline: none;
+						z-index: 10;
+						position: relative;
+						box-shadow: inset 0 0 0 2px var(--app-component-active-bg);
+					}
+					&:focus {
+						outline: none;
+					}
+				}
+			
+				&.selected {
+					& td {
+						background: $yellow-100 !important;
+						color: $yellow-800 !important;
+						font-weight: $font-weight-bold;
+						box-shadow: none;
+					}
+				}
+				&.dt-rowReorder-moving {
+					outline: 2px solid lighten($dark, 45%);
+				}
+			}
+		}
+		&.dt-rowReorder-float {
+			outline: 2px solid var(--app-component-active-bg);
+		}
+		&.dtr-inline.collapsed > tbody > tr {
+			& > {
+				& td,
+				& th {
+					&.dtr-control {
+						&:before {
+							left: rem(7px);
+							content: '\2b';
+							background: $gray-300;
+							border: none;
+							color: var(--app-componet-color);
+							font-size: $font-size-sm;
+							width: rem(18px);
+							height: rem(18px);
+							margin-top: rem(-9px);
+							border-radius: $border-radius;
+							box-shadow: none;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							
+							@include fontawesome();
+							
+							.dark-mode & {
+								background: $gray-700;
+							}
+						}
+					}
+				}
+			}
+			&.dt-hasChild {
+				& > td,
+				& > th {
+					&.dtr-control {
+						&:before {
+							content: '\f068';
+							background: var(--app-component-active-bg);
+							color: var(--app-component-active-color);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+.dtfh-floatingparent {
+	body & {
+		height: auto !important;
+		z-index: $app-header-zindex + 10 !important;
+		
+		& .dataTable {
+			background: var(--app-component-bg) !important;
+			
+			& > :not(caption) > * {
+				border-bottom: 2px solid var(--app-component-table-separator-color);
+			}
+		}
+	}
+}
+div.DTCR_pointer {
+	body & {
+		width: 2px;
+		margin-left: -2px;
+		background-color: var(--app-component-active-bg);
+	}
+}

@@ -1,0 +1,68 @@
+.coming-soon {
+	min-height: 100%;
+	padding: rem(30px);
+	display: flex;
+	align-items: center;
+	
+	@include media-breakpoint-down(sm) {
+		padding: rem(20px);
+	}
+	
+	& .coming-soon-img {
+		& img {
+			max-width: 100%;
+		}
+	}
+	& .coming-soon-content {
+		position: relative;
+		text-align: center;
+		max-width: rem(520px);
+		margin: 0 auto;
+		flex: 1;
+	}
+	& .is-countdown {
+		background: none;
+		border: none;
+		margin: 0;
+		padding: 0;
+		
+		@include clearfix();
+		
+		& .countdown-row {
+			display: block;
+			padding: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		& .countdown-show4 .countdown-section {
+			width: rem(80px);
+			background: $gray-200;
+			padding: rem(10px);
+			margin: 0 rem(5px);
+			border-radius: $border-radius-lg;
+			
+			.dark-mode & {
+				background: $gray-800;
+			}
+			
+			@include media-breakpoint-down(sm) {
+				width: rem(72px);
+			}
+		}
+		& .countdown-amount {
+			font-size: rem(24px);
+			font-weight: $font-weight-semi-bold;
+			line-height: 1.25;
+		}
+		& .countdown-period {
+			font-size: $font-size-base - rem(1px);
+			color: $gray-800;
+			line-height: 1.5;
+			
+			.dark-mode & {
+				color: $gray-500;
+			}
+		}
+	}
+}

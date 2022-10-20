@@ -1,0 +1,103 @@
+.widget-chat {
+	margin: 0;
+	padding: 0;
+	
+	& .widget-chat-item {
+		display: flex;
+		align-items: flex-end;
+		
+		& + .widget-chat-item {
+			margin-top: rem(15px);
+		}
+		& > div + div {
+			@if $enable-rtl {
+				padding-right: rem(10px);
+			} @else {
+				padding-left: rem(10px);
+			}
+		}
+	}
+	& .widget-chat-date {
+		font-size: $font-size-base - rem(2px);
+		font-weight: $font-weight-bold;
+		color: var(--app-component-color);
+		padding: rem(10px) rem(10px);
+		text-align: center;
+	}
+	& .widget-chat-content {
+		flex: 1;
+	}
+	& .widget-chat-name,
+	& .widget-chat-status {
+		font-size: $font-size-base - rem(3px);
+		font-weight: $font-weight-semi-bold;
+		color: rgba(var(--app-component-color-rgb), .5);
+		line-height: 1.25rem;
+	}
+	& .widget-chat-media {
+		width: rem(28px);
+		
+		& img {
+			max-width: 100%;
+			display: block;
+			
+			@include border-radius(28px);
+		}
+	}
+	& .widget-chat-message {
+		background: var(--app-component-bg);
+		padding: rem(8px) rem(15px);
+		display: inline-block;
+		position: relative;
+		border-radius: rem(20px);
+		
+		& + .widget-chat-message {
+			margin-top: rem(5px);
+		}
+		&.last {
+			&:before {
+				content: '';
+				border: rem(5px) solid transparent;
+				border-bottom-color: var(--app-component-bg);
+				position: absolute;
+				bottom: rem(6px);
+				
+				@if $enable-rtl {
+					right: rem(-4px);
+					border-left-color: var(--app-component-bg);
+				} @else {
+					left: rem(-4px);
+					border-right-color: var(--app-component-bg);
+				}
+			}
+		}
+	}
+	& .reply {
+		& .widget-chat-content {
+			@if $enable-rtl {
+				text-align: left;
+			} @else {
+				text-align: right;
+			}
+		}
+		& .widget-chat-message {
+			background: var(--app-component-active-bg);
+			color: var(--app-component-active-color);
+			
+			&.last:before {
+				border-color: transparent;
+				border-bottom-color: var(--app-component-active-bg);
+				
+				@if $enable-rtl {
+					border-right-color: var(--app-component-active-bg);
+					right: auto;
+					left: rem(-4px);
+				} @else {
+					border-left-color: var(--app-component-active-bg);
+					left: auto;
+					right: rem(-4px);
+				}
+			}
+		}
+	}
+}

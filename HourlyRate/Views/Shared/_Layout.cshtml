@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en" @ViewData["HtmlAttribute"]>
+<head>
+    <meta charset="utf-8" />
+    <title>AspStudio | @ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <meta name="author" content="@ViewData["MetaAuthor"]" />
+    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+
+    @RenderSection("MetaTag", required: false)
+
+    <!-- ================== BEGIN core-css ================== -->
+    <link href="~/css/vendor.min.css" rel="stylesheet" />
+    <link href="~/css/app.min.css" rel="stylesheet" />
+    <!-- ================== END core-css ================== -->
+    @RenderSection("Styles", required: false)
+</head>
+<body class="@ViewData["BodyClass"]">
+    <!-- BEGIN #app -->
+    <div id="app" class="app @ViewData["AppClass"]">
+        @if (ViewData["AppWithoutHeader"] == null)
+        {
+            <partial name="_Header" />
+        }
+
+        @if (ViewData["AppWithoutSidebar"] == null)
+        {
+            <partial name="_Sidebar" />
+        }
+
+        @if (ViewData["AppWithoutContainer"] == null)
+        {
+            <div id="content" class="app-content @ViewData["AppContentClass"]">
+                @RenderBody()
+
+                <!-- BEGIN btn-scroll-top -->
+                <a href="#" data-click="scroll-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+                <!-- END btn-scroll-top -->
+            </div>
+        }
+        else
+        {
+            @RenderBody()
+
+            <!-- BEGIN btn-scroll-top -->
+            <a href="#" data-click="scroll-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+            <!-- END btn-scroll-top -->
+        }
+
+        @RenderSection("OutterAppContainerContent", required: false)
+
+        @if (ViewData["AppWithFooter"] != null)
+        {
+            <partial name="_Footer" />
+        }
+    </div>
+
+    <partial name="_ThemePanel" />
+
+    <!-- ================== BEGIN core-js ================== -->
+    <script src="~/js/vendor.min.js"></script>
+    <script src="~/js/app.min.js"></script>
+    <!-- ================== END core-js ================== -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

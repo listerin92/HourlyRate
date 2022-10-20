@@ -1,0 +1,13 @@
+.breadcrumb {
+	font-weight: $breadcrumb-font-weight;
+	
+	& .breadcrumb-item {
+		& a {
+			text-decoration: $breadcrumb-text-decoration;
+			
+			&:hover {
+				text-decoration: $breadcrumb-hover-text-decoration;
+			}
+		}
+	}
+}

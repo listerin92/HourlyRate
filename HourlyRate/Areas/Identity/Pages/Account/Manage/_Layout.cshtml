@@ -1,0 +1,36 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
+    {
+        Layout = (string)parentLayout!;
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+    }
+}
+
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-xl-10">
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item"><a href="@Url.Action("Index", "Home", new { area = "" })">HOME</a></li>
+				<li class="breadcrumb-item active">@ViewData["Title"]</li>
+			</ul>
+			<h1 class="page-header">
+					Manage your account <small>Change your account settings</small>
+			</h1>
+			<div class="card">
+				<partial name="_ManageNav" />
+				<div class="tab-content p-4">
+					<div class="tab-pane active">
+            @RenderBody()
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

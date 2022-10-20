@@ -1,0 +1,379 @@
+.app-sidebar {
+	position: fixed;
+	top: $app-header-height;
+	bottom: 0;
+	width: $app-sidebar-width;
+	z-index: $app-sidebar-zindex;
+	display: flex;
+	flex-direction: column;
+	
+	@if $enable-rtl {
+		right: 0;
+		border-left: 1px solid var(--app-sidebar-border-color);
+	} @else {
+		left: 0;
+		border-right: 1px solid var(--app-sidebar-border-color);
+	}
+	@include media-breakpoint-down(lg) {
+    top: 0;
+    z-index: $app-header-zindex + 100;
+    @if $enable-rtl {
+			right: -$app-sidebar-width;
+			border-left: none;
+		} @else {
+			left: -$app-sidebar-width;
+			border-right: none;
+		}
+	}
+	
+	& .app-sidebar-content {
+		padding: $app-sidebar-content-padding-y $app-sidebar-content-padding-x;
+		flex: 1;
+		
+		@include media-breakpoint-down(lg) {
+			background-color: var(--app-sidebar-content-mobile-bg);
+			position: relative;
+			z-index: $app-sidebar-mobile-backdrop-zindex + 10;
+			width: $app-sidebar-width;
+		}
+	}
+	& .app-sidebar-mobile-backdrop {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: $app-sidebar-mobile-backdrop-zindex;
+		width: 100%;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		margin: 0;
+		outline: none;
+		display: none;
+	}
+	& .menu {
+		min-height: 100%;
+		display: flex;
+		flex-direction: column;
+		
+		& .menu-item {
+			padding: $app-sidebar-menu-item-padding-y $app-sidebar-menu-item-padding-x;
+			
+			& .menu-icon {
+				width: rem(20px);
+				height: rem(20px);
+				font-size: $font-size-base + 0.125rem;
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			
+				& + .menu-text {
+					@if $enable-rtl {
+						margin-right: rem(10px);
+					} @else {
+						margin-left: rem(10px);
+					}
+				}
+				& .menu-icon-label {
+					position: absolute;
+					top: rem(-5px);
+					font-size: rem(9px);
+					font-weight: $font-weight-bold;
+					height: auto;
+					background: var(--app-sidebar-menu-link-icon-label-bg);
+					color: var(--app-sidebar-menu-link-icon-label-color);
+					padding: rem(1px) 0 rem(2px);
+					line-height: 1;
+					min-width: rem(14px);
+					min-height: rem(14px);
+					border-radius: rem(14px);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					
+					@if $enable-rtl {
+						left: rem(-5px);
+					} @else {
+						right: rem(-5px);
+					}
+				}
+			}
+			& .menu-caret {
+				opacity: 0.75;
+			}
+			& .menu-text {
+				flex: 1;
+			}
+			& .menu-link {
+				padding: $app-sidebar-menu-link-padding-y $app-sidebar-menu-link-padding-x;
+				line-height: $app-sidebar-menu-link-line-height;
+				text-decoration: none;
+				color: var(--app-sidebar-menu-link-color);
+				display: flex;
+				align-items: center;
+				border-radius: $border-radius;
+				
+				&:hover {
+					background: var(--app-sidebar-menu-link-hover-bg);
+				}
+			}
+			& .menu-submenu {
+				display: none;
+				padding-bottom: $app-sidebar-submenu-padding-bottom;
+				
+				@if $enable-rtl {
+					padding-right: $app-sidebar-submenu-padding-left;
+				} @else {
+					padding-left: $app-sidebar-submenu-padding-left;
+				}
+				
+				& .menu-item {
+					@if $enable-rtl {
+						padding-left: 0;
+					} @else {
+						padding-right: 0;
+					}
+					
+					& .menu-link {
+						padding: $app-sidebar-submenu-menu-link-padding-y $app-sidebar-submenu-menu-link-padding-x;
+					}
+				}
+			}
+			&.active {
+				&:not(.has-sub) > .menu-link {
+					color: var(--app-sidebar-menu-link-active-color);
+					font-weight: $app-sidebar-menu-link-active-font-weight;
+					background: var(--app-sidebar-menu-link-active-bg);
+				}
+				& > .menu-submenu {
+					display: block;
+				}
+			}
+		}
+		& .menu-divider {
+			margin: 8px 0;
+			height: 1px;
+		}
+		& .menu-header {
+			margin: $app-sidebar-menu-header-margin-y $app-sidebar-menu-header-margin-x;
+			font-size: $app-sidebar-menu-header-font-size;
+			font-weight: $app-sidebar-menu-header-font-weight;
+			color: var(--app-sidebar-menu-header-color);
+		}
+	}
+}
+.app-full-width {
+	.app-sidebar {
+		z-index: $app-sidebar-zindex;
+		transition: all .2s ease;
+		
+		@if $enable-rtl {
+			right: -$app-sidebar-width;
+		} @else {
+			left: -$app-sidebar-width;
+		}
+	}
+}
+
+@keyframes appSidebarMobileSlideIn {
+	from {
+		@if $enable-rtl {
+			right: -$app-sidebar-width;
+		} @else {
+			left: -$app-sidebar-width;
+		}
+	}
+	to {
+		@if $enable-rtl {
+			right: 0;
+		} @else {
+			left: 0;
+		}
+	}
+}
+@keyframes appSidebarMobileSlideOut {
+	from {
+		@if $enable-rtl {
+			right: 0;
+		} @else {
+			left: 0;
+		}
+	}
+	to {
+		@if $enable-rtl {
+			right: -$app-sidebar-width;
+		} @else {
+			left: -$app-sidebar-width;
+		}
+	}
+}
+@keyframes appSidebarMobileBackdrop {
+	from {
+		background: transparent;
+	}
+	to {
+		background: var(--app-sidebar-mobile-backdrop-bg);
+	}
+}
+@keyframes appSidebarMobileRemoveBackdrop {
+	from {
+		background: var(--app-sidebar-mobile-backdrop-bg);
+	}
+	to {
+		background: transparent;
+	}
+}
+
+.app-sidebar-mobile-toggled {
+	& .app-sidebar {
+		animation: appSidebarMobileSlideIn .1s ease;
+		
+		@if $enable-rtl {
+			right: 0;
+		} @else {
+			left: 0;
+		}
+	}
+	& .app-sidebar-mobile-backdrop {
+		display: block;
+		background: var(--app-sidebar-mobile-backdrop-bg);
+		animation: appSidebarMobileBackdrop .2s ease;
+	}
+}
+.app-sidebar-mobile-closed {
+	& .app-sidebar {
+		animation: appSidebarMobileSlideOut .1s ease;
+		
+		@if $enable-rtl {
+			right: -$app-sidebar-width;
+		} @else {
+			left: -$app-sidebar-width;
+		}
+	}
+	& .app-sidebar-mobile-backdrop {
+		display: block;
+		background: none;
+		animation: appSidebarMobileRemoveBackdrop .2s ease;
+	}
+}
+.app-sidebar-minified {
+	& .app-sidebar {
+		width: $app-sidebar-minify-width;
+		
+		& .menu-item {
+			position: relative;
+			padding: $app-sidebar-minify-menu-item-padding-y $app-sidebar-minify-menu-item-padding-x;
+			
+			& .menu-link {
+				position: relative;
+				
+				& .menu-icon {
+					margin-left: auto;
+					margin-right: auto;
+				}
+				& .menu-caret {
+					opacity: 0.75;
+				}
+			}
+		}
+		& .menu-text,
+		& .ps__rail-x,
+		& .ps__rail-y,
+		& .menu-submenu {
+			display: none !important;
+		}
+		& .menu-header {
+			margin-left: $app-sidebar-minify-menu-header-margin-x;
+			margin-right: $app-sidebar-minify-menu-header-margin-x;
+			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		& .menu-caret {
+			position: absolute;
+			top: 50%;
+			margin-top: -9px;
+			
+			@if $enable-rtl {
+				left: 3px;
+				transform: rotate(90deg);
+			} @else {
+				right: 3px;
+				transform: rotate(-90deg);
+			}
+		}
+		& .hide-on-minified {
+			display: none;
+		}
+	}
+	& .app-content {
+		@if $enable-rtl {
+			margin-right: $app-sidebar-minify-width;
+		} @else {
+			margin-left: $app-sidebar-minify-width;
+		}
+		
+		@include media-breakpoint-down(lg) {
+			@if $enable-rtl {
+				margin-right: 0;
+			} @else {
+				margin-left: 0;
+			}
+		}
+	}
+}
+.app-float-submenu {
+	position: fixed;
+	width: $app-sidebar-width;
+	background: var(--app-float-submenu-bg);
+	margin: 0;
+	padding: $app-float-submenu-padding-y $app-float-submenu-padding-x;
+	list-style-type: none;
+	z-index: $app-float-submenu-sm-zindex;
+	border-radius: $border-radius;
+	box-shadow: $app-float-submenu-box-shadow;
+	
+	@include media-breakpoint-up(lg) {
+		z-index: $app-float-submenu-zindex;
+	}
+	
+	& a {
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		color: var(--app-float-submenu-link-color);
+		padding: $app-float-submenu-link-padding-y $app-float-submenu-link-padding-x;
+		line-height: $app-float-submenu-link-line-height;
+	}
+	& .active > a,
+	& a:hover,
+	& a:focus,
+	& a:active {
+		color: var(--app-float-submenu-link-active-color);
+		background: var(--app-float-submenu-link-active-bg);
+		text-decoration: none;
+	}
+	& .menu-submenu {
+		display: none;
+		
+		@if $enable-rtl {
+			padding-right: $app-float-submenu-submenu-padding-left;
+		} @else {
+			padding-left: $app-float-submenu-submenu-padding-left;
+		}
+	}
+	& .menu-icon,
+	& .menu-text,
+	& .menu-caret {
+		display: inline-flex;
+	}
+	& .menu-caret {
+		opacity: .75;
+	}
+	& .menu-text {
+		flex: 1;
+	}
+}

@@ -1,0 +1,21 @@
+/*!
+ * AspStudio v3.2.0 (https://seantheme.com/asp-studio/)
+ * Copyright 2022 SeanTheme
+ */
+
+@import 'font.scss';
+@import '_functions.scss';
+@import '_variables.scss';
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+
+@import '_mixins.scss';
+@import '_root.scss';
+@import '_helper.scss';
+@import '_reboot.scss';
+
+@import '_app.scss';
+@import '_ui.scss';
+@import '_plugins.scss';
+@import '_pages.scss';
+@import '_widgets.scss';
+@import '_rtl.scss';

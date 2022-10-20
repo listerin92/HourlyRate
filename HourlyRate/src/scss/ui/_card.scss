@@ -1,0 +1,45 @@
+.card {
+	&.card-expand {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 1060;
+		border-radius: 0;
+		margin: 0 !important;
+		
+		& .card-header,
+		& .card-body {
+			border-radius: 0;
+		}
+		& .card-body {
+			flex: 1 0 0;
+			overflow: scroll;
+		}
+	}
+	& .card-header {
+		& .card-header-tabs {
+			& .nav-item {
+				& .nav-link {
+					&.active {
+						background: var(--app-component-bg);
+						border-bottom-color: var(--app-component-bg);
+					}
+				}
+			}
+		}
+	}
+	& .card-body {
+		& .nav-tabs {
+			& .nav-item {
+				& .nav-link {
+					&.active {
+						background: var(--app-component-bg);
+						border-bottom-color: var(--app-component-bg);
+					}
+				}
+			}
+		}
+	}
+}

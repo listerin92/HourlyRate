@@ -1,0 +1,53 @@
+@page
+@model HourlyRate.Areas.Identity.Pages.Account.LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
+    ViewData["AppWithoutHeader"] = true;
+    ViewData["AppWithoutSidebar"] = true;
+    ViewData["AppWithoutContainer"] = true;
+}
+
+<!-- BEGIN login -->
+<div class="login">
+	<!-- BEGIN login-content -->
+	<div class="login-content">
+    <form id="account" method="post">
+			<h1 class="text-center">Sign In</h1>
+			<div class="text-muted text-center mb-4">
+				For your protection, please verify your identity.
+			</div>
+      <div asp-validation-summary="All" class="text-danger"></div>
+			<div class="mb-3">
+				<label class="form-label" asp-for="Input.Email"></label>
+				<input asp-for="Input.Email" class="form-control form-control-lg fs-15px" placeholder="username@address.com" />
+				<span asp-validation-for="Input.Email" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<div class="d-flex">
+					<label asp-for="Input.Password" class="form-label">Password</label>
+					<a id="forgot-password" asp-page="./ForgotPassword" class="ms-auto text-muted">Forgot password?</a>
+				</div>
+				<input asp-for="Input.Password" class="form-control form-control-lg fs-15px" value="" placeholder="Enter your password" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<div class="form-check">
+					<input class="form-check-input" asp-for="Input.RememberMe" />
+					<label class="form-check-label fw-500" asp-for="Input.RememberMe">@Html.DisplayNameFor(m => m.Input.RememberMe)</label>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary btn-lg d-block w-100 fw-500 mb-3">Sign In</button>
+			<div class="text-center text-muted">
+				Don't have an account yet? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Sign up</a>.
+			</div>
+		</form>
+	</div>
+	<!-- END login-content -->
+</div>
+<!-- END login -->
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,12 @@
+.btn-default {
+	@include button-variant($white, $gray-300, $gray-800, $gray-100, $gray-300, $gray-800);
+}
+.btn-outline-default {
+	@include button-outline-variant($gray-300, $gray-900);
+	color: $gray-900;
+}
+.btn {
+	&.btn-rounded {
+		border-radius: 200px !important;
+	}
+}

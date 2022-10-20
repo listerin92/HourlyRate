@@ -1,0 +1,83 @@
+.jvectormap-container {
+	position: relative;
+	
+	& .jvectormap-zoomin, 
+	& .jvectormap-zoomout, 
+	& .jvectormap-goback {
+		width: rem(20px);
+		height: rem(20px);
+		padding: 0 0 rem(2px);
+		border-radius: $border-radius;
+		box-sizing: border-box;
+		font-size: rem(16px);
+		background: var(--app-component-bg);
+		color: var(--app-component-color);
+		font-weight: $font-weight-semi-bold;
+		box-shadow: $dropdown-box-shadow;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		
+		@if $enable-rtl {
+			right: $card-spacer-x;
+		} @else {
+			left: $card-spacer-x;
+		}
+		
+		&:hover {
+			color: $component-active-bg;
+		}
+	}
+	& .jvectormap-zoomin {
+		top: $card-spacer-x;
+	}
+	& .jvectormap-zoomout {
+		top: $card-spacer-x + rem(25px);
+	}
+	& .jvectormap-legend {
+		background: var(--app-component-bg);
+		color: var(--app-component-color);
+		box-shadow: $dropdown-box-shadow;
+		border-radius: $border-radius;
+	}
+	& .jvectormap-legend-title {
+		font-size: $font-size-base - rem(2px);
+		margin-bottom: rem(3px);
+	}
+	& .jvectormap-legend-cnt-v {
+		& .jvectormap-legend {
+			padding: rem(10px);
+			margin: $card-spacer-x $card-spacer-x 0 0;
+			
+			& .jvectormap-legend-tick {
+				display: flex;
+				align-items: center;
+				
+				& + .jvectormap-legend-tick {
+					margin-top: 2px;
+				}
+			}
+			& .jvectormap-legend-tick-sample {
+				width: rem(18px);
+				height: rem(18px);
+				
+				border-radius: $border-radius-sm;
+			}
+			& .jvectormap-legend-tick-text {
+				@if $enable-rtl {
+					padding-right: rem(5px);
+				} @else {
+					padding-left: rem(5px);
+				}
+			}
+		}
+	}
+}
+.jvectormap-tip {
+	background: $gray-900 !important;
+	padding: rem(4px) rem(8px) !important;
+	border: none !important;
+	font-family: inherit !important;
+	font-size: rem(12px) !important;
+	border-radius: $border-radius !important;
+}

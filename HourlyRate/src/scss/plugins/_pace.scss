@@ -1,0 +1,61 @@
+.pace {
+	-webkit-pointer-events: none;
+	pointer-events: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	
+	& .pace-progress {
+		position: fixed;
+		z-index: 2000;
+		top: 0;
+		width: 100%;
+		height: rem(2px);
+		background: $gray-800;
+		
+		@if $enable-rtl {
+			left: 100%;
+		} @else {
+			right: 100%;
+		}
+	}
+	& .pace-progress-inner {
+		display: block;
+		position: absolute;
+		width: rem(100px);
+		height: 100%;
+		opacity: 1.0;
+		box-shadow: 0 0 rem(10px) $gray-800;
+		
+		@if $enable-rtl {
+			left: 0;
+		} @else {
+			right: 0;
+		}
+	}
+	& .pace-activity {
+		display: block;
+		position: fixed;
+		z-index: 2000;
+		top: $app-header-height + rem(15px);
+		width: rem(18px);
+		height: rem(18px);
+		border: solid rem(2px) transparent;
+		border-top-color: $gray-800;
+		
+		@if $enable-rtl {
+			border-right-color: $gray-800;
+			left: rem(15px);
+		} @else {
+			border-left-color: $gray-800;
+			right: rem(15px);
+		}
+	}
+	&.pace-inactive {
+		display: none;
+	}
+}
+@keyframes pace-spinner {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

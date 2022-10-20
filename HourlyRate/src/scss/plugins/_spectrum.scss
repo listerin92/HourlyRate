@@ -1,0 +1,44 @@
+.sp-original-input-container {
+	& .sp-add-on {
+		min-width: rem(35px);
+		border-color: var(--app-component-border-color) !important;
+		border-radius: $border-radius-sm !important;
+		
+		@if $enable-rtl {
+			body & {
+				border-radius: 0 !important;
+				border-top-right-radius: $border-radius !important;
+				border-bottom-right-radius: $border-radius !important;
+			}
+		}
+		
+		& .sp-colorize {
+			position: relative;
+			
+			&:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				border: 5px solid var(--app-component-border-color);
+			}
+		}
+	}
+	
+	@if $enable-rtl {
+		body & {
+			& .spectrum.with-add-on {
+				border-radius: 0 !important;
+				border-left: 1px solid var(--app-component-border-color);
+				border-top-left-radius: $border-radius !important;
+				border-bottom-left-radius: $border-radius !important;
+				
+				&:focus {
+					border-color: $input-focus-border-color;
+				}
+			}
+		}
+	}
+}

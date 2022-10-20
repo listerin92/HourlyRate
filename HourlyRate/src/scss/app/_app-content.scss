@@ -1,0 +1,51 @@
+.app-content {
+	padding: $app-content-padding-y $app-content-padding-x;
+	position: relative;
+	min-height: 100%;
+	
+	@if $enable-rtl {
+		margin-right: $app-sidebar-width;
+	} @else {
+		margin-left: $app-sidebar-width;
+	}
+	
+	@include media-breakpoint-down(lg) {
+		padding: $app-content-sm-padding-y $app-content-sm-padding-x;
+		
+		@if $enable-rtl {
+			margin-right: 0;
+		} @else {
+			margin-left: 0;
+		}
+	}
+	& > .container,
+	& > .container-fluid {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	& .app-content-container {
+		position: relative;
+		z-index: 10;
+	}
+	& .app-content-cover {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+}
+.app-content-full-width {
+	& .app-content {
+		margin: 0;
+	}
+}
+.app-content-full-height {
+	@include media-breakpoint-up(lg) {
+		height: 100%;
+		
+		& .app-content {
+			height: 100%;
+		}
+	}
+}

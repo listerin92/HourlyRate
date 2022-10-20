@@ -1,0 +1,38 @@
+@page
+@using HourlyRate.Areas.Identity.Pages.Account.Manage
+@model HourlyRate.Areas.Identity.Pages.Account.Manage.EmailModel
+@{
+    ViewData["Title"] = "Manage Email";
+    ViewData["ActivePage"] = ManageNavPages.Email;
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="email-form" method="post">
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                @if (Model.IsEmailConfirmed)
+                {
+                  	<input asp-for="Email" class="form-control is-valid" disabled />
+                }
+                 else
+                {
+                    <input asp-for="Email" class="form-control" disabled />
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                }
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.NewEmail" class="form-label"></label>
+                <input asp-for="Input.NewEmail" class="form-control" />
+                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+            </div>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary width-150">Change email</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

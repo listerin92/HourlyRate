@@ -1,0 +1,35 @@
+﻿@page
+@model HourlyRate.Areas.Identity.Pages.Account.LoginWithRecoveryCodeModel
+@{
+    ViewData["Title"] = "Recovery code verification";
+    ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
+    ViewData["AppWithoutHeader"] = true;
+    ViewData["AppWithoutSidebar"] = true;
+    ViewData["AppWithoutContainer"] = true;
+}
+
+<!-- BEGIN login -->
+<div class="login">
+	<!-- BEGIN login-content -->
+	<div class="login-content">
+		<h1 class="text-center">@ViewData["Title"]</h1>
+		<div class="text-muted text-center mb-4">
+			You have requested to log in with a recovery code. This login will not be remembered until you provide an authenticator app code at log in or disable 2FA and log in again.
+		</div>
+		<form method="post">
+				<div asp-validation-summary="All" class="text-danger"></div>
+				<div class="mb-3">
+						<label asp-for="Input.RecoveryCode" class="form-label"></label>
+						<input asp-for="Input.RecoveryCode" class="form-control" autocomplete="off" />
+						<span asp-validation-for="Input.RecoveryCode" class="text-danger"></span>
+				</div>
+				<button type="submit" class="btn btn-primary d-block w-100">Log in</button>
+		</form>
+	</div>
+	<!-- END login-content -->
+</div>
+<!-- END login -->
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,72 @@
+.calendar {
+	min-height: 100%;
+	background: var(--app-component-bg);
+	display: flex;
+	
+	& .calendar-body {
+		flex: 1;
+		
+		& + .calendar-sidebar {
+			@if $enable-rtl {
+				border-right: 1px solid var(--app-component-border-color);
+			} @else {
+				border-left: 1px solid var(--app-component-border-color);
+			}
+		}
+		
+		& .fc {
+			& .fc-head-container  {
+				& th {
+					border-bottom-width: 0;
+				}
+			}
+			& table {
+				border: none !important;
+			
+				& thead,
+				& tbody {
+					& tr {
+						border-width: 0;
+						
+						& th,
+						& td {
+							&:first-child {
+								border-left-width: 0 !important;
+							}
+							&:last-child {
+								border-right-width: 0 !important;
+							}
+						}
+					}
+				}
+				& .fc-head-container  {
+					border: none;
+				}
+			}
+		}
+	}
+	& .calendar-sidebar {
+		width: rem(220px);
+		padding: rem(16px);
+		
+		@include media-breakpoint-down(md) {
+			display: none;
+		}
+		
+		& + .calendar-body {
+			@if $enable-rtl {
+				border-right: 1px solid var(--app-component-border-color);
+			} @else {
+				border-left: 1px solid var(--app-component-border-color);
+			}
+		}
+		& .calendar-sidebar-title {
+			font-weight: $font-weight-bold;
+			padding: 0 0 rem(10px) 0;
+			min-height: rem(55px);
+			font-size: rem(13px);
+			display: flex;
+			align-items: flex-end;
+		}
+	}
+}

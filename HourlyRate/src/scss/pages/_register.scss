@@ -1,0 +1,17 @@
+.register {
+	min-height: 100%;
+	padding: rem(60px);
+	display: flex;
+	align-items: center;
+	
+	@include media-breakpoint-down(md) {
+		padding: rem(20px);
+	}
+	
+	& .register-content {
+		flex: 1;
+		max-width: rem(360px);
+		margin: 0 auto;
+		position: relative;
+	}
+}

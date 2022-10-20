@@ -1,0 +1,14 @@
+.page-header {
+	color: var(--app-component-color);
+	padding: 0;
+	border: none;
+	margin: 0 0 $page-header-spacer-y;
+	font-size: $page-header-font-size;
+	font-weight: $font-weight-bold;
+	
+	& small {
+		font-size: rem(16px);
+		color: rgba(var(--app-component-color-rgb), .5);
+		font-weight: $font-weight-base;
+	}
+}

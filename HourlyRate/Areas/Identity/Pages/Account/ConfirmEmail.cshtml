@@ -1,0 +1,21 @@
+@page
+@model HourlyRate.Areas.Identity.Pages.Account.ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+}
+
+<!-- BEGIN login -->
+<div class="login">
+	<!-- BEGIN login-content -->
+	<div class="login-content">
+		<form action="/" method="POST" name="login_form">
+			<img src="/img/page/email.svg" class="d-block mw-100" />
+			<h2 class="text-center mt-3">Confirm email</h2>
+			<div class="text-muted text-center mb-4">
+				Your email has been confirmed. <br />Click <a href="/Identity/Account/Login"> here</a> to sign in now.
+			</div>
+		</form>
+	</div>
+	<!-- END login-content -->
+</div>
+<!-- END login -->

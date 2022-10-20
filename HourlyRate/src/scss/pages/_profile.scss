@@ -1,0 +1,222 @@
+.profile {
+	& .profile-header {
+		position: relative;
+	
+		& .profile-header-cover {
+			background: url('images/profile-cover.jpg');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			height: rem(170px);
+			position: relative;
+			
+			@include media-breakpoint-down(md) {
+				height: rem(100px);
+			}
+		
+			&:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba($gray-900, .35);
+			}
+		}
+		& .profile-header-content {
+			position: relative;
+			padding: 0 $app-content-padding-x;
+			display: flex;
+			align-items: flex-end;
+			
+			@include media-breakpoint-down(md) {
+				display: block;
+				padding: 0 $app-content-sm-padding-x;
+			}
+			
+			& .profile-header-img {
+				width: rem(200px);
+				height: rem(200px);
+				overflow: hidden;
+				z-index: 10;
+				margin-top: rem(-140px);
+				padding: rem(3px);
+				background: $white;
+				border-radius: $border-radius-lg;
+				
+				@include media-breakpoint-down(md) {
+					width: rem(70px);
+					height: rem(70px);
+					margin: rem(-60px) 0 0;
+				}
+				
+				& img {
+					max-width: 100%;
+					width: 100%;
+					border-radius: $border-radius;
+				}
+			}
+			& .profile-header-tab {
+				position: relative;
+				flex: 1;
+				
+				@if $enable-rtl {
+					margin-right: $app-content-padding-x;
+				} @else {
+					margin-left: $app-content-padding-x;
+				}
+				
+				@include media-breakpoint-down(md) {
+					margin: rem(-10px) (-$app-content-sm-padding-x) 0;
+					padding: 0 $app-content-sm-padding-x;
+					overflow: scroll;
+					display: flex;
+					flex-wrap: nowrap;
+				}
+		
+				& .nav-item {
+					& .nav-link {
+						padding: rem(13px) rem(10px) rem(9px);
+						text-align: center;
+						
+						@include media-breakpoint-down(md) {
+							padding: rem(15px) rem(10px) rem(5px);
+						}
+						
+						& .nav-field {
+							font-weight: $font-weight-bold;
+							font-size: rem(13px);
+							
+							@include media-breakpoint-down(md) {
+								font-size: rem(11px);
+								margin-bottom: rem(-2px);
+							}
+						}
+						& .nav-value {
+							font-size: rem(20px);
+							font-weight: 400;
+							letter-spacing: -0.5px;
+							
+							@include media-breakpoint-down(md) {
+								font-size: rem(18px);
+							}
+						}
+						&.active {
+							color: var(--app-component-color);
+							border-color: var(--app-component-color);
+							
+							@include media-breakpoint-down(md) {
+								background: none;
+							}
+						}
+					}
+					& + .nav-item {
+						@if $enable-rtl {
+							margin-right: rem(15px);
+						} @else {
+							margin-left: rem(15px);
+						}
+					}
+				}
+			}
+		}
+	}
+	& .profile-container {
+		padding: $app-content-padding-y $app-content-padding-x;
+		display: flex;
+		
+		@include media-breakpoint-down(md) {
+			padding: $app-content-sm-padding-y $app-content-sm-padding-x;
+		}
+		
+		& .profile-sidebar {
+			width: rem(220px);
+			
+			@include media-breakpoint-down(md) {
+				display: none;
+			}
+		}
+		& .profile-content {
+			@if $enable-rtl {
+				padding-right: $app-content-padding-x - rem(20px);
+			} @else {
+				padding-left: $app-content-padding-x - rem(20px);
+			}
+			
+			@include media-breakpoint-down(md) {
+				@if $enable-rtl {
+					padding-right: 0;
+				} @else {
+					padding-left: 0;
+				}
+			}
+			flex: 1;
+		}
+	}
+	& .profile-img-list {
+		list-style-type: none;
+		margin: rem(-1px) (($card-spacer-x * -1) + rem(-1px));
+		padding: 0;
+		
+		@include clearfix();
+		
+		& .profile-img-list-item {
+			width: 25%;
+			padding: rem(1px);
+			
+			@if $enable-rtl {
+				float: right;
+			} @else {
+				float: left;
+			}
+			
+			&.main {
+				width: 50%;
+			}
+			& .profile-img-list-link {
+				display: block;
+				padding-top: 75%;
+				overflow: hidden;
+				position: relative;
+				
+				& img,
+				& .profile-img-content {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					max-width: 100%;
+					background-size: cover;
+					background-position: center;
+					background-repeat: no-repeat;
+					
+					&:before {
+						content: '';
+						position: absolute;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						border: 1px solid rgba($gray-800, .15);
+					}
+				}
+			}
+			&.with-number {
+				& .profile-img-number {
+					position: absolute;
+					top: 50%;
+					left: 0;
+					right: 0;
+					color: $white;
+					font-size: rem(26px);
+					font-weight: $font-weight-semi-bold;
+					line-height: rem(26px);
+					margin-top: rem(-13px);
+					text-align: center;
+				}
+			}
+		}
+	}
+}

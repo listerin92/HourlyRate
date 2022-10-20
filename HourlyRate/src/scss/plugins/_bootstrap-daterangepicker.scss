@@ -1,0 +1,254 @@
+body {
+	& .daterangepicker {
+		z-index: 1020;
+		border: none;
+		font-family: inherit;
+		font-size: inherit;
+		border-radius: $border-radius-lg;
+		box-shadow: $box-shadow-lg;
+		background-color: var(--app-component-dropdown-bg);
+		min-width: rem(300px);
+		
+		&:before,
+		&:after {
+			display: none;
+		}
+		& select.monthselect,
+		& select.yearselect {
+			font-size: rem(13px);
+		}
+		& .drp-calendar {
+			max-width: inherit;
+			padding: $spacer;
+			background: none;
+			
+			& .calendar-table {
+				background: none;
+				border: none;
+				
+				& table {
+					& thead,
+					& tbody {
+						& .week {
+							font-size: 90%;
+							color: $gray-600;
+							font-weight: $font-weight-bold;
+						}
+					}
+					& thead {
+						& tr {
+							& th {
+								min-width: auto;
+								width: auto;
+								height: auto;
+								line-height: 1;
+								padding: rem(7px) rem(7px);
+								color: var(--app-component-color);
+								font-weight: bold;
+								font-size: inherit;
+								border: none;
+								
+								&.prev,
+								&.next {
+									& span {
+										border-color: var(--app-component-color);
+									}
+									&:hover,
+									&:focus {
+										background: var(--bs-light);
+										color: var(--app-component-color);
+									}
+								}
+								&.month {
+									& .yearselect,
+									& .monthselect {
+										border-color: var(--app-component-dropdown-border-color);
+										color: var(--app-component-color);
+										background: var(--app-component-bg);
+										border-radius: $border-radius;
+										transition: all .2s linear;
+										
+										&:focus {
+											outline: none;
+											border-color: $input-focus-border-color;
+											box-shadow: 0 0 0 0.125rem rgba($input-focus-border-color ,.3);
+										}
+									}
+								}
+							}
+							&:last-child {
+								& th {
+									padding-bottom: rem(14px);
+								}
+							}
+						}
+					}
+					& tbody {
+						& tr {
+							& td {
+								min-width: auto;
+								width: auto;
+								height: auto;
+								line-height: 1;
+								padding: rem(9px) rem(9px);
+								font-weight: 400;
+								color: var(--app-component-color);
+								border: none;
+								font-size: inherit;
+								
+								&.available {
+									border-radius: $border-radius;
+									
+									&:hover,
+									&:focus {
+										background: var(--bs-light);
+									}
+									&.in-range {
+										background: var(--app-component-dropdown-hover-bg);
+										color: rgba(var(--app-component-color-rgb), .75);
+										border-radius: 0;
+									}
+									&.active {
+										background: var(--app-component-active-bg);
+										color: $white;
+									}
+									&.start-date {
+										border-radius: $border-radius 0 0 $border-radius;
+									}
+									&.end-date {
+										border-radius: 0 $border-radius $border-radius 0;
+									}
+								}
+								&.off {
+									background: none;
+									color: rgba(var(--app-component-color-rgb), .25);
+								}
+							}
+						}
+					}
+				}
+			}
+			&.left {
+				padding: rem(10px) !important;
+				
+				& .calendar-table {
+					padding: 0 !important;
+				}
+			}
+			&.right {
+				padding: rem(10px) !important;
+				
+				@if $enable-rtl {
+					border-right: 1px solid var(--app-component-dropdown-border-color);
+				} @else {
+					border-left: 1px solid var(--app-component-dropdown-border-color);
+				}
+				
+				@include media-breakpoint-down(sm) {
+					border-top: 1px solid var(--app-component-dropdown-border-color);
+					
+					@if $enable-rtl {
+						border-right: none;
+					} @else {
+						border-left: none;
+					}
+				}
+			}
+		}
+		& .drp-buttons {
+			padding: rem(12px);
+			border-color: var(--app-component-dropdown-border-color);
+			
+			& .btn {
+				font-size: rem(13px);
+				font-weight: $font-weight-semi-bold;
+			}
+			& .drp-selected {
+				font-weight: $font-weight-semi-bold;
+				color: lighten($dark, 30%);
+			}
+		}
+		& .ranges {
+			display: none;
+		}
+		&.show-ranges {
+			& .ranges {
+				position: relative;
+				display: block;
+				
+				@include media-breakpoint-down(md) {
+					float: none;
+					margin: 0;
+					padding: rem(10px);
+					border-bottom: 1px solid var(--app-component-dropdown-border-color);
+					overflow: scroll;
+					max-width: rem(560px);
+				}
+				
+				& ul {
+					@include media-breakpoint-down(md) {
+						width: auto;
+						white-space: nowrap;
+						display: flex;
+						flex-wrap: nowrap;
+						
+						@if $enable-rtl {
+							padding-left: rem(10px);
+						} @else {
+							padding-right: rem(10px);
+						}
+					}
+					
+					& li {
+						color: rgba(var(--app-component-color-rgb), .5);
+						font-size: $font-size-base - rem(1px);
+						font-weight: 400;
+						
+						@include media-breakpoint-down(md) {
+							border-radius: $border-radius;
+							
+							@if $enable-rtl {
+								margin-left: rem(10px) !important;
+							} @else {
+								margin-right: rem(10px) !important;
+							}
+						}
+						
+						&:hover,
+						&:focus {
+							background: var(--bs-light);
+							color: var(--app-component-color);
+						}
+						&.active {
+							background: var(--app-component-active-bg);
+							color: $white;
+							
+							@if $enable-rtl {
+								margin-left: rem(-1px);
+							} @else {
+								margin-right: rem(-1px);
+							}
+						}
+					}
+				}
+			}
+			& .drp-calendar {
+				&.left { 
+					@if $enable-rtl {
+						border-right: 1px solid var(--app-component-dropdown-border-color) !important;
+					} @else {
+						border-left: 1px solid var(--app-component-dropdown-border-color) !important;
+					}
+					
+					@include media-breakpoint-down(md) {
+						@if $enable-rtl {
+							border-right: none !important;
+						} @else {
+							border-left: none !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}

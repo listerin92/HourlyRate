@@ -1,0 +1,27 @@
+.navbar {
+	&.navbar-sticky {
+		top: $app-header-height + $app-content-padding-y;
+		position: sticky;
+		padding: 0;
+
+		@if $enable-rtl {
+			border-right: 1px solid var(--app-component-border-color);
+		} @else {
+			border-left: 1px solid var(--app-component-border-color);
+		}
+		
+		& .nav {
+			width: 100%;
+			flex-direction: column;
+			
+			& .nav-link {
+				padding: 3px 24px;
+				
+				&.active {
+					color: var(--app-component-color);
+					font-weight: $font-weight-bold;
+				}
+			}
+		}
+	}
+}

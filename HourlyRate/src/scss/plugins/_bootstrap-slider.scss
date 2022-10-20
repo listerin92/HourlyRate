@@ -1,0 +1,92 @@
+.app {
+  .slider {
+    &.slider-horizontal {
+      height: rem(24px);
+      width: 100%;
+    
+      & .slider-track {
+        height: rem(6px);
+        margin-top: rem(-3px);
+      }
+    }
+    &.slider-vertical {
+      margin: 0 auto;
+      display: block;
+      
+      & .slider-track {
+        width: rem(6px);
+        
+        @if $enable-rtl {
+        	right: 50%;
+					margin-right: rem(-3px);
+				} @else {
+        	left: 50%;
+					margin-left: rem(-3px);
+				}
+      }
+    }
+    &.slider-disabled {
+      & .slider-track {
+        opacity: 0.5;
+        background: $white;
+        
+				.dark-mode & {
+					background: $gray-600;
+				}
+      }
+      & .slider-handle {
+        background: $white;
+        cursor: not-allowed;
+        
+				.dark-mode & {
+					background: $gray-600;
+				}
+      }
+    }
+    & .slider-track {
+      box-shadow: none;
+      background: var(--bs-light);
+      border-radius: $border-radius;
+      
+      & .slider-selection {
+        background: var(--app-component-active-bg);
+        box-shadow: none;
+      }
+    }
+    & .slider-handle {
+      background: $white;
+      box-shadow: 0 rem(1px) rem(6px) rgba($gray-900, .25);
+      
+      .dark-mode & {
+      	background: $gray-600;
+      }
+    }
+    & .tooltip {
+  		position: absolute;
+  		
+      &.in {
+        opacity: 1;
+      }
+      &.top {
+        margin-top: rem(-30px);
+      }
+      &.bottom {
+        margin-top: rem(25px);
+      }
+      &.left {
+        @if $enable-rtl {
+					margin-right: rem(-30px);
+				} @else {
+					margin-left: rem(-30px);
+				}
+      }
+      &.right {
+        @if $enable-rtl {
+					margin-right: rem(5px);
+				} @else {
+					margin-left: rem(5px);
+				}
+      }
+    }
+  }
+}

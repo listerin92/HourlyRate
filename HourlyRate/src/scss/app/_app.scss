@@ -1,0 +1,47 @@
+.app {
+	padding-top: $app-header-height;
+	
+	@include media-breakpoint-down(md) {
+		padding-top: $app-header-height;
+	}
+	@include media-breakpoint-up(lg) {
+		&.app-boxed-layout {
+			background: var(--bs-body-bg);
+			min-height: 100%;
+			
+			&,
+			& .app-header {
+				max-width: rem(1280px);
+				margin-left: auto;
+				margin-right: auto;
+			}
+			& .app-sidebar {
+				background: var(--bs-body-bg);
+				
+				@if $enable-rtl {
+					right: auto;
+				} @else {
+					left: auto;
+				}
+			}
+			& .app-content {
+				background: var(--bs-body-bg);
+			}
+		}
+	}
+	&.app-full-height {
+		height: 100%;
+	}
+	&.app-without-header {
+		padding-top: 0;
+	}
+}
+.app-with-bg {
+	@include media-breakpoint-up(lg) {
+		background-image: url('images/bg.jpg');
+		background-size: cover;
+		background-position: center;
+		background-attachment: fixed;
+		background-repeat: no-repeat;
+	}
+}

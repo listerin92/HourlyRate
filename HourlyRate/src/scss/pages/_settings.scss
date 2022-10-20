@@ -1,0 +1,64 @@
+.setting-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	
+	
+	& > li {
+		display: flex;
+		background: #fff;
+		
+		@include media-breakpoint-down(md) {
+			display: block;
+		}
+		
+		& + li {
+			border-top: 1px solid darken($white, 15%);
+		}
+		&.setting-title { 
+			background: darken($white, 5%);
+			color: $black;
+			padding: rem(8px) rem(15px);
+			font-weight: bold;
+			font-size: rem(12px);
+			position: relative;
+		}
+		& .field,
+		& .value,
+		& .action {
+			padding: rem(15px) rem(15px);
+			
+			& + div {
+				@if $enable-rtl {
+					border-right: 1px solid darken($white, 15%);
+				} @else {
+					border-left: 1px solid darken($white, 15%);
+				}
+				
+				@include media-breakpoint-down(md) {
+					padding-top: 0;
+					
+					@if $enable-rtl {
+						border-right: none;
+					} @else {
+						border-left: none;
+					}
+				}
+			}
+		}
+		& .value {
+			flex: 1;
+			font-size: 14px;
+			font-weight: $font-weight-bold;
+		}
+		& .field {
+			width: rem(200px);
+			font-size: 14px;
+			
+			@include media-breakpoint-down(md) {
+				width: auto;
+				text-decoration: underline;
+			}
+		}
+	}
+}

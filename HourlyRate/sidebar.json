@@ -1,0 +1,20 @@
+﻿{
+  "sidebarMenu": [
+    {
+      "text": "Navigation",
+      "is_header": true
+    },
+    {
+      "controller": "Home",
+      "action": "Index",
+      "icon": "fa fa-home",
+      "text": "Home"
+    },
+    {
+      "controller": "Test",
+      "action": "Index",
+      "icon": "fa fa-home",
+      "text": "Test"
+    }
+  ]
+}

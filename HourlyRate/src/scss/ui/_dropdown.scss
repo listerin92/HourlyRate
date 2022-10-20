@@ -1,0 +1,60 @@
+.dropdown-menu {
+	box-shadow: $dropdown-box-shadow;
+	
+	&.dropdown-notification {
+		min-width: 320px;
+		
+		& .dropdown-notification-item {
+			padding: 10px $dropdown-item-padding-x;
+			text-decoration: none;
+			color: var(--app-component-color);
+			border-top: 1px solid var(--app-component-dropdown-border-color);
+			border-bottom: 1px solid var(--app-component-dropdown-border-color);
+			display: flex;
+			align-items: center;
+			
+			&:hover {
+				background: var(--app-component-dropdown-hover-bg);
+			}
+			& .dropdown-notification-icon {
+				width: 24px;
+				font-size: 16px;
+				text-align: center;
+				
+				& + .dropdown-notification-info {
+					@if $enable-rtl {
+						padding-right: 15px;
+					} @else {
+						padding-left: 15px;
+					}
+				}
+			}
+			& .dropdown-notification-arrow {
+				color: rgba(var(--app-component-color-rgb), .25);
+			}
+			& .dropdown-notification-info {
+				flex: 1;
+				
+				& .title {
+					& + .time {
+						margin-top: 5px;
+					}
+				}
+				& .time {
+					font-size: 12px;
+					color: rgba(var(--app-component-color-rgb), .5);
+				}
+				& + .dropdown-notification-arrow {
+					@if $enable-rtl {
+						padding-right: $dropdown-item-padding-x;
+					} @else {
+						padding-left: $dropdown-item-padding-x;
+					}
+				}
+			}
+			& + .dropdown-notification-item {
+				margin-top: -1px;
+			}
+		}
+	}
+}

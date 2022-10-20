@@ -1,0 +1,11 @@
+pre {
+	display: block;
+	padding: $spacer;
+	font-size: $font-size-base;
+	color: rgba(var(--app-component-color-rgb), .75);
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: $white;
+	border: 1px solid var(--app-component-border-color);
+	border-radius: $border-radius;
+}
