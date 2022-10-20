@@ -1,4 +1,4 @@
-using HourlyRate.Data;
+using HourlyRate.Core.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
