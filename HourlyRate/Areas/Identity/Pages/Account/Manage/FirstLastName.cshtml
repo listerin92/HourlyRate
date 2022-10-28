@@ -1,0 +1,32 @@
+﻿@page
+@using HourlyRate.Areas.Identity.Pages.Account.Manage
+@model HourlyRate.Areas.Identity.Pages.Account.Manage.FirstLastNameModel
+@{
+    ViewData["Title"] = "ChangeFirstLastName";
+    ViewData["ActivePage"] = ManageNavPages.FirstLastName;
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="changefirstlastname-form" method="post">
+            <div class="mb-3">
+                <label asp-for="Input.FirstName" class="form-label"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.LastName" class="form-label"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="btn btn-primary w-150px">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

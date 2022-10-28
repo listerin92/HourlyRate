@@ -1,10 +1,14 @@
 @using HourlyRate.Areas.Identity.Pages.Account.Manage
-@inject SignInManager<IdentityUser> SignInManager
+@using HourlyRate.Core.Models.Account
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <ul class="nav nav-tabs nav-tabs-v2 ps-4 pe-4">
     <li class="nav-item me-3"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+    <li class="nav-item me-3"><a class="nav-link @ManageNavPages.FlNavClass(ViewContext)" id="first-last-name" asp-page="./FirstLastName">FirstLastName</a></li>
+
     <li class="nav-item me-3"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
     <li class="nav-item me-3"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
     @if (hasExternalLogins)

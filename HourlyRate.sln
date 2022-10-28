@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HourlyRate", "HourlyRate\HourlyRate.csproj", "{9B25EBD2-AD43-4A80-BEF1-94E5239C7A20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HourlyRate.Core", "HourlyRate.Core\HourlyRate.Core.csproj", "{3807FF04-0FD6-4692-AE15-A53D2C639E5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HourlyRate.Core", "HourlyRate.Core\HourlyRate.Core.csproj", "{3807FF04-0FD6-4692-AE15-A53D2C639E5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
