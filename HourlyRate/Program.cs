@@ -1,5 +1,6 @@
 using HourlyRate.Core.Data;
 using HourlyRate.Core.Models.Account;
+using HourlyRate.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

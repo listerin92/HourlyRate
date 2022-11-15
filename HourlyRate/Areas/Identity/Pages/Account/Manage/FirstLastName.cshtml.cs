@@ -1,5 +1,5 @@
-using HourlyRate.Core.Data;
 using HourlyRate.Core.Models.Account;
+using HourlyRate.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

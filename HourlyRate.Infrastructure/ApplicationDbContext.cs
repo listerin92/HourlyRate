@@ -1,9 +1,10 @@
 ﻿using HourlyRate.Core.Models.Account;
 using HourlyRate.Core.Models.Employee;
-using Microsoft.EntityFrameworkCore;
+using HourlyRate.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace HourlyRate.Core.Data
+namespace HourlyRate.Infrastructure
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
@@ -19,6 +20,8 @@ namespace HourlyRate.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+            modelBuilder.ApplyConfiguration(new FinancialYearConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

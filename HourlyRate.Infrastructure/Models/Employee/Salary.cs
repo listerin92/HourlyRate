@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HourlyRate.Core.Models.Employee
@@ -14,7 +15,9 @@ namespace HourlyRate.Core.Models.Employee
 
         public Employee Employee { get; set; } = null!;
 
-        [Required] 
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
         public decimal Amount { get; set; }
 
         [ForeignKey(nameof(FinancialYear))]

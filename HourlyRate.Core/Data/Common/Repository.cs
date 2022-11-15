@@ -1,4 +1,6 @@
-﻿namespace HourlyRate.Core.Data.Common
+﻿using HourlyRate.Infrastructure;
+
+namespace HourlyRate.Core.Data.Common
 {
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
