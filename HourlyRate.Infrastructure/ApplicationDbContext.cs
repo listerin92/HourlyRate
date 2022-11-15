@@ -23,6 +23,8 @@ namespace HourlyRate.Infrastructure
         {
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new FinancialYearConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+            modelBuilder.ApplyConfiguration(new SalaryConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

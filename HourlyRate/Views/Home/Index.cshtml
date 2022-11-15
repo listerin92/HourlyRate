@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<EmployeeViewModel>
+
+@{
     ViewData["Title"] = "Starter Page";
 
 }
@@ -33,3 +35,52 @@
         </div>
     </div>
 </div>
+
+@*<div id="profileWidget" class="mb-5">
+    <h4>Profile widget</h4>
+    <p>Profile widget created by using Bootstrap <code>.card</code> component with Bootstrap grid.</p>
+</div>*@
+
+@foreach (var employee in Model)
+{
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="card border-0 overflow-hidden rounded-0 rounded-top" style="height: 165px">
+                        <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
+                        <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">
+                            <div class="mb-2">
+                                <img src="/img/user/user-5.jpg" alt="" width="80" class="rounded-circle" />
+                            </div>
+                            <div>
+                                <div class="fw-600">@employee.FirstName @employee.LastName</div>
+                                <div class="fs-12px">@employee.JobTitle</div>
+                                <div class="fs-12px">@employee.Salary</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-top-0 rounded-0 rounded-bottom">
+                        <div class="card-body py-2 px-3">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="fw-600">415</div>
+                                    <div class="fs-12px">posts</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-600">140k</div>
+                                    <div class="fs-12px">followers</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-600">697</div>
+                                    <div class="fs-12px">following</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

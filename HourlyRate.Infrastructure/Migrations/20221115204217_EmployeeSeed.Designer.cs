@@ -4,6 +4,7 @@ using HourlyRate.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspStudio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221115204217_EmployeeSeed")]
+    partial class EmployeeSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,36 +375,6 @@ namespace AspStudio.Migrations
                     b.HasIndex("FinancialYearId");
 
                     b.ToTable("Salaries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amount = 5000m,
-                            EmployeeId = 1,
-                            FinancialYearId = 8
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amount = 2322m,
-                            EmployeeId = 2,
-                            FinancialYearId = 8
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Amount = 1211m,
-                            EmployeeId = 3,
-                            FinancialYearId = 8
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Amount = 855m,
-                            EmployeeId = 4,
-                            FinancialYearId = 8
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
