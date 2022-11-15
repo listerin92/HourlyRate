@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using HourlyRate.Models;
+using HourlyRate.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HourlyRate.Controllers;

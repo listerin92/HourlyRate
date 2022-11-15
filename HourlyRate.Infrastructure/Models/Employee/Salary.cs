@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using HourlyRate.Core.Models.Employee;
+using Microsoft.EntityFrameworkCore;
 
-namespace HourlyRate.Core.Models.Employee
+namespace HourlyRate.Infrastructure.Models.Employee
 {
     public class Salary
     {
@@ -13,7 +14,7 @@ namespace HourlyRate.Core.Models.Employee
         [ForeignKey(nameof(Employee))]
         public int EmployeeId { get; set; }
 
-        public Employee Employee { get; set; } = null!;
+        public Infrastructure.Models.Employee.Employee Employee { get; set; } = null!;
 
         [Required]
         [Column(TypeName = "money")]

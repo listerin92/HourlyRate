@@ -1,7 +1,6 @@
-using HourlyRate.Core.Data;
 using HourlyRate.Core.Models.Account;
+using HourlyRate.Extensions;
 using HourlyRate.Infrastructure;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +33,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
 });
 
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

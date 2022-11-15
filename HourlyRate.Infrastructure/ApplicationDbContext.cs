@@ -1,6 +1,7 @@
 ﻿using HourlyRate.Core.Models.Account;
 using HourlyRate.Core.Models.Employee;
 using HourlyRate.Infrastructure.Configuration;
+using HourlyRate.Infrastructure.Models.Employee;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

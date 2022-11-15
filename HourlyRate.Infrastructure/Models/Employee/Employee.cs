@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HourlyRate.Core.Models.Employee
+namespace HourlyRate.Infrastructure.Models.Employee
 {
     public class Employee
     {
@@ -19,6 +19,9 @@ namespace HourlyRate.Core.Models.Employee
 
         [ForeignKey(nameof(Department))]
         public int DepartmentId { get; set; }
+
+        [Required] 
+        public bool IsEmployee { get; set; } = true;
 
         public Department Department { get; set; } = null!;
 
