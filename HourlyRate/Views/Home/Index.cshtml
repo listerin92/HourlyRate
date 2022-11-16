@@ -41,12 +41,12 @@
     <p>Profile widget created by using Bootstrap <code>.card</code> component with Bootstrap grid.</p>
 </div>*@
 
-@foreach (var employee in Model)
-{
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            @foreach (var employee in Model)
+            {
                 <div class="col-xl-6">
                     <div class="card border-0 overflow-hidden rounded-0 rounded-top" style="height: 165px">
                         <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
-}
+</div>
