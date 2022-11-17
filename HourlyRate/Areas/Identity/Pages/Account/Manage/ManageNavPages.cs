@@ -25,6 +25,7 @@ namespace  HourlyRate.Areas.Identity.Pages.Account.Manage
         public static string Email => "Email";
 
         public static string FirstLastName => "FirstLastName";
+        public static string CompanyInfo => "CompanyInfo";
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -73,6 +74,7 @@ namespace  HourlyRate.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public static string FlNavClass(ViewContext viewContext) => PageNavClass(viewContext, FirstLastName);
+        public static string CompanyClass(ViewContext viewContext) => PageNavClass(viewContext, CompanyInfo);
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

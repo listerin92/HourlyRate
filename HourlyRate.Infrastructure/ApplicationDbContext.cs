@@ -1,6 +1,6 @@
-﻿using HourlyRate.Core.Models.Account;
-using HourlyRate.Core.Models.Employee;
-using HourlyRate.Infrastructure.Configuration;
+﻿using HourlyRate.Infrastructure.Configuration;
+using HourlyRate.Infrastructure.Models;
+using HourlyRate.Infrastructure.Models.Account;
 using HourlyRate.Infrastructure.Models.Employee;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +17,7 @@ namespace HourlyRate.Infrastructure
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<FinancialYear> FinancialYears { get; set; }
-        public DbSet<Salary> Salaries { get; set; }
+        public DbSet<Expenses> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using HourlyRate.Infrastructure.Models.Account;
 
 namespace HourlyRate.Infrastructure.Models.Employee
 {
@@ -24,6 +25,9 @@ namespace HourlyRate.Infrastructure.Models.Employee
         public bool IsEmployee { get; set; } = true;
 
         public Department Department { get; set; } = null!;
+
+        public string? UserId { get; set; }
+
 
     }
 }

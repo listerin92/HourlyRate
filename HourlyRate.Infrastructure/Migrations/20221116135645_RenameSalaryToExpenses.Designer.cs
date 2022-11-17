@@ -4,6 +4,7 @@ using HourlyRate.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspStudio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221116135645_RenameSalaryToExpenses")]
+    partial class RenameSalaryToExpenses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,28 +24,13 @@ namespace AspStudio.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Account.User", b =>
+            modelBuilder.Entity("HourlyRate.Core.Models.Account.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("CompanyDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyPhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -97,10 +84,6 @@ namespace AspStudio.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("VAT")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -112,6 +95,119 @@ namespace AspStudio.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("HourlyRate.Core.Models.Employee.FinancialYear", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FinancialYears");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Year = 2015
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Year = 2016
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Year = 2017
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Year = 2018
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Year = 2019
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Year = 2020
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Year = 2021
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Year = 2022
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Year = 2023
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Year = 2025
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Year = 2027
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Year = 2028
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Year = 2029
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Year = 2030
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Year = 2031
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Year = 2032
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Year = 2033
+                        });
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Department", b =>
@@ -209,9 +305,6 @@ namespace AspStudio.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -257,142 +350,7 @@ namespace AspStudio.Migrations
                         });
                 });
 
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.FinancialYear", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FinancialYears");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = false,
-                            Year = 2015
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = false,
-                            Year = 2016
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = false,
-                            Year = 2017
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = false,
-                            Year = 2018
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsActive = false,
-                            Year = 2019
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsActive = false,
-                            Year = 2020
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IsActive = false,
-                            Year = 2021
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IsActive = false,
-                            Year = 2022
-                        },
-                        new
-                        {
-                            Id = 9,
-                            IsActive = false,
-                            Year = 2023
-                        },
-                        new
-                        {
-                            Id = 10,
-                            IsActive = false,
-                            Year = 2024
-                        },
-                        new
-                        {
-                            Id = 11,
-                            IsActive = false,
-                            Year = 2025
-                        },
-                        new
-                        {
-                            Id = 12,
-                            IsActive = false,
-                            Year = 2026
-                        },
-                        new
-                        {
-                            Id = 13,
-                            IsActive = false,
-                            Year = 2027
-                        },
-                        new
-                        {
-                            Id = 14,
-                            IsActive = false,
-                            Year = 2028
-                        },
-                        new
-                        {
-                            Id = 15,
-                            IsActive = false,
-                            Year = 2029
-                        },
-                        new
-                        {
-                            Id = 16,
-                            IsActive = false,
-                            Year = 2030
-                        },
-                        new
-                        {
-                            Id = 17,
-                            IsActive = false,
-                            Year = 2031
-                        },
-                        new
-                        {
-                            Id = 18,
-                            IsActive = false,
-                            Year = 2032
-                        },
-                        new
-                        {
-                            Id = 19,
-                            IsActive = false,
-                            Year = 2033
-                        });
-                });
-
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Expenses", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Expenses", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -409,9 +367,6 @@ namespace AspStudio.Migrations
 
                     b.Property<int>("FinancialYearId")
                         .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -600,13 +555,13 @@ namespace AspStudio.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Expenses", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Expenses", b =>
                 {
                     b.HasOne("HourlyRate.Infrastructure.Models.Employee.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("HourlyRate.Infrastructure.Models.Employee.FinancialYear", "FinancialYear")
+                    b.HasOne("HourlyRate.Core.Models.Employee.FinancialYear", "FinancialYear")
                         .WithMany()
                         .HasForeignKey("FinancialYearId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -628,7 +583,7 @@ namespace AspStudio.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -637,7 +592,7 @@ namespace AspStudio.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -652,7 +607,7 @@ namespace AspStudio.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -661,7 +616,7 @@ namespace AspStudio.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

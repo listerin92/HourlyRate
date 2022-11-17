@@ -1,6 +1,7 @@
-using HourlyRate.Core.Models.Account;
 using HourlyRate.Extensions;
 using HourlyRate.Infrastructure;
+using HourlyRate.Infrastructure.Models.Account;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
 
         options.User.RequireUniqueEmail = true;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
@@ -33,11 +35,19 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("My Policy", policy =>
+    {
+        policy.RequireRole("Admin");
+        policy.RequireClaim("CompanyId");
+    });
+});
+
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -45,7 +55,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

@@ -6,7 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using HourlyRate.Core.Models.Account;
+using HourlyRate.Infrastructure;
+using HourlyRate.Infrastructure.Models;
+using HourlyRate.Infrastructure.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -20,6 +22,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationDbContext _context;
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
@@ -27,11 +30,13 @@ namespace HourlyRate.Areas.Identity.Pages.Account
 
         public RegisterModel(
             UserManager<User> userManager,
-            IUserStore<User> userStore,
+            ApplicationDbContext context,
+        IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            _context = context;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -100,6 +105,16 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             [Required]
             [StringLength(20, MinimumLength = 2)]
             public string LastName { get; set; }
+
+            public string CompanyName { get; set; } = null!;
+
+            public string? CompanyDescription { get; set; }
+            [Required]
+            public string CompanyEmail { get; set; } = null!;
+            [Required]
+            public string CompanyPhoneNumber { get; set; } = null!;
+            [Required]
+            public string VAT { get; set; } = null!;
         }
 
 
@@ -116,7 +131,6 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                var res = user.FirstName;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -169,9 +183,17 @@ namespace HourlyRate.Areas.Identity.Pages.Account
         {
             try
             {
+                
                 var createUser = Activator.CreateInstance<User>();
                 createUser.FirstName = Input.FirstName;
                 createUser.LastName = Input.LastName;
+                createUser.Email = Input.Email;
+                createUser.CompanyName = Input.CompanyName;
+                createUser.CompanyDescription = Input.CompanyDescription;
+                createUser.CompanyEmail = Input.CompanyEmail;
+                createUser.CompanyPhoneNumber = Input.CompanyPhoneNumber;
+                createUser.VAT = Input.VAT;
+
                 return createUser;
             }
             catch
@@ -181,6 +203,20 @@ namespace HourlyRate.Areas.Identity.Pages.Account
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
+
+        //private Company CreateCompany()
+        //{
+        //    var company = new Company()
+        //    {
+        //        CompanyName = Input.CompanyName,
+        //        CompanyDescription = Input.CompanyDescription,
+        //        CompanyEmail = Input.CompanyEmail,
+        //        CompanyPhoneNumber = Input.CompanyPhoneNumber,
+        //        VAT = Input.VAT
+        //    };
+        //    _context.Companies.Add(company);
+        //    return company;
+        //}
 
         private IUserEmailStore<User> GetEmailStore()
         {

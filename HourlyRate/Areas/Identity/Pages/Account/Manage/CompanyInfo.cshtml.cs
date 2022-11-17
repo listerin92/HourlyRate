@@ -7,13 +7,13 @@ using HourlyRate.Infrastructure.Models.Account;
 
 namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 {
-    public class FirstLastNameModel : PageModel
+    public class CompanyInfo : PageModel
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ApplicationDbContext _dbContext;
 
-        public FirstLastNameModel(
+        public CompanyInfo(
             UserManager<User> userManager
             , SignInManager<User> signInManager
                 , ApplicationDbContext dbContext)
@@ -25,9 +25,11 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 
         [TempData]
         public string StatusMessage { get; set; }
-
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string CompanyName { get; set; } = null!;
+        public string? CompanyDescription { get; set; }
+        public string CompanyEmail { get; set; } = null!;
+        public string CompanyPhoneNumber { get; set; } = null!;
+        public string VAT { get; set; } = null!;
 
 
 
@@ -35,11 +37,12 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
         public InputModel Input { get; set; }
         public class InputModel
         {
-            [StringLength(20, MinimumLength = 4)]
-            public string FirstName { get; set; }
+            public string CompanyName { get; set; } = null!;
 
-            [StringLength(20, MinimumLength = 4)]
-            public string LastName { get; set; }
+            public string? CompanyDescription { get; set; }
+            public string CompanyEmail { get; set; } = null!;
+            public string CompanyPhoneNumber { get; set; } = null!;
+            public string VAT { get; set; } = null!;
         }
 
         private async Task LoadAsync(User user)
@@ -47,8 +50,12 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                FirstName = user.FirstName ?? "",
-                LastName = user.LastName ?? ""
+                CompanyName = user.CompanyName,
+                CompanyDescription = user.CompanyDescription,
+                CompanyEmail = user.CompanyEmail,
+                CompanyPhoneNumber = user.CompanyPhoneNumber,
+                VAT = user.VAT,
+                
             };
         }
 
@@ -59,7 +66,6 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             await LoadAsync(user);
             return Page();
         }
@@ -80,13 +86,19 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 
             var dbUser = _dbContext.Users.FirstOrDefault(u => u.Email == user.Email);
 
-            var firstName = dbUser?.FirstName ?? "";
-            var lastName = dbUser?.LastName ?? "";
 
-            if (Input.FirstName != firstName || Input.LastName != lastName)
+            if (Input.CompanyName != dbUser?.CompanyName || 
+                Input.CompanyDescription != dbUser.CompanyDescription ||
+                Input.CompanyEmail != dbUser.CompanyEmail ||
+                Input.CompanyPhoneNumber != dbUser.CompanyPhoneNumber ||
+                Input.VAT != dbUser.VAT)
             {
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
+                user.CompanyName = Input.CompanyName;
+                user.CompanyDescription = Input.CompanyDescription;
+                user.CompanyEmail = Input.CompanyEmail;
+                user.CompanyPhoneNumber = Input.CompanyPhoneNumber;
+                user.VAT = Input.VAT;
+
                 _dbContext.Update(user);
                 await _dbContext.SaveChangesAsync();
             }

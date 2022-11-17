@@ -20,9 +20,14 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var model = await _employeeService.AllEmployees();
-        return View(model);
+        if (User.Identity?.IsAuthenticated ?? false)
+        {
+            var model = await _employeeService.AllEmployees();
+            return View(model);
+        }
+        else return View();
     }
+
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
@@ -30,3 +35,4 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+

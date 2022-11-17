@@ -3,7 +3,7 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
-using HourlyRate.Core.Models.Account;
+using HourlyRate.Infrastructure.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

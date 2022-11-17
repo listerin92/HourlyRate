@@ -1,0 +1,46 @@
+﻿@page
+@using HourlyRate.Areas.Identity.Pages.Account.Manage
+@model HourlyRate.Areas.Identity.Pages.Account.Manage.CompanyInfo
+@{
+    ViewData["Title"] = "ChangeCompanyInfo";
+    ViewData["ActivePage"] = ManageNavPages.CompanyInfo;
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="changecompanyinfo-form" method="post">
+            <div class="mb-3">
+                <label asp-for="Input.CompanyName" class="form-label"></label>
+                <input asp-for="Input.CompanyName" class="form-control" />
+                <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.CompanyDescription" class="form-label"></label>
+                <input asp-for="Input.CompanyDescription" class="form-control" />
+                <span asp-validation-for="Input.CompanyDescription" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.CompanyEmail" class="form-label"></label>
+                <input asp-for="Input.CompanyEmail" class="form-control" />
+                <span asp-validation-for="Input.CompanyEmail" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.CompanyPhoneNumber" class="form-label"></label>
+                <input asp-for="Input.CompanyPhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.CompanyPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.VAT" class="form-label"></label>
+                <input asp-for="Input.VAT" class="form-control" />
+                <span asp-validation-for="Input.VAT" class="text-danger"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="btn btn-primary w-150px">Save</button>
+        </form>
+    </div>
+</div>
+
+@{
+    <partial name="_ValidationScriptsPartial" />
+}

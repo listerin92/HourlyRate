@@ -1,4 +1,4 @@
-﻿using HourlyRate.Core.Models.Employee;
+﻿using HourlyRate.Infrastructure.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,20 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using HourlyRate.Core.Models.Employee;
+using HourlyRate.Infrastructure.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
-namespace HourlyRate.Infrastructure.Models.Employee
+namespace HourlyRate.Infrastructure.Models
 {
-    public class Salary
+    public class Expenses
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
         [ForeignKey(nameof(Employee))]
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
 
-        public Infrastructure.Models.Employee.Employee Employee { get; set; } = null!;
+        public Employee.Employee Employee { get; set; } = null!;
+
+
 
         [Required]
         [Column(TypeName = "money")]
@@ -25,5 +26,7 @@ namespace HourlyRate.Infrastructure.Models.Employee
         public int FinancialYearId { get; set; }
 
         public FinancialYear FinancialYear { get; set; } = null!;
+
+        public string? UserId { get; set; }
     }
 }

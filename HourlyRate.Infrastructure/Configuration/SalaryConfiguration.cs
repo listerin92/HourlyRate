@@ -1,21 +1,21 @@
-﻿using HourlyRate.Infrastructure.Models.Employee;
+﻿using HourlyRate.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HourlyRate.Infrastructure.Configuration
 {
-    internal class SalaryConfiguration : IEntityTypeConfiguration<Salary>
+    internal class SalaryConfiguration : IEntityTypeConfiguration<Expenses>
     {
-        public void Configure(EntityTypeBuilder<Salary> builder)
+        public void Configure(EntityTypeBuilder<Expenses> builder)
         {
             builder.HasData(CreateSalary());
         }
 
-        private List<Salary> CreateSalary()
+        private List<Expenses> CreateSalary()
         {
-            var salary = new List<Salary>()
+            var salary = new List<Expenses>()
             {
-                new Salary()
+                new Expenses()
                 {
                     Id = 1,
                     EmployeeId = 1,
@@ -23,7 +23,7 @@ namespace HourlyRate.Infrastructure.Configuration
                     FinancialYearId = 8
 
                 },
-                new Salary()
+                new Expenses()
                 {
                     Id = 2,
                     EmployeeId = 2,
@@ -31,7 +31,7 @@ namespace HourlyRate.Infrastructure.Configuration
                     FinancialYearId = 8
 
                 },
-                new Salary()
+                new Expenses()
                 {
                     Id = 3,
                     EmployeeId = 3,
@@ -39,7 +39,7 @@ namespace HourlyRate.Infrastructure.Configuration
                     FinancialYearId = 8
 
                 },
-                new Salary()
+                new Expenses()
                 {
                     Id = 4,
                     EmployeeId = 4,

@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using HourlyRate.Core.Models.Account;
+using HourlyRate.Infrastructure.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

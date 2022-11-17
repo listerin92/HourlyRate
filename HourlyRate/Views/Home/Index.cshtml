@@ -1,9 +1,20 @@
-﻿@model IEnumerable<EmployeeViewModel>
+﻿@using Microsoft.AspNetCore.Identity
+@using HourlyRate.Infrastructure.Models.Account
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
-@{
-    ViewData["Title"] = "Starter Page";
+@model IEnumerable<EmployeeViewModel>
 
+@if (SignInManager.IsSignedIn(User))
+{
+    ViewData["Title"] = $"{UserManager.GetUserAsync(User).Result.CompanyName}";
 }
+else
+{
+    ViewData["Title"] = $"Starting Page";
+}
+
+
 
 <ul class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">LAYOUT</a></li>
@@ -11,13 +22,13 @@
 </ul>
 
 <h1 class="page-header">
-    Starter Page <small>page header description goes here...</small>
+    @UserManager.GetUserAsync(User).Result.CompanyName
 </h1>
 
 <div class="list-group"></div>
 
 
-<!-- with icon -->
+@*<!-- with icon -->
 <div class="list-group-item d-flex align-items-center">
     <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
         <i class="fa fa-print fa-lg"></i>
@@ -34,7 +45,7 @@
             <a href="#" class="dropdown-item">Report</a>
         </div>
     </div>
-</div>
+</div>*@
 
 @*<div id="profileWidget" class="mb-5">
     <h4>Profile widget</h4>
@@ -45,41 +56,53 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            @foreach (var employee in Model)
+            @if (SignInManager.IsSignedIn(User))
             {
-                <div class="col-xl-6">
-                    <div class="card border-0 overflow-hidden rounded-0 rounded-top" style="height: 165px">
-                        <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
-                        <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">
-                            <div class="mb-2">
-                                <img src="/img/user/user-5.jpg" alt="" width="80" class="rounded-circle" />
-                            </div>
-                            <div>
-                                <div class="fw-600">@employee.FirstName @employee.LastName</div>
-                                <div class="fs-12px">@employee.JobTitle</div>
-                                <div class="fs-12px">@employee.Salary</div>
+                @foreach (var employee in Model)
+                {
+                    <div class="col-xl-2">
+                        <div class="dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="text-muted"><i class="fa fa-ellipsis-h"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
+                                <a href="#" class="dropdown-item">View</a>
+                                <a href="#" class="dropdown-item">Analytic</a>
+                                <a href="#" class="dropdown-item">Report</a>
                             </div>
                         </div>
-                    </div>
-                    <div class="card border-top-0 rounded-0 rounded-bottom">
-                        <div class="card-body py-2 px-3">
-                            <div class="row text-center">
-                                <div class="col-4">
-                                    <div class="fw-600">415</div>
-                                    <div class="fs-12px">posts</div>
+                        <div class="card border-0 overflow-hidden rounded-0 rounded-top" style="height: 165px">
+                            <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
+                            <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">
+                                <div class="mb-2">
+                                    <img src="/img/user/user-5.jpg" alt="" width="80" class="rounded-circle" />
                                 </div>
-                                <div class="col-4">
-                                    <div class="fw-600">140k</div>
-                                    <div class="fs-12px">followers</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="fw-600">697</div>
-                                    <div class="fs-12px">following</div>
+                                <div>
+                                    <div class="fw-600">@employee.FirstName @employee.LastName</div>
+                                    <div class="fs-12px">@employee.JobTitle</div>
+                                    <div class="fs-12px">@employee.Salary</div>
                                 </div>
                             </div>
                         </div>
+                        <div class="card border-top-0 rounded-0 rounded-bottom">
+                            <div class="card-body py-2 px-3">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <div class="fw-600">415</div>
+                                        <div class="fs-12px">posts</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="fw-600">140k</div>
+                                        <div class="fs-12px">followers</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="fw-600">697</div>
+                                        <div class="fs-12px">following</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
+                }
             }
         </div>
     </div>
