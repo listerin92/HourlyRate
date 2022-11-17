@@ -15,7 +15,7 @@
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h1 class="text-center">Sign Up</h1>
             <p class="text-muted text-center">One Admin ID is all you need to access all the Admin services.</p>
-            <div asp-validation-summary="All" class="text-danger"></div>
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
             <div class="mb-3">
                 <label asp-for="Input.Email" class="form-label"></label>
                 <input asp-for="Input.Email" class="form-control form-control-lg fs-15px" placeholder="e.g JohnSmith@asdf.com" />

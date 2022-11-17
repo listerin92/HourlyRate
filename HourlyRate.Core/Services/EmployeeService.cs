@@ -1,9 +1,7 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models;
 using HourlyRate.Infrastructure.Models;
-using HourlyRate.Infrastructure.Models.Account;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebShopDemo.Core.Data.Common;
@@ -26,7 +24,7 @@ namespace HourlyRate.Core.Services
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             return await _repo.AllReadonly<Expenses>()
-                .Where(y => y.FinancialYear.Year == 2022 && y.UserId == userId)
+                .Where(y => y.FinancialYear.Year == 2022)//TODO: get company id == userCompanyId
                 .Select(e => new EmployeeViewModel()
                 {
                     Id = e.Id,

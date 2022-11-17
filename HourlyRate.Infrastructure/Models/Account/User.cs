@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 
 namespace HourlyRate.Infrastructure.Models.Account
 {
@@ -25,6 +25,11 @@ namespace HourlyRate.Infrastructure.Models.Account
 
         [Required]
         public string VAT { get; set; } = null!;
+
+        [ForeignKey(nameof(Company))]
+        public Guid CompanyId { get; set; }
+
+        public Company Company { get; set; } = null!;
 
     }
 }

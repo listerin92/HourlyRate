@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HourlyRate.Infrastructure.Models.Employee;
+﻿using HourlyRate.Infrastructure.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Configuration;
 
 namespace HourlyRate.Infrastructure.Configuration
 {

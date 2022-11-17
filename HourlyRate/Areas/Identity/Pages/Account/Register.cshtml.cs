@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HourlyRate.Areas.Identity.Pages.Account
 {
@@ -106,10 +107,13 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             [StringLength(20, MinimumLength = 2)]
             public string LastName { get; set; }
 
+            [Required]
             public string CompanyName { get; set; } = null!;
 
-            public string? CompanyDescription { get; set; }
+            public string CompanyDescription { get; set; }
+
             [Required]
+            [EmailAddress]
             public string CompanyEmail { get; set; } = null!;
             [Required]
             public string CompanyPhoneNumber { get; set; } = null!;
@@ -128,10 +132,10 @@ namespace HourlyRate.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var company = CreateCompany();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
-
+                var user = CreateUser(company.Id);
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -179,11 +183,11 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private User CreateUser()
+        private User CreateUser(Guid guid)
         {
             try
             {
-                
+
                 var createUser = Activator.CreateInstance<User>();
                 createUser.FirstName = Input.FirstName;
                 createUser.LastName = Input.LastName;
@@ -193,6 +197,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account
                 createUser.CompanyEmail = Input.CompanyEmail;
                 createUser.CompanyPhoneNumber = Input.CompanyPhoneNumber;
                 createUser.VAT = Input.VAT;
+                createUser.CompanyId = guid;
 
                 return createUser;
             }
@@ -204,19 +209,27 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             }
         }
 
-        //private Company CreateCompany()
-        //{
-        //    var company = new Company()
-        //    {
-        //        CompanyName = Input.CompanyName,
-        //        CompanyDescription = Input.CompanyDescription,
-        //        CompanyEmail = Input.CompanyEmail,
-        //        CompanyPhoneNumber = Input.CompanyPhoneNumber,
-        //        VAT = Input.VAT
-        //    };
-        //    _context.Companies.Add(company);
-        //    return company;
-        //}
+        private Company CreateCompany()
+        {
+            var ifExistCompanyName = _context.Companies
+                .FirstOrDefault(c => c.CompanyName == Input.CompanyName);
+
+            if (ifExistCompanyName != null)
+            {
+                ModelState.AddModelError("", "Invalid Company");
+            }
+
+            var company = new Company()
+            {
+                CompanyName = Input.CompanyName,
+                CompanyDescription = Input.CompanyDescription,
+                CompanyEmail = Input.CompanyEmail,
+                CompanyPhone = Input.CompanyPhoneNumber,
+                VAT = Input.VAT
+            };
+            _context.Companies.Add(company);
+            return company;
+        }
 
         private IUserEmailStore<User> GetEmailStore()
         {

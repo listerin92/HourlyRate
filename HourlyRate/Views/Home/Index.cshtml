@@ -22,7 +22,13 @@ else
 </ul>
 
 <h1 class="page-header">
-    @UserManager.GetUserAsync(User).Result.CompanyName
+    @if (SignInManager.IsSignedIn(User))
+    {
+        @UserManager.GetUserAsync(User).Result.CompanyName
+
+    }
+    
+        Starting Page
 </h1>
 
 <div class="list-group"></div>

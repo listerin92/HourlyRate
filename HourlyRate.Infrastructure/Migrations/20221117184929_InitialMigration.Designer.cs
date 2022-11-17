@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AspStudio.Migrations
+namespace HourlyRate.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221115183533_SeedDepartmentsYears")]
-    partial class SeedDepartmentsYears
+    [Migration("20221117184929_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,13 +24,31 @@ namespace AspStudio.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("HourlyRate.Core.Models.Account.User", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Account.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("CompanyDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyPhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -84,7 +102,13 @@ namespace AspStudio.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("VAT")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -97,7 +121,134 @@ namespace AspStudio.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("HourlyRate.Core.Models.Employee.Department", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CompanyDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VAT")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Consumable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ArticleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("Consumables");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Machine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UniqueId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Machines");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Rent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Rents");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Tax", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Taxes");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,7 +317,7 @@ namespace AspStudio.Migrations
                         });
                 });
 
-            modelBuilder.Entity("HourlyRate.Core.Models.Employee.Employee", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -174,12 +325,18 @@ namespace AspStudio.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEmployee")
+                        .HasColumnType("bit");
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
@@ -191,18 +348,61 @@ namespace AspStudio.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DepartmentId = 1,
+                            FirstName = "Ivan",
+                            IsEmployee = true,
+                            JobTitle = "asdf",
+                            LastName = "Ivanov"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DepartmentId = 2,
+                            FirstName = "Petar",
+                            IsEmployee = true,
+                            JobTitle = "asdf",
+                            LastName = "Petrov"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DepartmentId = 1,
+                            FirstName = "Stefan",
+                            IsEmployee = true,
+                            JobTitle = "bbb",
+                            LastName = "Todorov"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DepartmentId = 1,
+                            FirstName = "Georgi",
+                            IsEmployee = true,
+                            JobTitle = "asdf",
+                            LastName = "Antonov"
+                        });
                 });
 
-            modelBuilder.Entity("HourlyRate.Core.Models.Employee.FinancialYear", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.FinancialYear", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -215,101 +415,120 @@ namespace AspStudio.Migrations
                         new
                         {
                             Id = 1,
+                            IsActive = false,
                             Year = 2015
                         },
                         new
                         {
                             Id = 2,
+                            IsActive = false,
                             Year = 2016
                         },
                         new
                         {
                             Id = 3,
+                            IsActive = false,
                             Year = 2017
                         },
                         new
                         {
                             Id = 4,
+                            IsActive = false,
                             Year = 2018
                         },
                         new
                         {
                             Id = 5,
+                            IsActive = false,
                             Year = 2019
                         },
                         new
                         {
                             Id = 6,
+                            IsActive = false,
                             Year = 2020
                         },
                         new
                         {
                             Id = 7,
+                            IsActive = false,
                             Year = 2021
                         },
                         new
                         {
                             Id = 8,
+                            IsActive = false,
                             Year = 2022
                         },
                         new
                         {
                             Id = 9,
+                            IsActive = false,
                             Year = 2023
                         },
                         new
                         {
                             Id = 10,
+                            IsActive = false,
                             Year = 2024
                         },
                         new
                         {
                             Id = 11,
+                            IsActive = false,
                             Year = 2025
                         },
                         new
                         {
                             Id = 12,
+                            IsActive = false,
                             Year = 2026
                         },
                         new
                         {
                             Id = 13,
+                            IsActive = false,
                             Year = 2027
                         },
                         new
                         {
                             Id = 14,
+                            IsActive = false,
                             Year = 2028
                         },
                         new
                         {
                             Id = 15,
+                            IsActive = false,
                             Year = 2029
                         },
                         new
                         {
                             Id = 16,
+                            IsActive = false,
                             Year = 2030
                         },
                         new
                         {
                             Id = 17,
+                            IsActive = false,
                             Year = 2031
                         },
                         new
                         {
                             Id = 18,
+                            IsActive = false,
                             Year = 2032
                         },
                         new
                         {
                             Id = 19,
+                            IsActive = false,
                             Year = 2033
                         });
                 });
 
-            modelBuilder.Entity("HourlyRate.Core.Models.Employee.Salary", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Expenses", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -321,19 +540,70 @@ namespace AspStudio.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("money");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ConsumableId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmployeeId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("FinancialYearId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TaxId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ConsumableId");
 
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("FinancialYearId");
 
-                    b.ToTable("Salaries");
+                    b.HasIndex("RentId");
+
+                    b.HasIndex("TaxId");
+
+                    b.ToTable("Expenses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amount = 5000m,
+                            EmployeeId = 1,
+                            FinancialYearId = 8
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Amount = 2322m,
+                            EmployeeId = 2,
+                            FinancialYearId = 8
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Amount = 1211m,
+                            EmployeeId = 3,
+                            FinancialYearId = 8
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Amount = 855m,
+                            EmployeeId = 4,
+                            FinancialYearId = 8
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -473,34 +743,119 @@ namespace AspStudio.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HourlyRate.Core.Models.Employee.Employee", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Account.User", b =>
                 {
-                    b.HasOne("HourlyRate.Core.Models.Employee.Department", "Department")
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
                         .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Consumable", b =>
+                {
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("HourlyRate.Infrastructure.Models.Costs.Machine", "Machine")
+                        .WithMany()
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Machine");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Machine", b =>
+                {
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Rent", b =>
+                {
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Tax", b =>
+                {
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Employee", b =>
+                {
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("HourlyRate.Infrastructure.Models.Employee.Department", "Department")
+                        .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Company");
+
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("HourlyRate.Core.Models.Employee.Salary", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Expenses", b =>
                 {
-                    b.HasOne("HourlyRate.Core.Models.Employee.Employee", "Employee")
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("HourlyRate.Infrastructure.Models.Costs.Consumable", "Consumable")
+                        .WithMany()
+                        .HasForeignKey("ConsumableId");
+
+                    b.HasOne("HourlyRate.Infrastructure.Models.Employee.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HourlyRate.Core.Models.Employee.FinancialYear", "FinancialYear")
+                    b.HasOne("HourlyRate.Infrastructure.Models.Employee.FinancialYear", "FinancialYear")
                         .WithMany()
                         .HasForeignKey("FinancialYearId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("HourlyRate.Infrastructure.Models.Costs.Rent", "Rent")
+                        .WithMany()
+                        .HasForeignKey("RentId");
+
+                    b.HasOne("HourlyRate.Infrastructure.Models.Costs.Tax", "Tax")
+                        .WithMany()
+                        .HasForeignKey("TaxId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Consumable");
+
                     b.Navigation("Employee");
 
                     b.Navigation("FinancialYear");
+
+                    b.Navigation("Rent");
+
+                    b.Navigation("Tax");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -514,7 +869,7 @@ namespace AspStudio.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -523,7 +878,7 @@ namespace AspStudio.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -538,7 +893,7 @@ namespace AspStudio.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -547,11 +902,16 @@ namespace AspStudio.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("HourlyRate.Core.Models.Account.User", null)
+                    b.HasOne("HourlyRate.Infrastructure.Models.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Department", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }
