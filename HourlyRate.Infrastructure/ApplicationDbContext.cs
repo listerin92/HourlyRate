@@ -1,6 +1,7 @@
 ﻿using HourlyRate.Infrastructure.Configuration;
 using HourlyRate.Infrastructure.Models;
 using HourlyRate.Infrastructure.Models.Account;
+using HourlyRate.Infrastructure.Models.CostCategories;
 using HourlyRate.Infrastructure.Models.Costs;
 using HourlyRate.Infrastructure.Models.Employee;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -19,18 +20,17 @@ namespace HourlyRate.Infrastructure
         public DbSet<Employee> Employees { get; set; }
         public DbSet<FinancialYear> FinancialYears { get; set; }
         public DbSet<Expenses> Expenses { get; set; }
-        public DbSet<Rent> Rents { get; set; }
-        public DbSet<Tax> Taxes { get; set; }
         public DbSet<Consumable> Consumables { get; set; }
         public DbSet<Machine> Machines { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<CostCategory> CostCategories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new FinancialYearConfiguration());
+            modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new SalaryConfiguration());
 

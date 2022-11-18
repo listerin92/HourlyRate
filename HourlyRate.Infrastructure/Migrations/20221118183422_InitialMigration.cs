@@ -40,19 +40,6 @@ namespace HourlyRate.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FinancialYears",
                 columns: table => new
                 {
@@ -127,6 +114,46 @@ namespace HourlyRate.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CostCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CostCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CostCategories_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Departments_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Machines",
                 columns: table => new
                 {
@@ -135,7 +162,7 @@ namespace HourlyRate.Infrastructure.Migrations
                     UniqueId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,72 +171,6 @@ namespace HourlyRate.Infrastructure.Migrations
                         name: "FK_Machines_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Rents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rents_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Taxes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Taxes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Taxes_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Employees",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    IsEmployee = table.Column<bool>(type: "bit", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Employees_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Employees_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -300,14 +261,43 @@ namespace HourlyRate.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: true),
+                    IsEmployee = table.Column<bool>(type: "bit", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employees_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Employees_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Consumables",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ArticleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MachineId = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    MachineId = table.Column<int>(type: "int", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -316,13 +306,13 @@ namespace HourlyRate.Infrastructure.Migrations
                         name: "FK_Consumables_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Consumables_Machines_MachineId",
                         column: x => x.MachineId,
                         principalTable: "Machines",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -331,13 +321,12 @@ namespace HourlyRate.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
                     FinancialYearId = table.Column<int>(type: "int", nullable: false),
-                    RentId = table.Column<int>(type: "int", nullable: true),
-                    TaxId = table.Column<int>(type: "int", nullable: true),
                     ConsumableId = table.Column<int>(type: "int", nullable: true),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CostCategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -346,99 +335,29 @@ namespace HourlyRate.Infrastructure.Migrations
                         name: "FK_Expenses_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Expenses_Consumables_ConsumableId",
                         column: x => x.ConsumableId,
                         principalTable: "Consumables",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Expenses_CostCategories_CostCategoryId",
+                        column: x => x.CostCategoryId,
+                        principalTable: "CostCategories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Expenses_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Expenses_FinancialYears_FinancialYearId",
                         column: x => x.FinancialYearId,
                         principalTable: "FinancialYears",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Expenses_Rents_RentId",
-                        column: x => x.RentId,
-                        principalTable: "Rents",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Expenses_Taxes_TaxId",
-                        column: x => x.TaxId,
-                        principalTable: "Taxes",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.InsertData(
-                table: "Departments",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Prepress" },
-                    { 2, "Press" },
-                    { 3, "WebPress" },
-                    { 4, "ManualLabor" },
-                    { 5, "Cutters" },
-                    { 6, "Stitchers" },
-                    { 7, "Binders" },
-                    { 8, "HardCover" },
-                    { 9, "FrontCutter" },
-                    { 10, "RotaryCutter" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "FinancialYears",
-                columns: new[] { "Id", "IsActive", "Year" },
-                values: new object[,]
-                {
-                    { 1, false, 2015 },
-                    { 2, false, 2016 },
-                    { 3, false, 2017 },
-                    { 4, false, 2018 },
-                    { 5, false, 2019 },
-                    { 6, false, 2020 },
-                    { 7, false, 2021 },
-                    { 8, false, 2022 },
-                    { 9, false, 2023 },
-                    { 10, false, 2024 },
-                    { 11, false, 2025 },
-                    { 12, false, 2026 },
-                    { 13, false, 2027 },
-                    { 14, false, 2028 },
-                    { 15, false, 2029 },
-                    { 16, false, 2030 },
-                    { 17, false, 2031 },
-                    { 18, false, 2032 },
-                    { 19, false, 2033 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Employees",
-                columns: new[] { "Id", "CompanyId", "DepartmentId", "FirstName", "IsEmployee", "JobTitle", "LastName" },
-                values: new object[,]
-                {
-                    { 1, null, 1, "Ivan", true, "asdf", "Ivanov" },
-                    { 2, null, 2, "Petar", true, "asdf", "Petrov" },
-                    { 3, null, 1, "Stefan", true, "bbb", "Todorov" },
-                    { 4, null, 1, "Georgi", true, "asdf", "Antonov" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Expenses",
-                columns: new[] { "Id", "Amount", "CompanyId", "ConsumableId", "EmployeeId", "FinancialYearId", "RentId", "TaxId" },
-                values: new object[,]
-                {
-                    { 1, 5000m, null, null, 1, 8, null, null },
-                    { 2, 2322m, null, null, 2, 8, null, null },
-                    { 3, 1211m, null, null, 3, 8, null, null },
-                    { 4, 855m, null, null, 4, 8, null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -496,6 +415,16 @@ namespace HourlyRate.Infrastructure.Migrations
                 column: "MachineId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CostCategories_CompanyId",
+                table: "CostCategories",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Departments_CompanyId",
+                table: "Departments",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Employees_CompanyId",
                 table: "Employees",
                 column: "CompanyId");
@@ -516,6 +445,11 @@ namespace HourlyRate.Infrastructure.Migrations
                 column: "ConsumableId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Expenses_CostCategoryId",
+                table: "Expenses",
+                column: "CostCategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Expenses_EmployeeId",
                 table: "Expenses",
                 column: "EmployeeId");
@@ -526,28 +460,8 @@ namespace HourlyRate.Infrastructure.Migrations
                 column: "FinancialYearId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expenses_RentId",
-                table: "Expenses",
-                column: "RentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Expenses_TaxId",
-                table: "Expenses",
-                column: "TaxId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Machines_CompanyId",
                 table: "Machines",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rents_CompanyId",
-                table: "Rents",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Taxes_CompanyId",
-                table: "Taxes",
                 column: "CompanyId");
         }
 
@@ -581,16 +495,13 @@ namespace HourlyRate.Infrastructure.Migrations
                 name: "Consumables");
 
             migrationBuilder.DropTable(
+                name: "CostCategories");
+
+            migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "FinancialYears");
-
-            migrationBuilder.DropTable(
-                name: "Rents");
-
-            migrationBuilder.DropTable(
-                name: "Taxes");
 
             migrationBuilder.DropTable(
                 name: "Machines");

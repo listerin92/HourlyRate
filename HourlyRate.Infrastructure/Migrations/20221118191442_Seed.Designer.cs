@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HourlyRate.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221117184929_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221118191442_Seed")]
+    partial class Seed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -149,6 +149,28 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.CostCategories.CostCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("CostCategories");
+                });
+
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Consumable", b =>
                 {
                     b.Property<int>("Id")
@@ -161,10 +183,10 @@ namespace HourlyRate.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("MachineId")
+                    b.Property<int?>("MachineId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -184,7 +206,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -204,50 +226,6 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.ToTable("Machines");
                 });
 
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Rent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("Rents");
-                });
-
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Tax", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("Taxes");
-                });
-
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -256,11 +234,16 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Departments");
 
@@ -268,51 +251,61 @@ namespace HourlyRate.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "Prepress"
                         },
                         new
                         {
                             Id = 2,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "Press"
                         },
                         new
                         {
                             Id = 3,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "WebPress"
                         },
                         new
                         {
                             Id = 4,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "ManualLabor"
                         },
                         new
                         {
                             Id = 5,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "Cutters"
                         },
                         new
                         {
                             Id = 6,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "Stitchers"
                         },
                         new
                         {
                             Id = 7,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "Binders"
                         },
                         new
                         {
                             Id = 8,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "HardCover"
                         },
                         new
                         {
                             Id = 9,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "FrontCutter"
                         },
                         new
                         {
                             Id = 10,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             Name = "RotaryCutter"
                         });
                 });
@@ -325,10 +318,10 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -358,6 +351,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             DepartmentId = 1,
                             FirstName = "Ivan",
                             IsEmployee = true,
@@ -367,6 +361,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             DepartmentId = 2,
                             FirstName = "Petar",
                             IsEmployee = true,
@@ -376,6 +371,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             DepartmentId = 1,
                             FirstName = "Stefan",
                             IsEmployee = true,
@@ -385,6 +381,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             DepartmentId = 1,
                             FirstName = "Georgi",
                             IsEmployee = true,
@@ -540,23 +537,19 @@ namespace HourlyRate.Infrastructure.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("money");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("ConsumableId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CostCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("EmployeeId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("FinancialYearId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TaxId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -565,13 +558,11 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("ConsumableId");
 
+                    b.HasIndex("CostCategoryId");
+
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("FinancialYearId");
-
-                    b.HasIndex("RentId");
-
-                    b.HasIndex("TaxId");
 
                     b.ToTable("Expenses");
 
@@ -580,6 +571,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         {
                             Id = 1,
                             Amount = 5000m,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             EmployeeId = 1,
                             FinancialYearId = 8
                         },
@@ -587,6 +579,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         {
                             Id = 2,
                             Amount = 2322m,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             EmployeeId = 2,
                             FinancialYearId = 8
                         },
@@ -594,6 +587,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         {
                             Id = 3,
                             Amount = 1211m,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             EmployeeId = 3,
                             FinancialYearId = 8
                         },
@@ -601,6 +595,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         {
                             Id = 4,
                             Amount = 855m,
+                            CompanyId = new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"),
                             EmployeeId = 4,
                             FinancialYearId = 8
                         });
@@ -754,17 +749,28 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.CostCategories.CostCategory", b =>
+                {
+                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Consumable", b =>
                 {
                     b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HourlyRate.Infrastructure.Models.Costs.Machine", "Machine")
                         .WithMany()
-                        .HasForeignKey("MachineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MachineId");
 
                     b.Navigation("Company");
 
@@ -775,25 +781,20 @@ namespace HourlyRate.Infrastructure.Migrations
                 {
                     b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Rent", b =>
+            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Department", b =>
                 {
                     b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Tax", b =>
-                {
-                    b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Company");
                 });
@@ -802,13 +803,13 @@ namespace HourlyRate.Infrastructure.Migrations
                 {
                     b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.HasOne("HourlyRate.Infrastructure.Models.Employee.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("HourlyRate.Infrastructure.Models.Employee.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
 
                     b.Navigation("Company");
 
@@ -819,17 +820,21 @@ namespace HourlyRate.Infrastructure.Migrations
                 {
                     b.HasOne("HourlyRate.Infrastructure.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HourlyRate.Infrastructure.Models.Costs.Consumable", "Consumable")
                         .WithMany()
                         .HasForeignKey("ConsumableId");
 
+                    b.HasOne("HourlyRate.Infrastructure.Models.CostCategories.CostCategory", "CostCategories")
+                        .WithMany()
+                        .HasForeignKey("CostCategoryId");
+
                     b.HasOne("HourlyRate.Infrastructure.Models.Employee.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("HourlyRate.Infrastructure.Models.Employee.FinancialYear", "FinancialYear")
                         .WithMany()
@@ -837,25 +842,15 @@ namespace HourlyRate.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HourlyRate.Infrastructure.Models.Costs.Rent", "Rent")
-                        .WithMany()
-                        .HasForeignKey("RentId");
-
-                    b.HasOne("HourlyRate.Infrastructure.Models.Costs.Tax", "Tax")
-                        .WithMany()
-                        .HasForeignKey("TaxId");
-
                     b.Navigation("Company");
 
                     b.Navigation("Consumable");
 
+                    b.Navigation("CostCategories");
+
                     b.Navigation("Employee");
 
                     b.Navigation("FinancialYear");
-
-                    b.Navigation("Rent");
-
-                    b.Navigation("Tax");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -907,11 +902,6 @@ namespace HourlyRate.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Department", b =>
-                {
-                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

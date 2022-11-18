@@ -18,52 +18,62 @@ namespace HourlyRate.Infrastructure.Configuration
                 new Department()
                 {
                     Id = 1,
-                    Name = "Prepress"
+                    Name = "Prepress",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 2,
-                    Name = "Press"
+                    Name = "Press",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 3,
-                    Name = "WebPress"
+                    Name = "WebPress",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 4,
-                    Name = "ManualLabor"
+                    Name = "ManualLabor",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 5,
-                    Name = "Cutters"
+                    Name = "Cutters",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 6,
-                    Name = "Stitchers"
+                    Name = "Stitchers",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 7,
-                    Name = "Binders"
+                    Name = "Binders",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 8,
-                    Name = "HardCover"
+                    Name = "HardCover",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 9,
-                    Name = "FrontCutter"
+                    Name = "FrontCutter",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 },
                 new Department()
                 {
                     Id = 10,
-                    Name = "RotaryCutter"
+                    Name = "RotaryCutter",
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
                 }
 
             };

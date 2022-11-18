@@ -20,7 +20,8 @@ namespace HourlyRate.Infrastructure.Configuration
                     Id = 1,
                     EmployeeId = 1,
                     Amount = 5000,
-                    FinancialYearId = 8
+                    FinancialYearId = 8,
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
 
                 },
                 new Expenses()
@@ -28,7 +29,8 @@ namespace HourlyRate.Infrastructure.Configuration
                     Id = 2,
                     EmployeeId = 2,
                     Amount = 2322,
-                    FinancialYearId = 8
+                    FinancialYearId = 8,
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
 
                 },
                 new Expenses()
@@ -36,7 +38,8 @@ namespace HourlyRate.Infrastructure.Configuration
                     Id = 3,
                     EmployeeId = 3,
                     Amount = 1211,
-                    FinancialYearId = 8
+                    FinancialYearId = 8,
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
 
                 },
                 new Expenses()
@@ -44,7 +47,8 @@ namespace HourlyRate.Infrastructure.Configuration
                     Id = 4,
                     EmployeeId = 4,
                     Amount = 855,
-                    FinancialYearId = 8
+                    FinancialYearId = 8,
+                    CompanyId = Guid.Parse("17E6E89D-C613-47D0-D580-08DAC9989BD1")
 
                 },
             };
