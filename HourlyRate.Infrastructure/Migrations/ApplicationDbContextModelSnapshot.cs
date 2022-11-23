@@ -144,7 +144,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.CostCategories.CostCategory", b =>
@@ -166,7 +166,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("CostCategories");
+                    b.ToTable("CostCategories", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Consumable", b =>
@@ -193,7 +193,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("MachineId");
 
-                    b.ToTable("Consumables");
+                    b.ToTable("Consumables", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.Costs.Machine", b =>
@@ -221,7 +221,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Machines");
+                    b.ToTable("Machines", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Models.Employee.Department", b =>
@@ -243,7 +243,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
 
                     b.HasData(
                         new
@@ -348,7 +348,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("ExpensesId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
 
                     b.HasData(
                         new
@@ -409,7 +409,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FinancialYears");
+                    b.ToTable("FinancialYears", (string)null);
 
                     b.HasData(
                         new
@@ -567,7 +567,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("FinancialYearId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expenses", (string)null);
 
                     b.HasData(
                         new

@@ -65,10 +65,10 @@ public class HomeController : Controller
         }
         var user = _userManager.GetUserAsync(User);
         
-        int id = await _employeeService.CreateEmployee(employee, user.Result.CompanyId);
-        await _employeeService.CreateExpensesByEmployee(employee, id);
+        int employeeId = await _employeeService.CreateEmployee(employee, user.Result.CompanyId);
+        await _employeeService.CreateExpensesByEmployee(employeeId, employee, user.Result.CompanyId);
 
-        return RedirectToAction(nameof(Index), new { id });
+        return RedirectToAction(nameof(Index), new { id = employeeId });
     }
 
 

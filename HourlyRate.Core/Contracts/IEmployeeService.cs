@@ -10,7 +10,7 @@ namespace HourlyRate.Core.Contracts
         Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments();
         Task<bool> DepartmentExists(int categoryId);
         Task<int> CreateEmployee(EmployeeViewModel model, Guid companyId);
-        Task CreateExpensesByEmployee(EmployeeViewModel employee, int employeeId);
+        Task CreateExpensesByEmployee(int employeeId, EmployeeViewModel employee, Guid companyId);
 
 
 

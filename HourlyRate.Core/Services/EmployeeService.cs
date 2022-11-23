@@ -77,12 +77,14 @@ namespace HourlyRate.Core.Services
             return employee.Id;
         }
 
-        public async Task CreateExpensesByEmployee(EmployeeViewModel employee, int employeeId)
+        public async Task CreateExpensesByEmployee(int employeeId, EmployeeViewModel employee,  Guid companyId)
         {
             var expense = new Expenses()
             {
                 EmployeeId = employeeId,
-                Amount = employee.Salary
+                Amount = employee.Salary,
+                CompanyId = companyId,
+                FinancialYearId = 8 //TODO: implement financial years
             };
             await _repo.AddAsync(expense);
             await _repo.SaveChangesAsync();
