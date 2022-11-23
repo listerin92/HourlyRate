@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using HourlyRate.Infrastructure.Models.Account;
+using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,14 +12,14 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly IUserStore<User> _userStore;
+        private readonly UserManager<UserIdentityExt> _userManager;
+        private readonly SignInManager<UserIdentityExt> _signInManager;
+        private readonly IUserStore<UserIdentityExt> _userStore;
 
         public ExternalLoginsModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            IUserStore<User> userStore)
+            UserManager<UserIdentityExt> userManager,
+            SignInManager<UserIdentityExt> signInManager,
+            IUserStore<UserIdentityExt> userStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -65,7 +65,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
                 .ToList();
 
             string passwordHash = null;
-            if (_userStore is IUserPasswordStore<User> userPasswordStore)
+            if (_userStore is IUserPasswordStore<UserIdentityExt> userPasswordStore)
             {
                 passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
             }

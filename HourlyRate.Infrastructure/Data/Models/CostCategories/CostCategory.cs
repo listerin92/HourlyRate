@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HourlyRate.Infrastructure.Models.CostCategories
+namespace HourlyRate.Infrastructure.Data.Models.CostCategories
 {
     public class CostCategory
     {
         [Key]
         public int Id { get; set; }
-        
+
         [Required]
         public string Name { get; set; } = null!;
 

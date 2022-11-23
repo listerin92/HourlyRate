@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using HourlyRate.Infrastructure.Models.Account;
-
-namespace HourlyRate.Infrastructure.Models.Employee
+namespace HourlyRate.Infrastructure.Data.Models.Employee
 {
     public class Employee
     {
@@ -14,15 +12,15 @@ namespace HourlyRate.Infrastructure.Models.Employee
 
         [Required]
         public string LastName { get; set; } = null!;
-        
+
         [Required]
         public string JobTitle { get; set; } = null!;
 
         [ForeignKey(nameof(Department))]
-        public int? DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
         public Department? Department { get; set; }
 
-        [Required] 
+        [Required]
         public bool IsEmployee { get; set; } = true;
 
         [ForeignKey(nameof(Company))]

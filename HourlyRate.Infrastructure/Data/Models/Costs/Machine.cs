@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HourlyRate.Infrastructure.Models.Costs
+namespace HourlyRate.Infrastructure.Data.Models.Costs
 {
     public class Machine
     {
@@ -10,7 +10,7 @@ namespace HourlyRate.Infrastructure.Models.Costs
         [Required]
         public int UniqueId { get; set; }
 
-        [Required] 
+        [Required]
         public string Name { get; set; } = null!;
 
         public string? Description { get; set; }

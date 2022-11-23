@@ -1,9 +1,9 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using HourlyRate.Infrastructure.Models.Account
+@using HourlyRate.Infrastructure.Data.Models.Account
 
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+@inject SignInManager<UserIdentityExt> SignInManager
+@inject UserManager<UserIdentityExt> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

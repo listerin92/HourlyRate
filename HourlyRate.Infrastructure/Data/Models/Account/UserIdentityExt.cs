@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HourlyRate.Infrastructure.Models.Account
+namespace HourlyRate.Infrastructure.Data.Models.Account
 {
-    public class User : IdentityUser
+    public class UserIdentityExt : IdentityUser
     {
         [StringLength(20)]
         public string? FirstName { get; set; }

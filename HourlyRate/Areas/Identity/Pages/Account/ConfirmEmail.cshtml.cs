@@ -3,7 +3,7 @@
 #nullable disable
 
 using System.Text;
-using HourlyRate.Infrastructure.Models.Account;
+using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,9 +13,9 @@ namespace HourlyRate.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<UserIdentityExt> _userManager;
 
-        public ConfirmEmailModel(UserManager<User> userManager)
+        public ConfirmEmailModel(UserManager<UserIdentityExt> userManager)
         {
             _userManager = userManager;
         }

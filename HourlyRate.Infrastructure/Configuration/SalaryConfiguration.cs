@@ -1,4 +1,4 @@
-﻿using HourlyRate.Infrastructure.Models;
+﻿using HourlyRate.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

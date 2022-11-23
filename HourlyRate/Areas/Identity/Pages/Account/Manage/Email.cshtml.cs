@@ -5,7 +5,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
-using HourlyRate.Infrastructure.Models.Account;
+using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +16,13 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 {
     public class EmailModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<UserIdentityExt> _userManager;
+        private readonly SignInManager<UserIdentityExt> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            UserManager<UserIdentityExt> userManager,
+            SignInManager<UserIdentityExt> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -72,9 +72,9 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(User user)
+        private async Task LoadAsync(UserIdentityExt userIdentityExt)
         {
-            var email = await _userManager.GetEmailAsync(user);
+            var email = await _userManager.GetEmailAsync(userIdentityExt);
             Email = email;
 
             Input = new InputModel
@@ -82,7 +82,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
                 NewEmail = email,
             };
 
-            IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
+            IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userIdentityExt);
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -90,7 +90,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load userIdentityExt with ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -102,7 +102,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load userIdentityExt with ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -140,7 +140,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load userIdentityExt with ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)

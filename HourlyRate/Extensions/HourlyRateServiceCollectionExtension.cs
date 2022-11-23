@@ -1,7 +1,6 @@
 ﻿using HourlyRate.Core.Contracts;
-using HourlyRate.Core.Data.Common;
 using HourlyRate.Core.Services;
-using WebShopDemo.Core.Data.Common;
+using HourlyRate.Infrastructure.Data.Common;
 
 namespace HourlyRate.Extensions
 {

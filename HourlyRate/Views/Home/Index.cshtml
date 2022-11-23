@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using HourlyRate.Infrastructure.Models.Account
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+@using HourlyRate.Infrastructure.Data.Models.Account;
+@inject SignInManager<UserIdentityExt> SignInManager
+@inject UserManager<UserIdentityExt> UserManager
 
 @model IEnumerable<EmployeeViewModel>
 
@@ -57,7 +57,10 @@ else
     <h4>Profile widget</h4>
     <p>Profile widget created by using Bootstrap <code>.card</code> component with Bootstrap grid.</p>
 </div>*@
-
+@if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Home" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add House</a>
+}
 
 <div class="card">
     <div class="card-body">

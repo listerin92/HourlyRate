@@ -1,21 +1,21 @@
-using HourlyRate.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-using HourlyRate.Infrastructure.Models.Account;
+using HourlyRate.Infrastructure.Data.Models.Account;
+using HourlyRate.Infrastructure.Data;
 
 namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 {
     public class CompanyInfo : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<UserIdentityExt> _userManager;
+        private readonly SignInManager<UserIdentityExt> _signInManager;
         private readonly ApplicationDbContext _dbContext;
 
         public CompanyInfo(
-            UserManager<User> userManager
-            , SignInManager<User> signInManager
+            UserManager<UserIdentityExt> userManager
+            , SignInManager<UserIdentityExt> signInManager
                 , ApplicationDbContext dbContext)
         {
             _userManager = userManager;
@@ -45,18 +45,18 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             public string VAT { get; set; } = null!;
         }
 
-        private async Task LoadAsync(User user)
+        private Task LoadAsync(UserIdentityExt userIdentityExt)
         {
-
             Input = new InputModel
             {
-                CompanyName = user.CompanyName,
-                CompanyDescription = user.CompanyDescription,
-                CompanyEmail = user.CompanyEmail,
-                CompanyPhoneNumber = user.CompanyPhoneNumber,
-                VAT = user.VAT,
+                CompanyName = userIdentityExt.CompanyName,
+                CompanyDescription = userIdentityExt.CompanyDescription,
+                CompanyEmail = userIdentityExt.CompanyEmail,
+                CompanyPhoneNumber = userIdentityExt.CompanyPhoneNumber,
+                VAT = userIdentityExt.VAT,
                 
             };
+            return Task.CompletedTask;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -64,7 +64,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load userIdentityExt with ID '{_userManager.GetUserId(User)}'.");
             }
             await LoadAsync(user);
             return Page();
@@ -75,7 +75,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load userIdentityExt with ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)

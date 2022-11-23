@@ -3,7 +3,7 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
-using HourlyRate.Infrastructure.Models.Account;
+using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,12 +12,12 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<UserIdentityExt> _userManager;
+        private readonly SignInManager<UserIdentityExt> _signInManager;
 
         public IndexModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            UserManager<UserIdentityExt> userManager,
+            SignInManager<UserIdentityExt> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,10 +58,10 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(User user)
+        private async Task LoadAsync(UserIdentityExt userIdentityExt)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var userName = await _userManager.GetUserNameAsync(userIdentityExt);
+            var phoneNumber = await _userManager.GetPhoneNumberAsync(userIdentityExt);
 
             Username = userName;
 
@@ -76,7 +76,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load userIdentityExt with ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -88,7 +88,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load userIdentityExt with ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)

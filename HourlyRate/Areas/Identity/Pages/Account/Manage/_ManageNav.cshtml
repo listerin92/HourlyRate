@@ -1,7 +1,7 @@
-@using HourlyRate.Areas.Identity.Pages.Account.Manage
-@using HourlyRate.Infrastructure.Models.Account
+@using HourlyRate.Infrastructure.Data.Models.Account
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@inject SignInManager<User> SignInManager
+@using HourlyRate.Areas.Identity.Pages.Account.Manage
+@inject SignInManager<UserIdentityExt> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

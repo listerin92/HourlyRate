@@ -1,12 +1,9 @@
-﻿using HourlyRate.Infrastructure;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace HourlyRate.Core.Data.Common
+namespace HourlyRate.Infrastructure.Data.Common
 {
-    using System.Linq.Expressions;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-    using WebShopDemo.Core.Data.Common;
-
     /// <summary>
     /// Implementation of repository access methods
     /// for Relational Database Engine
@@ -137,12 +134,12 @@ namespace HourlyRate.Core.Data.Common
         /// <returns>Single record</returns>
         public async Task<T> GetByIdAsync<T>(object id) where T : class
         {
-            return await DbSet<T>().FindAsync(id);
+            return await DbSet<T>().FindAsync(id) ?? throw new InvalidOperationException();
         }
 
         public async Task<T> GetByIdsAsync<T>(object[] id) where T : class
         {
-            return await DbSet<T>().FindAsync(id);
+            return await DbSet<T>().FindAsync(id) ?? throw new InvalidOperationException();
         }
 
         /// <summary>

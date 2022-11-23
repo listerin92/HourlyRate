@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using HourlyRate.Infrastructure;
-using HourlyRate.Infrastructure.Models;
-using HourlyRate.Infrastructure.Models.Account;
+using HourlyRate.Infrastructure.Data;
+using HourlyRate.Infrastructure.Data.Models;
+using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -21,19 +21,19 @@ namespace HourlyRate.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<UserIdentityExt> _signInManager;
+        private readonly UserManager<UserIdentityExt> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly IUserStore<User> _userStore;
-        private readonly IUserEmailStore<User> _emailStore;
+        private readonly IUserStore<UserIdentityExt> _userStore;
+        private readonly IUserEmailStore<UserIdentityExt> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<User> userManager,
+            UserManager<UserIdentityExt> userManager,
             ApplicationDbContext context,
-        IUserStore<User> userStore,
-            SignInManager<User> signInManager,
+        IUserStore<UserIdentityExt> userStore,
+            SignInManager<UserIdentityExt> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -149,7 +149,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("UserIdentityExt created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -183,12 +183,12 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private User CreateUser(Guid guid)
+        private UserIdentityExt CreateUser(Guid guid)
         {
             try
             {
 
-                var createUser = Activator.CreateInstance<User>();
+                var createUser = Activator.CreateInstance<UserIdentityExt>();
                 createUser.FirstName = Input.FirstName;
                 createUser.LastName = Input.LastName;
                 createUser.Email = Input.Email;
@@ -231,13 +231,13 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             return company;
         }
 
-        private IUserEmailStore<User> GetEmailStore()
+        private IUserEmailStore<UserIdentityExt> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<User>)_userStore;
+            return (IUserEmailStore<UserIdentityExt>)_userStore;
         }
     }
 }

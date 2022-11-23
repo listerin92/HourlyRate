@@ -1,4 +1,4 @@
-﻿namespace HourlyRate.Infrastructure.Models.Employee
+﻿namespace HourlyRate.Infrastructure.Data.Models.Employee
 {
     public class FinancialYear
     {

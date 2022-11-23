@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace WebShopDemo.Core.Data.Common
+namespace HourlyRate.Infrastructure.Data.Common
 {
     /// <summary>
     /// Abstraction of repository access methods
