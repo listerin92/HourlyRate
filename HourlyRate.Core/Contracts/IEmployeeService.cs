@@ -5,7 +5,7 @@ namespace HourlyRate.Core.Contracts
 {
     public interface IEmployeeService
     {
-        Task<IEnumerable<EmployeeViewModel>> AllEmployees();
+        Task<IEnumerable<EmployeeViewModelCurrency>> AllEmployeesWithSalary(Guid companyId);
 
         Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments();
         Task<bool> DepartmentExists(int categoryId);

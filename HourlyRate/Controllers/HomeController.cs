@@ -31,7 +31,9 @@ public class HomeController : Controller
     {
         if (User.Identity?.IsAuthenticated ?? false)
         {
-            var model = await _employeeService.AllEmployees();
+            var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
+
+            var model = await _employeeService.AllEmployeesWithSalary(companyId);
             return View(model);
         }
         else return View();

@@ -30,6 +30,11 @@
                 <span asp-validation-for="JobTitle" class="text-danger"></span>
             </div>
             <div class="mb-3">
+                <label asp-for="ImageUrl" class="form-label"></label>
+                <input asp-for="ImageUrl" class="form-control form-control-lg fs-15px" placeholder="e.g image url" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
                 <label asp-for="Salary" class="form-label"></label>
                 <input asp-for="Salary" class="form-control form-control-lg fs-15px" placeholder="e.g 1000" />
                 <span asp-validation-for="Salary" class="text-danger"></span>

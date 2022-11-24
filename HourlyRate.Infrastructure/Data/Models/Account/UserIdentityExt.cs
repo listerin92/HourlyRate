@@ -24,6 +24,10 @@ namespace HourlyRate.Infrastructure.Data.Models.Account
         public string CompanyPhoneNumber { get; set; } = null!;
 
         [Required]
+        public string DefaultCurrency { get; set; } = null!;
+
+
+        [Required]
         public string VAT { get; set; } = null!;
 
         [ForeignKey(nameof(Company))]

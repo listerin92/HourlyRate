@@ -29,6 +29,8 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
         public string? CompanyDescription { get; set; }
         public string CompanyEmail { get; set; } = null!;
         public string CompanyPhoneNumber { get; set; } = null!;
+        public string DefaultCurrency { get; set; } = null!;
+
         public string VAT { get; set; } = null!;
 
 
@@ -42,6 +44,8 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
             public string? CompanyDescription { get; set; }
             public string CompanyEmail { get; set; } = null!;
             public string CompanyPhoneNumber { get; set; } = null!;
+            public string DefaultCurrency { get; set; } = null!;
+
             public string VAT { get; set; } = null!;
         }
 
@@ -53,6 +57,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
                 CompanyDescription = userIdentityExt.CompanyDescription,
                 CompanyEmail = userIdentityExt.CompanyEmail,
                 CompanyPhoneNumber = userIdentityExt.CompanyPhoneNumber,
+                DefaultCurrency = userIdentityExt.DefaultCurrency,
                 VAT = userIdentityExt.VAT,
                 
             };
@@ -91,15 +96,26 @@ namespace HourlyRate.Areas.Identity.Pages.Account.Manage
                 Input.CompanyDescription != dbUser.CompanyDescription ||
                 Input.CompanyEmail != dbUser.CompanyEmail ||
                 Input.CompanyPhoneNumber != dbUser.CompanyPhoneNumber ||
+                Input.DefaultCurrency != dbUser.DefaultCurrency ||
                 Input.VAT != dbUser.VAT)
             {
                 user.CompanyName = Input.CompanyName;
                 user.CompanyDescription = Input.CompanyDescription;
                 user.CompanyEmail = Input.CompanyEmail;
                 user.CompanyPhoneNumber = Input.CompanyPhoneNumber;
+                user.DefaultCurrency = Input.DefaultCurrency;
                 user.VAT = Input.VAT;
 
+                var company = _dbContext.Companies.First(c => c.CompanyName == Input.CompanyName);
+                company.CompanyName = Input.CompanyName;
+                company.CompanyDescription = Input.CompanyDescription;
+                company.CompanyEmail = Input.CompanyEmail;
+                company.CompanyPhone = Input.CompanyPhoneNumber;
+                company.DefaultCurrency = Input.DefaultCurrency;
+                company.VAT = Input.VAT;
+
                 _dbContext.Update(user);
+                _dbContext.Update(company);
                 await _dbContext.SaveChangesAsync();
             }
 

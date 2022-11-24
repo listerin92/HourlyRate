@@ -16,6 +16,10 @@ namespace HourlyRate.Infrastructure.Data.Models.Employee
         [Required]
         public string JobTitle { get; set; } = null!;
 
+        [Required]
+        [StringLength(200)]
+        public string ImageUrl { get; set; } = null!;
+
         [ForeignKey(nameof(Department))]
         public int? DepartmentId { get; set; }
         public Department? Department { get; set; }

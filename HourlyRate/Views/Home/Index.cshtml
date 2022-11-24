@@ -3,7 +3,7 @@
 @inject SignInManager<UserIdentityExt> SignInManager
 @inject UserManager<UserIdentityExt> UserManager
 
-@model IEnumerable<EmployeeViewModel>
+@model IEnumerable<EmployeeViewModelCurrency>
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -81,20 +81,20 @@ else
                                 <a href="#" class="dropdown-item">Report</a>
                             </div>
                         </div>
-                        <div class="card border-0 overflow-hidden rounded-0 rounded-top" style="height: 165px">
+                        <div class="card border-0 overflow-hidden rounded-0 rounded-top" style="height: 185px">
                             <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
                             <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">
                                 <div class="mb-2">
-                                    <img src="/img/user/user-5.jpg" alt="" width="80" class="rounded-circle" />
+                                    <img src="@employee.ImageUrl" alt="" width="80" class="rounded-circle" />
                                 </div>
                                 <div>
-                                    <div class="fw-600">@employee.FirstName @employee.LastName</div>
-                                    <div class="fs-12px">@employee.JobTitle</div>
-                                    <div class="fs-12px">@employee.Salary</div>
+                                    <div class="fs-18px fw-600">@employee.FirstName @employee.LastName</div>
+                                    <div class="fs-14px">@employee.JobTitle</div>
+                                    <div class="fs-14px">@employee.Salary @employee.DefaultCurrency</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card border-top-0 rounded-0 rounded-bottom">
+                        @*<div class="card border-top-0 rounded-0 rounded-bottom">
                             <div class="card-body py-2 px-3">
                                 <div class="row text-center">
                                     <div class="col-4">
@@ -111,7 +111,7 @@ else
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
 
                     </div>
                 }

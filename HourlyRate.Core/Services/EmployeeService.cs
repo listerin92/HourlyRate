@@ -13,29 +13,26 @@ namespace HourlyRate.Core.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IRepository _repo;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public EmployeeService(IRepository repo,
-            IHttpContextAccessor httpContextAccessor)
+        public EmployeeService(IRepository repo
+
+            )
         {
-            _httpContextAccessor = httpContextAccessor;
             _repo = repo;
         }
-        public async Task<IEnumerable<EmployeeViewModel>> AllEmployees()
+        public async Task<IEnumerable<EmployeeViewModelCurrency>> AllEmployeesWithSalary(Guid companyId)
         {
-            if (_httpContextAccessor.HttpContext != null)
-            {
-                var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            }
 
             return await _repo.AllReadonly<Expenses>()
-                .Where(y => y.FinancialYear.Year == 2022)//TODO: get company id == userCompanyId
-                .Select(e => new EmployeeViewModel()
+                .Where(y => y.FinancialYear.Year == 2022 && y.CompanyId == companyId)//TODO: get company id == userCompanyId
+                .Select(e => new EmployeeViewModelCurrency()
                 {
                     Id = e.Id,
                     FirstName = e.Employee!.FirstName,
                     LastName = e.Employee.LastName,
-                    Salary = e.Amount
+                    ImageUrl = e.Employee.ImageUrl,
+                    Salary = e.Amount,
+                    DefaultCurrency = e.Company.DefaultCurrency,
                 })
                 .ToListAsync();
 
@@ -67,6 +64,7 @@ namespace HourlyRate.Core.Services
                 LastName = model.LastName,
                 CompanyId = companyId,
                 JobTitle = model.JobTitle,
+                ImageUrl = model.ImageUrl,
                 DepartmentId = model.DepartmentId,
                 IsEmployee = true
             };
@@ -77,7 +75,7 @@ namespace HourlyRate.Core.Services
             return employee.Id;
         }
 
-        public async Task CreateExpensesByEmployee(int employeeId, EmployeeViewModel employee,  Guid companyId)
+        public async Task CreateExpensesByEmployee(int employeeId, EmployeeViewModel employee, Guid companyId)
         {
             var expense = new Expenses()
             {

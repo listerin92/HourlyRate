@@ -18,6 +18,8 @@ namespace HourlyRate.Core.Models
         [Display(Name = "Job Title")]
         public string JobTitle { get; set; } = null!;
 
+        public string ImageUrl { get; set; } = null!;
+        
         [Required]
         [Display(Name = "Price per month")]
         [Range(0.00, 200000.00, ErrorMessage = "Price per month must be a positive number and less than {2} digits")]

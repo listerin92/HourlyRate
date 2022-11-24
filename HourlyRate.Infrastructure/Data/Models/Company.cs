@@ -9,10 +9,10 @@ namespace HourlyRate.Infrastructure.Data.Models
 
         [Required]
         public string CompanyName { get; set; } = null!;
-
         public string? CompanyDescription { get; set; }
         public string? CompanyPhone { get; set; } = null!;
         public string? CompanyEmail { get; set; } = null!;
+        public string DefaultCurrency { get; set; } = null!;
         public string VAT { get; set; } = null!;
     }
 }

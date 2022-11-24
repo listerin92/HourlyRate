@@ -117,6 +117,10 @@ namespace HourlyRate.Areas.Identity.Pages.Account
             public string CompanyEmail { get; set; } = null!;
             [Required]
             public string CompanyPhoneNumber { get; set; } = null!;
+
+            [Required]
+            public string DefaultCurrency { get; set; } = null!;
+
             [Required]
             public string VAT { get; set; } = null!;
         }
@@ -132,9 +136,9 @@ namespace HourlyRate.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            var company = CreateCompany();
             if (ModelState.IsValid)
             {
+                var company = CreateCompany();
                 var user = CreateUser(company.Id);
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -196,8 +200,9 @@ namespace HourlyRate.Areas.Identity.Pages.Account
                 createUser.CompanyDescription = Input.CompanyDescription;
                 createUser.CompanyEmail = Input.CompanyEmail;
                 createUser.CompanyPhoneNumber = Input.CompanyPhoneNumber;
+                createUser.DefaultCurrency = Input.DefaultCurrency;
                 createUser.VAT = Input.VAT;
-                createUser.CompanyId = guid;
+                createUser.CompanyId = guid; //TODO: Not find a way to use only guid in ASP User. Mirroring Company properties !!!!!!!!!
 
                 return createUser;
             }
@@ -225,6 +230,7 @@ namespace HourlyRate.Areas.Identity.Pages.Account
                 CompanyDescription = Input.CompanyDescription,
                 CompanyEmail = Input.CompanyEmail,
                 CompanyPhone = Input.CompanyPhoneNumber,
+                DefaultCurrency = Input.DefaultCurrency,
                 VAT = Input.VAT
             };
             _context.Companies.Add(company);
