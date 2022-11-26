@@ -7,17 +7,20 @@ using System.Security.Claims;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using HourlyRate.Infrastructure.Data.Models.Employee;
+using HourlyRate.Infrastructure.Data;
 
 namespace HourlyRate.Core.Services
 {
     public class EmployeeService : IEmployeeService
     {
         private readonly IRepository _repo;
+        private readonly ApplicationDbContext _dbContext;
 
         public EmployeeService(IRepository repo
-
+            , ApplicationDbContext dbContext
             )
         {
+            _dbContext = dbContext;
             _repo = repo;
         }
         public async Task<IEnumerable<EmployeeViewModelCurrency>> AllEmployeesWithSalary(Guid companyId)
@@ -27,7 +30,7 @@ namespace HourlyRate.Core.Services
                 .Where(y => y.FinancialYear.Year == 2022 && y.CompanyId == companyId)//TODO: get company id == userCompanyId
                 .Select(e => new EmployeeViewModelCurrency()
                 {
-                    Id = e.Id,
+                    Id = e.Employee!.Id,
                     FirstName = e.Employee!.FirstName,
                     LastName = e.Employee.LastName,
                     ImageUrl = e.Employee.ImageUrl,
@@ -50,10 +53,10 @@ namespace HourlyRate.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> DepartmentExists(int categoryId)
+        public async Task<bool> DepartmentExists(int? departmentId)
         {
             return await _repo.AllReadonly<Department>()
-                .AnyAsync(c => c.Id == categoryId);
+                .AnyAsync(c => c.Id == departmentId);
         }
 
         public async Task<int> CreateEmployee(EmployeeViewModel model, Guid companyId)
@@ -75,18 +78,80 @@ namespace HourlyRate.Core.Services
             return employee.Id;
         }
 
-        public async Task CreateExpensesByEmployee(int employeeId, EmployeeViewModel employee, Guid companyId)
+        public async Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId)
         {
             var expense = new Expenses()
             {
                 EmployeeId = employeeId,
-                Amount = employee.Salary,
+                Amount = amount,
                 CompanyId = companyId,
                 FinancialYearId = 8 //TODO: implement financial years
             };
             await _repo.AddAsync(expense);
             await _repo.SaveChangesAsync();
         }
+
+        public async Task<bool> Exists(int id)
+        {
+            return await _repo.AllReadonly<Employee>()
+                .AnyAsync(h => h.Id == id && h.IsEmployee);
+        }
+
+        public async Task Edit(int employeeId, EmployeeViewModel model, Guid companyId)
+        {
+            var employee = await _repo.GetByIdAsync<Employee>(employeeId);
+
+            employee.FirstName = model.FirstName;
+            employee.LastName = model.LastName;
+            employee.CompanyId = companyId;
+            employee.JobTitle = model.JobTitle;
+            employee.ImageUrl = model.ImageUrl;
+            employee.DepartmentId = model.DepartmentId;
+            employee.IsEmployee = true;
+
+            await _repo.SaveChangesAsync();
+
+            var salary = GetEmployeeSalary(employeeId);
+            var changeSalary = await _repo.GetByIdAsync<Expenses>(salary.Result.Id);
+
+            changeSalary.Amount = model.Salary;
+            await _repo.SaveChangesAsync();
+
+
+        }
+
+        public async Task<int> GetEmployeeCategoryId(int employeeId)
+        {
+            return (int)(await _repo.GetByIdAsync<Employee>(employeeId)).DepartmentId;
+
+        }
+
+        public async Task<Expenses> GetEmployeeSalary(int employeeId)
+        {
+            var salary = await _dbContext.Expenses.FirstAsync(s => s.EmployeeId == employeeId);
+
+            return salary;
+        }
+
+        public async Task<EmployeeViewModel> EmployeeDetailsById(int id, Guid companyId)
+        {
+            return await _repo.AllReadonly<Employee>()
+                .Where(e => e.IsEmployee && e.CompanyId == companyId)
+                .Where(e => e.Id == id)
+                .Select(e => new EmployeeViewModel()
+                {
+                    Id = id,
+                    FirstName = e.FirstName,
+                    LastName = e.LastName,
+                    ImageUrl = e.ImageUrl,
+                    JobTitle = e.JobTitle,
+                    DepartmentId = e.DepartmentId,
+
+                })
+                .FirstAsync();
+        }
+
+
     }
 
 }

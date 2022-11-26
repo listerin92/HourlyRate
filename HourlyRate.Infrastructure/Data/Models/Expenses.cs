@@ -15,9 +15,7 @@ namespace HourlyRate.Infrastructure.Data.Models
 
         [ForeignKey(nameof(Employee))]
         public int? EmployeeId { get; set; }
-
         public Employee.Employee? Employee { get; set; }
-        public List<Employee.Employee>? Employees { get; set; }
 
         [Required]
         [Column(TypeName = "money")]

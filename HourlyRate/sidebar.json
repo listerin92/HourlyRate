@@ -8,13 +8,19 @@
       "controller": "Home",
       "action": "Index",
       "icon": "fa fa-home",
-      "text": "Home"
+      "text": "Employees"
     },
     {
-      "controller": "Test",
+      "controller": "Machines",
       "action": "Index",
       "icon": "fa fa-home",
-      "text": "Test"
+      "text": "Machines"
+    },
+    {
+      "controller": "CostCenters",
+      "action": "Index",
+      "icon": "fa fa-home",
+      "text": "CostCenters"
     }
   ]
 }

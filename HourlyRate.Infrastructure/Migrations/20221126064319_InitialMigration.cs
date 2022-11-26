@@ -32,6 +32,7 @@ namespace HourlyRate.Infrastructure.Migrations
                     CompanyDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DefaultCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VAT = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -85,6 +86,7 @@ namespace HourlyRate.Infrastructure.Migrations
                     CompanyDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VAT = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -269,6 +271,7 @@ namespace HourlyRate.Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: true),
                     IsEmployee = table.Column<bool>(type: "bit", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)

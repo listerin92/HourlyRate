@@ -26,7 +26,7 @@ namespace HourlyRate.Core.Models
         public decimal Salary { get; set; }
 
         [Display(Name = "Department")]
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
 
         public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
             = new List<EmployeeDepartmentModel>();

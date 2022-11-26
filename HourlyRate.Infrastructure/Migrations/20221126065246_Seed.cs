@@ -14,16 +14,16 @@ namespace HourlyRate.Infrastructure.Migrations
                 columns: new[] { "Id", "CompanyId", "Name" },
                 values: new object[,]
                 {
-                    { 1, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "Prepress" },
-                    { 2, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "Press" },
-                    { 3, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "WebPress" },
-                    { 4, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "ManualLabor" },
-                    { 5, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "Cutters" },
-                    { 6, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "Stitchers" },
-                    { 7, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "Binders" },
-                    { 8, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "HardCover" },
-                    { 9, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "FrontCutter" },
-                    { 10, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), "RotaryCutter" }
+                    { 1, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "Prepress" },
+                    { 2, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "Press" },
+                    { 3, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "WebPress" },
+                    { 4, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "ManualLabor" },
+                    { 5, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "Cutters" },
+                    { 6, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "Stitchers" },
+                    { 7, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "Binders" },
+                    { 8, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "HardCover" },
+                    { 9, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "FrontCutter" },
+                    { 10, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), "RotaryCutter" }
                 });
 
             migrationBuilder.InsertData(
@@ -54,13 +54,13 @@ namespace HourlyRate.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Employees",
-                columns: new[] { "Id", "CompanyId", "DepartmentId", "FirstName", "IsEmployee", "JobTitle", "LastName" },
+                columns: new[] { "Id", "CompanyId", "DepartmentId", "FirstName", "ImageUrl", "IsEmployee", "JobTitle", "LastName" },
                 values: new object[,]
                 {
-                    { 1, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), 1, "Ivan", true, "asdf", "Ivanov" },
-                    { 2, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), 2, "Petar", true, "asdf", "Petrov" },
-                    { 3, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), 1, "Stefan", true, "bbb", "Todorov" },
-                    { 4, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), 1, "Georgi", true, "asdf", "Antonov" }
+                    { 1, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), 1, "Ivan", "https://www.loudegg.com/wp-content/uploads/2020/10/Mickey-Mouse.jpg", true, "asdf", "Ivanov" },
+                    { 2, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), 2, "Petar", "https://www.loudegg.com/wp-content/uploads/2020/10/Bugs-Bunny.jpg", true, "asdf", "Petrov" },
+                    { 3, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), 1, "Stefan", "https://www.loudegg.com/wp-content/uploads/2020/10/Fred-Flintstone.jpg", true, "bbb", "Todorov" },
+                    { 4, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), 1, "Georgi", "https://www.loudegg.com/wp-content/uploads/2020/10/SpongeBob-SqaurePants.jpg", true, "asdf", "Antonov" }
                 });
 
             migrationBuilder.InsertData(
@@ -68,10 +68,10 @@ namespace HourlyRate.Infrastructure.Migrations
                 columns: new[] { "Id", "Amount", "CompanyId", "ConsumableId", "CostCategoryId", "EmployeeId", "FinancialYearId" },
                 values: new object[,]
                 {
-                    { 1, 5000m, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), null, null, 1, 8 },
-                    { 2, 2322m, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), null, null, 2, 8 },
-                    { 3, 1211m, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), null, null, 3, 8 },
-                    { 4, 855m, new Guid("17e6e89d-c613-47d0-d580-08dac9989bd1"), null, null, 4, 8 }
+                    { 1, 5000m, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), null, null, 1, 8 },
+                    { 2, 2322m, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), null, null, 2, 8 },
+                    { 3, 1211m, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), null, null, 3, 8 },
+                    { 4, 855m, new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"), null, null, 4, 8 }
                 });
         }
 

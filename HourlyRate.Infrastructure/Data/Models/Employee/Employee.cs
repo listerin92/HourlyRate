@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace HourlyRate.Infrastructure.Data.Models.Employee
 {
     public class Employee
@@ -30,7 +31,6 @@ namespace HourlyRate.Infrastructure.Data.Models.Employee
         [ForeignKey(nameof(Company))]
         public Guid CompanyId { get; set; }
         public Company Company { get; set; } = null!;
-
 
     }
 }

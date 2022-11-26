@@ -68,9 +68,70 @@ public class HomeController : Controller
         var user = _userManager.GetUserAsync(User);
         
         int employeeId = await _employeeService.CreateEmployee(employee, user.Result.CompanyId);
-        await _employeeService.CreateExpensesByEmployee(employeeId, employee, user.Result.CompanyId);
+        var amount = employee.Salary;
+        await _employeeService.CreateExpensesByEmployee(employeeId, amount, user.Result.CompanyId);
 
         return RedirectToAction(nameof(Index), new { id = employeeId });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        if ((await _employeeService.Exists(id)) == false)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        var user = _userManager.GetUserAsync(User);
+        var companyId = user.Result.CompanyId;
+
+        var employee = await _employeeService.EmployeeDetailsById(id, companyId);
+
+        var salary = _employeeService.GetEmployeeSalary(employee.Id).Result.Amount;
+        var departmentId = await _employeeService.GetEmployeeCategoryId(id);
+
+        var model = new EmployeeViewModel()
+        {
+            Id = id,
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            JobTitle = employee.JobTitle,
+            ImageUrl = employee.ImageUrl,
+            Salary = salary,
+            DepartmentId = departmentId,
+            EmployeeDepartments = await _employeeService.AllDepartments()
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, EmployeeViewModel model)
+    {
+        if (id != model.Id)
+        {
+            return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+        }
+
+        if ((await _employeeService.Exists(model.Id)) == false)
+        {
+            ModelState.AddModelError("", "Employee does not exist");
+            model.EmployeeDepartments = await _employeeService.AllDepartments();
+
+            return View(model);
+        }
+
+
+        if (ModelState.IsValid == false)
+        {
+            model.EmployeeDepartments = await _employeeService.AllDepartments();
+
+            return View(model);
+        }
+        var user = _userManager.GetUserAsync(User);
+        var companyId = user.Result.CompanyId;
+        await _employeeService.Edit(model.Id, model, companyId);
+
+        return RedirectToAction(nameof(Index), new { model.Id });
     }
 
 

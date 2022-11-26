@@ -2,7 +2,7 @@
 
 namespace HourlyRate.Controllers
 {
-    public class TestController : Controller
+    public class CostCentersController : Controller
     {
         public IActionResult Index()
         {
