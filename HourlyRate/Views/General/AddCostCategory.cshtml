@@ -1,0 +1,46 @@
+﻿@model CostCategoryViewModel
+@{
+    ViewData["Title"] = "Add CostCategory";
+    //ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
+    //ViewData["AppWithoutHeader"] = true;
+    //ViewData["AppWithoutSidebar"] = true;
+    //ViewData["AppWithoutContainer"] = true;
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<!-- BEGIN Add Cost -->
+<div class="register">
+    <!-- BEGIN add-content -->
+    <div class="register-content">
+        <form method="post">
+            <input type="hidden" asp-for="@Model.Id" />
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <input asp-for="Description" class="form-control form-control-lg fs-15px" placeholder="e.g Occupation" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CostCategoryId"></label>
+                <select asp-for="CostCategoryId" class="form-control">
+                    @foreach (var cost in Model.GeneralCostType)
+                    {
+                        <option value="@cost.Id">@cost.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CostCategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+    <!-- END Add-content -->
+</div>
+<!-- END Add -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

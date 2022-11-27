@@ -31,35 +31,40 @@ namespace HourlyRate.Core.Services
 
         public async Task<IEnumerable<CostViewModel>> AllGeneralCost(Guid companyId)
         {
-            var all = await _repo.AllReadonly<Expenses>()
-               .Where(y => y.FinancialYear.Year == 2022 && y.CompanyId == companyId && y.CostCategoryId != null)
+            var currentYear = ActiveFinancialYear();
+
+            var allGeneralCost = await _repo.AllReadonly<Expenses>()
+               .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId && y.CostCategoryId != null)
                .Select(c => new CostViewModel()
                {
                    Id = c.Id,
                    Amount = c.Amount,
                    CostCategoryId = c.CostCategoryId,
-                   Description = c.CostCenter!.Name
+                   Description = c.Description!,
+                   DefaultCurrency = c.Company.DefaultCurrency
 
                })
                .ToListAsync();
 
-            return all;
+            return allGeneralCost;
         }
 
-        public async Task<bool> CostCategoryTypeExist(int? costcategoryId)
+        public async Task<bool> CostCategoryTypeExist(int? costCategoryId)
         {
             return await _repo.AllReadonly<CostCategory>()
-                .AnyAsync(c => c.Id == costcategoryId);
+                .AnyAsync(c => c.Id == costCategoryId);
 
         }
 
         public async Task<int> CreateCost(CostViewModel model, Guid companyId)
         {
+
             var cost = new Expenses()
             {
                 CompanyId = companyId,
                 Amount = model.Amount,
                 CostCategoryId = model.CostCategoryId,
+                Description = model.Description,
                 FinancialYearId = 8
             };
 
@@ -67,6 +72,35 @@ namespace HourlyRate.Core.Services
             await _repo.SaveChangesAsync();
 
             return cost.Id;
+
+        }
+
+        public async Task<int> CreateCostCategory(CostCategoryViewModel model, Guid companyId)
+        {
+            var checkExist = _repo.AllReadonly<CostCategory>()
+                .FirstOrDefault(c => c.Name == model.Description)
+                ?.Name;
+            if (checkExist != null)
+            {
+                return -1;
+            }
+
+            var costCategory = new CostCategory()
+            {
+                Name = model.Description,
+                CompanyId = companyId
+            };
+
+            await _repo.AddAsync(costCategory);
+            await _repo.SaveChangesAsync();
+            return costCategory.Id;
+        }
+
+        private int ActiveFinancialYear()
+        {
+            return _repo.AllReadonly<FinancialYear>()
+                .First(y => y.IsActive).Year;
         }
     }
+
 }

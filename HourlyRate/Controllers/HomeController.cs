@@ -67,9 +67,11 @@ public class HomeController : Controller
 
         int employeeId = await _employeeService.CreateEmployee(employee, user.Result.CompanyId);
         var amount = employee.Salary;
+
         await _employeeService.CreateExpensesByEmployee(employeeId, amount, user.Result.CompanyId);
 
         return RedirectToAction(nameof(Index), new { id = employeeId });
+
     }
 
     [HttpGet]
@@ -86,6 +88,7 @@ public class HomeController : Controller
 
         var salary = _employeeService.GetEmployeeSalary(employee.Id).Result.Amount;
         var departmentId = await _employeeService.GetEmployeeDepartmentId(id);
+
 
         var model = new EmployeeViewModel()
         {

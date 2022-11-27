@@ -4,6 +4,7 @@ using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace HourlyRate.Controllers
 {
@@ -26,7 +27,7 @@ namespace HourlyRate.Controllers
         {
             if (User.Identity?.IsAuthenticated ?? false)
             {
-                var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
+                var companyId = GetCompanyId();
 
                 var model = await _generalCostService.AllGeneralCost(companyId);
                 return View(model);
@@ -58,11 +59,53 @@ namespace HourlyRate.Controllers
 
                 return View(cost);
             }
-            var user = _userManager.GetUserAsync(User);
+            var companyId = GetCompanyId();
 
-            int employeeId = await _generalCostService.CreateCost(cost, user.Result.CompanyId);
+            await _generalCostService.CreateCost(cost, companyId);
 
-            return RedirectToAction(nameof(Index), new { id = employeeId });
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddCostCategory()
+        {
+            var model = new CostCategoryViewModel()
+            {
+                GeneralCostType = await _generalCostService.AllCostTypes()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCostCategory(CostCategoryViewModel model)
+        {
+            if ((await _generalCostService.CostCategoryTypeExist(model.CostCategoryId)) == false)
+            {
+                ModelState.AddModelError(nameof(model.CostCategoryId), "Category does not exists");
+            }
+            if (!ModelState.IsValid)
+            {
+                model.GeneralCostType = await _generalCostService.AllCostTypes();
+
+                return View(model);
+            }
+            var companyId = GetCompanyId();
+
+            var result = await _generalCostService.CreateCostCategory(model, companyId);
+            
+            if (result != -1) return RedirectToAction(nameof(Index));
+            
+            ModelState.AddModelError("", "CategoryAlreadyExist");
+            return View(model);
+
+
+        }
+
+        private Guid GetCompanyId()
+        {
+            var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
+            return companyId;
         }
     }
 }

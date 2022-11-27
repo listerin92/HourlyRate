@@ -39,6 +39,7 @@ else
     @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
     {
         <a asp-controller="General" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add General Cost</a>
+        <a asp-controller="General" asp-action="AddCostCategory" class="btn btn-primary btn-lg" role="button">Add CostCategory</a>
     }
 </div>
 
@@ -53,17 +54,15 @@ else
                         <div class="dropdown">
                             <a href="#" data-bs-toggle="dropdown" class="text-muted"><i class="fa fa-ellipsis-h"></i></a>
                             <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
-                                <a href="#" class="dropdown-item">Details Not ready</a>
-                                <a asp-controller="General" asp-action="Edit" class="dropdown-item" asp-route-id="@cost.Id">Edit Employee</a>
-                                <a asp-controller="General" asp-action="Delete" class="dropdown-item" asp-route-id="@cost.Id">Delete Employee</a>
+                                <a asp-controller="General" asp-action="Edit" class="dropdown-item" asp-route-id="@cost.Id">Edit Cost</a>
+                                <a asp-controller="General" asp-action="Delete" class="dropdown-item" asp-route-id="@cost.Id">Delete Delete</a>
                             </div>
                         </div>
-                        <div class="card border-0 overflow-hidden rounded-0 rounded-top rounded-bottom" style="height: 200px">
-                            <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
+                        <div class="card border-0 overflow-hidden rounded-0 rounded-top rounded-bottom" style="height: 120px">
                             <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">
                                 <div>
                                     <div class="fs-18px fw-600">@cost.Description</div>
-                                    <div class="fs-14px">@cost.Amount</div>
+                                    <div class="fs-16px">@cost.Amount.ToString("n2") @cost.DefaultCurrency</div>
                                 </div>
                             </div>
                         </div>

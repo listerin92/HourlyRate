@@ -64,7 +64,7 @@ else
                                 <div>
                                     <div class="fs-18px fw-600">@employee.FirstName @employee.LastName</div>
                                     <div class="fs-14px">@employee.JobTitle</div>
-                                    <div class="fs-14px">@employee.Salary @employee.DefaultCurrency</div>
+                                    <div class="fs-14px">@employee.Salary.ToString("n2") @employee.DefaultCurrency</div>
                                 </div>
                             </div>
                         </div>

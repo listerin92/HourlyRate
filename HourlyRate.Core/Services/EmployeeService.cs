@@ -20,11 +20,17 @@ namespace HourlyRate.Core.Services
             _dbContext = dbContext;
             _repo = repo;
         }
+
+        private int ActiveFinancialYear()
+        {
+            return _repo.AllReadonly<FinancialYear>()
+                .First(y => y.IsActive).Year;
+        }
         public async Task<IEnumerable<EmployeeViewModelCurrency>> AllEmployeesWithSalary(Guid companyId)
         {
-
+            var currentYear = ActiveFinancialYear();
             return await _repo.AllReadonly<Expenses>()
-                .Where(y => y.FinancialYear.Year == 2022 && y.CompanyId == companyId && y.Employee.IsEmployee == true)//TODO: get company id == userCompanyId
+                .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId && y.Employee!.IsEmployee == true)
                 .Select(e => new EmployeeViewModelCurrency()
                 {
                     Id = e.Employee!.Id,
@@ -110,7 +116,7 @@ namespace HourlyRate.Core.Services
 
             var salary = GetEmployeeSalary(employeeId);
             var changeSalary = await _repo.GetByIdAsync<Expenses>(salary.Result.Id);
-
+            
             changeSalary.Amount = model.Salary;
             await _repo.SaveChangesAsync();
 
