@@ -1,8 +1,6 @@
-﻿@model EmployeeViewModel
-
+﻿@model CostViewModel
 @{
-    ViewBag.Title = "Edit Employee";
-
+    ViewData["Title"] = "Add";
     //ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
     //ViewData["AppWithoutHeader"] = true;
     //ViewData["AppWithoutSidebar"] = true;
@@ -12,7 +10,7 @@
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-<partial name="_EmployeePartial" model="@Model" />
+<partial name="_GeneralCostPartial" model="@Model" />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

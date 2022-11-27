@@ -1,0 +1,35 @@
+﻿@model EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Delete Employee";
+    //ViewData["AppWithoutHeader"] = true;
+    //ViewData["AppWithoutSidebar"] = true;
+    //ViewData["AppWithoutContainer"] = true;
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="card" style="width: 290px; height: 320px">
+    <div class="card-body">
+        <form asp-action="Delete">
+            <div class="card border-0 overflow-hidden rounded-0 rounded-top" style="width: 250px; height: 300px">
+                <div class="mb-2">
+                    <img src="@Model.ImageUrl" alt="" width="80" class="rounded-circle" />
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" disabled="disabled" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" disabled="disabled" />
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Delete" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

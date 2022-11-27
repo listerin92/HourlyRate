@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace HourlyRate.Core.Models
 {
@@ -22,6 +23,7 @@ namespace HourlyRate.Core.Models
         
         [Required]
         [Display(Name = "Price per month")]
+        [Precision(18, 2)]
         [Range(0.00, 200000.00, ErrorMessage = "Price per month must be a positive number and less than {2} digits")]
         public decimal Salary { get; set; }
 

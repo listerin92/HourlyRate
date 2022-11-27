@@ -10,6 +10,7 @@ namespace HourlyRate.Extensions
         {
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IGeneralCostService, GeneralCostService>();
 
             return services;
         }

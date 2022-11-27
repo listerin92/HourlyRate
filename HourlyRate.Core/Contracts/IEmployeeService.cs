@@ -15,8 +15,11 @@ namespace HourlyRate.Core.Contracts
         Task<bool> Exists(int id);
         Task Edit(int employeeId, EmployeeViewModel model, Guid companyId);
 
-        Task<int> GetEmployeeCategoryId(int houseId);
+        Task<int> GetEmployeeDepartmentId(int houseId);
         Task<EmployeeViewModel> EmployeeDetailsById(int id, Guid companyId);
         Task<bool> DepartmentExists(int? departmentId);
+
+        Task Delete(int employeeId);
+
     }
 }

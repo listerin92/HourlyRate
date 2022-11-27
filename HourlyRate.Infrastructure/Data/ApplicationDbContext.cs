@@ -33,6 +33,7 @@ namespace HourlyRate.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new SalaryConfiguration());
+            modelBuilder.ApplyConfiguration(new CostCategoryConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

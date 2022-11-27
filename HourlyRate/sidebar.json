@@ -11,10 +11,10 @@
       "text": "Employees"
     },
     {
-      "controller": "Machines",
+      "controller": "General",
       "action": "Index",
       "icon": "fa fa-home",
-      "text": "Machines"
+      "text": "GeneralCost"
     },
     {
       "controller": "CostCenters",

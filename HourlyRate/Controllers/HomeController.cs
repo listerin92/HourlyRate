@@ -1,12 +1,9 @@
-﻿using System.Diagnostics;
-using System.Security.Claims;
-using HourlyRate.Core.Contracts;
+﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models;
-using HourlyRate.Extensions;
-using HourlyRate.Infrastructure.Data.Models;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace HourlyRate.Controllers;
 
@@ -17,9 +14,10 @@ public class HomeController : Controller
     private readonly IEmployeeService _employeeService;
 
     public HomeController(
-        IEmployeeService employeeService,
-        ILogger<HomeController> logger,
-        UserManager<UserIdentityExt> userManager)
+        IEmployeeService employeeService
+        , ILogger<HomeController> logger
+        , UserManager<UserIdentityExt> userManager
+        )
 
     {
         _employeeService = employeeService;
@@ -66,7 +64,7 @@ public class HomeController : Controller
             return View(employee);
         }
         var user = _userManager.GetUserAsync(User);
-        
+
         int employeeId = await _employeeService.CreateEmployee(employee, user.Result.CompanyId);
         var amount = employee.Salary;
         await _employeeService.CreateExpensesByEmployee(employeeId, amount, user.Result.CompanyId);
@@ -87,7 +85,7 @@ public class HomeController : Controller
         var employee = await _employeeService.EmployeeDetailsById(id, companyId);
 
         var salary = _employeeService.GetEmployeeSalary(employee.Id).Result.Amount;
-        var departmentId = await _employeeService.GetEmployeeCategoryId(id);
+        var departmentId = await _employeeService.GetEmployeeDepartmentId(id);
 
         var model = new EmployeeViewModel()
         {
@@ -134,7 +132,40 @@ public class HomeController : Controller
         return RedirectToAction(nameof(Index), new { model.Id });
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        if ((await _employeeService.Exists(id)) == false)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        var user = _userManager.GetUserAsync(User);
+        var companyId = user.Result.CompanyId;
 
+        var employee = await _employeeService.EmployeeDetailsById(id, companyId);
+        var model = new EmployeeViewModel()
+        {
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            ImageUrl = employee.ImageUrl
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id, EmployeeViewModel model)
+    {
+        if ((await _employeeService.Exists(id)) == false)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        await _employeeService.Delete(id);
+
+        return RedirectToAction(nameof(Index));
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

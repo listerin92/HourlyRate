@@ -13,6 +13,8 @@ namespace HourlyRate.Infrastructure.Data.Models
         [Key]
         public int Id { get; set; }
 
+        public string? Description { get; set; }
+
         [ForeignKey(nameof(Employee))]
         public int? EmployeeId { get; set; }
         public Employee.Employee? Employee { get; set; }
@@ -42,5 +44,10 @@ namespace HourlyRate.Infrastructure.Data.Models
         public int? CostCategoryId { get; set; }
 
         public CostCategory? CostCategories { get; set; }
+
+        [ForeignKey(nameof(CostCenter))]
+        public int? CostCenterId { get; set; }
+
+        public CostCenter? CostCenter { get; set; }
     }
 }

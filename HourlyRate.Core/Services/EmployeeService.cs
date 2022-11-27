@@ -1,13 +1,10 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models;
-using HourlyRate.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using HourlyRate.Infrastructure.Data.Common;
-using HourlyRate.Infrastructure.Data.Models.Account;
-using HourlyRate.Infrastructure.Data.Models.Employee;
 using HourlyRate.Infrastructure.Data;
+using HourlyRate.Infrastructure.Data.Common;
+using HourlyRate.Infrastructure.Data.Models;
+using HourlyRate.Infrastructure.Data.Models.Employee;
+using Microsoft.EntityFrameworkCore;
 
 namespace HourlyRate.Core.Services
 {
@@ -27,7 +24,7 @@ namespace HourlyRate.Core.Services
         {
 
             return await _repo.AllReadonly<Expenses>()
-                .Where(y => y.FinancialYear.Year == 2022 && y.CompanyId == companyId)//TODO: get company id == userCompanyId
+                .Where(y => y.FinancialYear.Year == 2022 && y.CompanyId == companyId && y.Employee.IsEmployee == true)//TODO: get company id == userCompanyId
                 .Select(e => new EmployeeViewModelCurrency()
                 {
                     Id = e.Employee!.Id,
@@ -120,9 +117,11 @@ namespace HourlyRate.Core.Services
 
         }
 
-        public async Task<int> GetEmployeeCategoryId(int employeeId)
+        public async Task<int> GetEmployeeDepartmentId(int employeeId)
         {
-            return (int)(await _repo.GetByIdAsync<Employee>(employeeId)).DepartmentId;
+            var getEmployeeId = await _repo.GetByIdAsync<Employee>(employeeId);
+
+            return (int)getEmployeeId.DepartmentId;
 
         }
 
@@ -151,7 +150,14 @@ namespace HourlyRate.Core.Services
                 .FirstAsync();
         }
 
+        
+        public async Task Delete(int employeeId)
+        {
+            var employee = await _repo.GetByIdAsync<Employee>(employeeId);
+            employee.IsEmployee = false;
 
+            await _repo.SaveChangesAsync();
+        }
     }
 
 }
