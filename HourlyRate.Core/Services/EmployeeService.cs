@@ -34,12 +34,15 @@ namespace HourlyRate.Core.Services
                 .Select(e => new EmployeeViewModelCurrency()
                 {
                     Id = e.Employee!.Id,
+                    ImageUrl = e.Employee.ImageUrl,
                     FirstName = e.Employee!.FirstName,
                     LastName = e.Employee.LastName,
-                    ImageUrl = e.Employee.ImageUrl,
+                    JobTitle = e.Employee.JobTitle,
                     Salary = e.Amount,
                     DefaultCurrency = e.Company.DefaultCurrency,
+                    Department = e.Employee.Department!
                 })
+                .OrderBy(o => o.Department)
                 .ToListAsync();
 
         }

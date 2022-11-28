@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using HourlyRate.Infrastructure.Data.Models.Employee;
 
 namespace HourlyRate.Core.Models
 {
@@ -29,6 +30,7 @@ namespace HourlyRate.Core.Models
         [Display(Name = "Department")]
         public int? DepartmentId { get; set; }
 
+        public Department Department { get; set; }
         public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
             = new List<EmployeeDepartmentModel>();
     }

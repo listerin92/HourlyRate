@@ -55,16 +55,18 @@ else
                                 <a asp-controller="Home" asp-action="Delete" class="dropdown-item" asp-route-id="@employee.Id">Delete Employee</a>
                             </div>
                         </div>
-                        <div class="card border-0 overflow-hidden rounded-0 rounded-top rounded-bottom" style="height: 200px">
+                        <div class="card border-0 overflow-hidden rounded-0 rounded-top rounded-bottom" style="height: 230px">
                             <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
                             <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">
                                 <div class="mb-2">
-                                    <img src="@employee.ImageUrl" alt="" width="80" class="rounded-circle" />
+                                    <img src="@employee.ImageUrl" alt="" width="80" height="80" class="rounded-circle" />
                                 </div>
                                 <div>
                                     <div class="fs-18px fw-600">@employee.FirstName @employee.LastName</div>
                                     <div class="fs-14px">@employee.JobTitle</div>
-                                    <div class="fs-14px">@employee.Salary.ToString("n2") @employee.DefaultCurrency</div>
+                                    <div class="fs-18px">@employee.Salary.ToString("n2") @employee.DefaultCurrency</div>
+                                    <div class="fs-16px">@employee.Department.Name</div>
+
                                 </div>
                             </div>
                         </div>
