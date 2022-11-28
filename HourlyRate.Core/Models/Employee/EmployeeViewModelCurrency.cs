@@ -1,4 +1,4 @@
-﻿namespace HourlyRate.Core.Models
+﻿namespace HourlyRate.Core.Models.Employee
 {
     public class EmployeeViewModelCurrency : EmployeeViewModel
     {

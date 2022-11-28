@@ -11,6 +11,7 @@ namespace HourlyRate.Extensions
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IGeneralCostService, GeneralCostService>();
+            services.AddScoped<ICostCenterService, CostCenterService> ();
 
             return services;
         }

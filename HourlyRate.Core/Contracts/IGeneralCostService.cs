@@ -1,4 +1,4 @@
-﻿using HourlyRate.Core.Models;
+﻿using HourlyRate.Core.Models.GeneralCost;
 
 namespace HourlyRate.Core.Contracts
 {

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using HourlyRate.Infrastructure.Data.Models.Employee;
 
-namespace HourlyRate.Core.Models
+namespace HourlyRate.Core.Models.Employee
 {
     public class EmployeeViewModel
     {

@@ -1,5 +1,5 @@
 ﻿using HourlyRate.Core.Contracts;
-using HourlyRate.Core.Models;
+using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
 using HourlyRate.Infrastructure.Data.Models.CostCategories;

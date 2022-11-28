@@ -1,6 +1,6 @@
-﻿namespace HourlyRate.Core.Models
+﻿namespace HourlyRate.Core.Models.Employee
 {
-    public class GeneralCostTypeViewModel
+    public class EmployeeDepartmentModel
     {
         public int Id { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using HourlyRate.Core.Models;
+﻿using HourlyRate.Core.Models.Employee;
 using HourlyRate.Infrastructure.Data.Models;
 
 namespace HourlyRate.Core.Contracts

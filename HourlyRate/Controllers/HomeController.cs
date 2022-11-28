@@ -1,5 +1,6 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models;
+using HourlyRate.Core.Models.Employee;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

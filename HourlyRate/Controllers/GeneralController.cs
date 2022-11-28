@@ -1,5 +1,5 @@
 ﻿using HourlyRate.Core.Contracts;
-using HourlyRate.Core.Models;
+using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
