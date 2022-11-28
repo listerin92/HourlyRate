@@ -16,28 +16,48 @@
     <div class="register-content">
         <form method="post">
             <input type="hidden" asp-for="@Model.Id" />
-            <h1 class="text-center">Add Cost</h1>
-            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+            <h1 class="text-center">Add Cost Center</h1>
             <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
-                <input asp-for="Description" class="form-control form-control-lg fs-15px" placeholder="e.g Occupation" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control form-control-lg fs-15px" placeholder="e.g Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Amount" class="form-label"></label>
-                <input asp-for="Amount" class="form-control form-control-lg fs-15px" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
+                <label asp-for="FloorSpace" class="form-label"></label>
+                <input asp-for="FloorSpace" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="FloorSpace" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AnnualHours" class="form-label"></label>
+                <input asp-for="AnnualHours" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="AnnualHours" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AnnualChargeableHours" class="form-label"></label>
+                <input asp-for="AnnualChargeableHours" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="AnnualChargeableHours" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AvgPowerConsumptionKwh" class="form-label"></label>
+                <input asp-for="AvgPowerConsumptionKwh" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="AvgPowerConsumptionKwh" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CostCategoryId"></label>
-                <select asp-for="CostCategoryId" class="form-control">
-                    @foreach (var cost in Model.GeneralCostType)
+                <label asp-for="DepartmentId"></label>
+                <select asp-for="DepartmentId" class="form-control">
+                    @foreach (var department in Model.EmployeeDepartments)
                     {
-                        <option value="@cost.Id">@cost.Name</option>
+                        <option value="@department.Id">@department.Name</option>
                     }
                 </select>
-                <span asp-validation-for="CostCategoryId" class="text-danger"></span>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="FloorSpace" class="form-label"></label>
+                <input asp-for="FloorSpace" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="FloorSpace" class="text-danger"></span>
+            </div>          
+            
 
             <div class="text-center">
                 <input class="btn btn-primary mt-3" type="submit" value="Save" />

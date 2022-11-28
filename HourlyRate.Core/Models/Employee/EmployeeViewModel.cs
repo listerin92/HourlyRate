@@ -30,7 +30,7 @@ namespace HourlyRate.Core.Models.Employee
         [Display(Name = "Department")]
         public int? DepartmentId { get; set; }
 
-        public Department Department { get; set; }
+        public Department Department { get; set; } = null!;
         public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
             = new List<EmployeeDepartmentModel>();
     }

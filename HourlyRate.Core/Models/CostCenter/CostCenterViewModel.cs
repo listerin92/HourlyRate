@@ -1,14 +1,29 @@
-﻿namespace HourlyRate.Core.Models.CostCenter
+﻿using HourlyRate.Core.Models.Employee;
+using HourlyRate.Infrastructure.Data.Models.Employee;
+using System.ComponentModel.DataAnnotations;
+
+namespace HourlyRate.Core.Models.CostCenter
 {
     public class CostCenterViewModel
     {
         public int Id { get; set; }
+        [Required]
+        [StringLength(50)]
         public string Name { get; set; } = null!;
+        [Required]
         public decimal FloorSpace { get; set; }
-        public decimal PowerConsumptionKwh { get; set; }
+        public decimal AvgPowerConsumptionKwh { get; set; }
+        [Required]
         public decimal AnnualHours { get; set; }
+        [Required]
         public decimal AnnualChargeableHours { get; set; }
-        public decimal NumberOfEmployee { get; set; }
+        public int? DepartmentId { get; set; }
+
+        public Department Department { get; set; } = null!;
+        public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
+            = new List<EmployeeDepartmentModel>();
+
+        [Required]
         public decimal DirectWagesCost { get; set; }
         public decimal DirectRepairCost { get; set; }
         public decimal DirectGeneraConsumablesCost { get; set; }
