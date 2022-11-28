@@ -1,0 +1,46 @@
+﻿@model AddEmployeeDepartmentViewModel
+@{
+    ViewData["Title"] = "Add Employee Department";
+    //ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
+    //ViewData["AppWithoutHeader"] = true;
+    //ViewData["AppWithoutSidebar"] = true;
+    //ViewData["AppWithoutContainer"] = true;
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<!-- BEGIN Add Cost -->
+<div class="register">
+    <!-- BEGIN add-content -->
+    <div class="register-content">
+        <form method="post">
+            <input type="hidden" asp-for="@Model.Id" />
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control form-control-lg fs-15px" placeholder="e.g Occupation" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentId"></label>
+                <select asp-for="DepartmentId" class="form-control">
+                    @foreach (var cost in Model.EmployeeDepartments)
+                    {
+                        <option value="@cost.Id">@cost.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+    <!-- END Add-content -->
+</div>
+<!-- END Add -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

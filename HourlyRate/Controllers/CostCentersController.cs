@@ -1,4 +1,5 @@
 ﻿using HourlyRate.Core.Contracts;
+using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,34 +8,39 @@ namespace HourlyRate.Controllers
 {
     public class CostCentersController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<CostCentersController> _logger;
         private readonly UserManager<UserIdentityExt> _userManager;
-        private readonly IEmployeeService _employeeService;
+        private readonly ICostCenterService _costCenterService;
         public CostCentersController(
-             IEmployeeService employeeService
-            , ILogger<HomeController> logger
+             ICostCenterService costCenterService
+            , ILogger<CostCentersController> logger
             , UserManager<UserIdentityExt> userManager
             )
         {
-            _employeeService = employeeService;
+            _costCenterService = costCenterService;
             _userManager = userManager;
             _logger = logger;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (User.Identity?.IsAuthenticated ?? false)
             {
                 var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
 
-                var model = await _employeeService.AllCostCenters(companyId);
+                var model = await _costCenterService.AllCostCenters(companyId);
                 return View(model);
             }
-            else return View();
+            return View();
         }
 
-        public IActionResult AddCostCenter()
+        [HttpGet]
+        public async Task<IActionResult> Add()
         {
-            return RedirectToAction(nameof(Index));
+            var model = new AddCostCenterViewModel()
+            {
+                EmployeeDepartments = await _costCenterService.AllDepartments()
+            };
+            return View(model);
         }
     }
 }

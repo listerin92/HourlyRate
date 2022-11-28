@@ -1,8 +1,10 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.Employee;
+using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
+using HourlyRate.Infrastructure.Data.Models.CostCategories;
 using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +42,7 @@ namespace HourlyRate.Core.Services
                     JobTitle = e.Employee.JobTitle,
                     Salary = e.Amount,
                     DefaultCurrency = e.Company.DefaultCurrency,
-                    Department = e.Employee.Department!
+                    Department = e.Employee.Department
                 })
                 .OrderBy(o => o.Department)
                 .ToListAsync();
@@ -83,6 +85,29 @@ namespace HourlyRate.Core.Services
 
             return employee.Id;
         }
+
+        public async Task<int> CreateDepartment(AddEmployeeDepartmentViewModel model, Guid companyId)
+        {
+            var checkExist = _repo.AllReadonly<Department>()
+                .FirstOrDefault(c => c.Name == model.Name)
+                ?.Name;
+            if (checkExist != null)
+            {
+                return -1;
+            }
+
+            var department = new Department()
+            {
+                Name = model.Name,
+                CompanyId = companyId
+            };
+
+            await _repo.AddAsync(department);
+            await _repo.SaveChangesAsync();
+            return department.Id;
+        }
+
+
 
         public async Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId)
         {
@@ -154,7 +179,6 @@ namespace HourlyRate.Core.Services
                     ImageUrl = e.ImageUrl,
                     JobTitle = e.JobTitle,
                     DepartmentId = e.DepartmentId,
-
                 })
                 .FirstAsync();
         }

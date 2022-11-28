@@ -1,4 +1,4 @@
-﻿@model CostCenterViewModel
+﻿@model AddCostCenterViewModel
 @{
     ViewData["Title"] = "Add";
     //ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
@@ -23,6 +23,11 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="mb-3">
+                <label asp-for="AvgPowerConsumptionKwh" class="form-label"></label>
+                <input asp-for="AvgPowerConsumptionKwh" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="AvgPowerConsumptionKwh" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
                 <label asp-for="FloorSpace" class="form-label"></label>
                 <input asp-for="FloorSpace" class="form-control form-control-lg fs-15px" />
                 <span asp-validation-for="FloorSpace" class="text-danger"></span>
@@ -37,25 +42,20 @@
                 <input asp-for="AnnualChargeableHours" class="form-control form-control-lg fs-15px" />
                 <span asp-validation-for="AnnualChargeableHours" class="text-danger"></span>
             </div>
-            <div class="mb-3">
-                <label asp-for="AvgPowerConsumptionKwh" class="form-label"></label>
-                <input asp-for="AvgPowerConsumptionKwh" class="form-control form-control-lg fs-15px" />
-                <span asp-validation-for="AvgPowerConsumptionKwh" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="DepartmentId"></label>
                 <select asp-for="DepartmentId" class="form-control">
-                    @foreach (var department in Model.EmployeeDepartments)
+                    @foreach (var costType in Model.EmployeeDepartments)
                     {
-                        <option value="@department.Id">@department.Name</option>
+                        <option value="@costType.Id">@costType.Name</option>
                     }
                 </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="FloorSpace" class="form-label"></label>
-                <input asp-for="FloorSpace" class="form-control form-control-lg fs-15px" />
-                <span asp-validation-for="FloorSpace" class="text-danger"></span>
+                <input asp-for="IsUsingWater" class="form-check-input form-control-sm fs-15px mt-10px" />
+                <label asp-for="IsUsingWater" class="form-label mt-10px"></label>
+                <span asp-validation-for="IsUsingWater" class="text-danger"></span>
             </div>          
             
 

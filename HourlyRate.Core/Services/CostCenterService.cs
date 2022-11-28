@@ -1,7 +1,10 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.CostCenter;
+using HourlyRate.Core.Models.Employee;
+using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
+using HourlyRate.Infrastructure.Data.Models.CostCategories;
 using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +30,20 @@ namespace HourlyRate.Core.Services
             return _repo.AllReadonly<FinancialYear>()
                 .First(y => y.IsActive).Year;
         }
+
+        public async Task<IEnumerable<GeneralCostTypeViewModel>> AllCostTypes()
+        {
+
+            return await _repo.AllReadonly<CostCategory>()
+                .OrderBy(c => c.Name)
+                .Select(c => new GeneralCostTypeViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
             var currentYear = ActiveFinancialYear();
@@ -37,10 +54,21 @@ namespace HourlyRate.Core.Services
                 .Select(c => new CostCenterViewModel()
                 {
                     Id = c.Id,
+                    Name = c.CostCenter.Name
                     
                 }).ToListAsync();
+        }
 
-
+        public async Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments()
+        {
+            return await _repo.AllReadonly<Department>()
+                .OrderBy(c => c.Name)
+                .Select(c => new EmployeeDepartmentModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync();
         }
     }
 }

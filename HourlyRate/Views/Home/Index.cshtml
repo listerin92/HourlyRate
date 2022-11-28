@@ -35,6 +35,7 @@ else
     @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
     {
         <a asp-controller="Home" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add Employee</a>
+        <a asp-controller="Home" asp-action="AddDepartment" class="btn btn-primary btn-lg" role="button">Add Employee Department</a>
     }
 </div>
 

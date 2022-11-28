@@ -1,7 +1,9 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models;
 using HourlyRate.Core.Models.Employee;
+using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
+using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -74,6 +76,40 @@ public class HomeController : Controller
         return RedirectToAction(nameof(Index), new { id = employeeId });
 
     }
+
+    [HttpGet]
+    public async Task<IActionResult> AddDepartment()
+    {
+        var model = new AddEmployeeDepartmentViewModel()
+        {
+            EmployeeDepartments = await _employeeService.AllDepartments()
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddDepartment(AddEmployeeDepartmentViewModel model)
+    {
+        if ((await _employeeService.DepartmentExists(model.DepartmentId)) == false)
+        {
+            ModelState.AddModelError(nameof(model.DepartmentId), "Department does not exists");
+        }
+        if (!ModelState.IsValid)
+        {
+            model.EmployeeDepartments = await _employeeService.AllDepartments();
+
+            return View(model);
+        }
+        var companyId = GetCompanyId();
+
+        var result = await _employeeService.CreateDepartment(model, companyId);
+
+        if (result != -1) return RedirectToAction(nameof(Index));
+
+        ModelState.AddModelError("", "Department Already Exist");
+        return View(model);
+    }
+
 
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
@@ -169,6 +205,12 @@ public class HomeController : Controller
         await _employeeService.Delete(id);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    private Guid GetCompanyId()
+    {
+        var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
+        return companyId;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

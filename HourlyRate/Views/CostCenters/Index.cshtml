@@ -31,7 +31,7 @@ else
 <div class="card-header pb-2">
     @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
     {
-        <a asp-controller="CostCenters" asp-action="AddCostCenter" class="btn btn-primary btn-lg" role="button">Add Cost Center</a>
+        <a asp-controller="CostCenters" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add Cost Center</a>
     }
 </div>
 <div>

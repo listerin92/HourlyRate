@@ -8,8 +8,10 @@ namespace HourlyRate.Core.Contracts
         Task<IEnumerable<EmployeeViewModelCurrency>> AllEmployeesWithSalary(Guid companyId);
 
         Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments();
+
+        Task<int> CreateDepartment(AddEmployeeDepartmentViewModel model, Guid companyId);
         Task<int> CreateEmployee(EmployeeViewModel model, Guid companyId);
-        Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId);
+        Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId);  
         Task<Expenses> GetEmployeeSalary(int employeeId);
 
         Task<bool> Exists(int id);
