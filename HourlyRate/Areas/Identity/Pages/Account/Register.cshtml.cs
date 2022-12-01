@@ -202,7 +202,8 @@ namespace HourlyRate.Areas.Identity.Pages.Account
                 createUser.CompanyPhoneNumber = Input.CompanyPhoneNumber;
                 createUser.DefaultCurrency = Input.DefaultCurrency;
                 createUser.VAT = Input.VAT;
-                createUser.CompanyId = guid; //TODO: Not find a way to use only guid in ASP User. Mirroring Company properties !!!!!!!!!
+                createUser.CompanyId = guid; 
+                //TODO: Not find a way to use only guid in ASP User. Mirroring Company properties !!!!!!!!!
 
                 return createUser;
             }

@@ -111,12 +111,14 @@ namespace HourlyRate.Core.Services
 
         public async Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId)
         {
+            var currentYear = ActiveFinancialYear();
+
             var expense = new Expenses()
             {
                 EmployeeId = employeeId,
                 Amount = amount,
                 CompanyId = companyId,
-                FinancialYearId = 8 //TODO: implement financial years
+                FinancialYearId = currentYear
             };
             await _repo.AddAsync(expense);
             await _repo.SaveChangesAsync();

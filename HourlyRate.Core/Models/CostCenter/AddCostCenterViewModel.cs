@@ -18,7 +18,7 @@ namespace HourlyRate.Core.Models.CostCenter
         public decimal AnnualHours { get; set; }
         [Required]
         public decimal AnnualChargeableHours { get; set; }
-        public int? DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
         public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
             = new List<EmployeeDepartmentModel>();
         [Display(Name = "Using Water")]

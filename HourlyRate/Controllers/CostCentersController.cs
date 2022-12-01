@@ -42,5 +42,22 @@ namespace HourlyRate.Controllers
             };
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AddCostCenterViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+
+            }
+            var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
+
+            await _costCenterService.AddCostCenter(model, companyId);
+
+            return RedirectToAction(nameof(Index));
+
+        }
     }
 }

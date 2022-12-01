@@ -17,11 +17,14 @@ namespace HourlyRate.Core.Models.CostCenter
         public decimal AnnualHours { get; set; }
         [Required]
         public decimal AnnualChargeableHours { get; set; }
+        public int DirectAllocatedStuff { get; set; }
         public int? DepartmentId { get; set; }
 
         public Department Department { get; set; } = null!;
         public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
             = new List<EmployeeDepartmentModel>();
+
+        public decimal TotalPowerConsumption { get; set; }
 
         [Required]
         public decimal DirectWagesCost { get; set; }

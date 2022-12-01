@@ -48,14 +48,21 @@ namespace HourlyRate.Core.Services
         {
             var currentYear = ActiveFinancialYear();
 
-            return await _repo.AllReadonly<Expenses>()
-                .Where(c => c.FinancialYear.Year == currentYear &&
+
+            return await _repo.AllReadonly<CostCenter>()
+                .Where(c =>
                             c.CompanyId == companyId)
                 .Select(c => new CostCenterViewModel()
                 {
-                    Id = c.Id,
-                    Name = c.CostCenter.Name
-                    
+                    Name = c.Name,
+                    FloorSpace = c.FloorSpace,
+                    AvgPowerConsumptionKwh = c.AvgPowerConsumptionKwh,
+                    AnnualHours = c.AnnualHours,
+                    AnnualChargeableHours = c.AnnualChargeableHours,
+                    DepartmentId = c.DepartmentId,
+                    TotalPowerConsumption = c.AnnualChargeableHours * c.AvgPowerConsumptionKwh,
+
+
                 }).ToListAsync();
         }
 
@@ -69,6 +76,49 @@ namespace HourlyRate.Core.Services
                     Name = c.Name
                 })
                 .ToListAsync();
+        }
+
+        public async Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId)
+        {
+            var currentYear = ActiveFinancialYear();
+
+            
+            var emplNo = _repo.AllReadonly<Employee>()
+                .Count(e => e.DepartmentId == ccModel.DepartmentId);
+
+            var emplSalary = _repo.AllReadonly<Expenses>()
+                .Where(e => e.Employee.DepartmentId == ccModel.DepartmentId)
+                .Sum(e => e.Amount);
+            
+
+            var costCenter = new CostCenter()
+            {
+                Name = ccModel.Name,
+                FloorSpace = ccModel.FloorSpace,
+                AvgPowerConsumptionKwh = ccModel.AvgPowerConsumptionKwh,
+                AnnualHours = ccModel.AnnualHours,
+                AnnualChargeableHours = ccModel.AnnualChargeableHours,
+                DepartmentId = ccModel.DepartmentId,
+                IsUsingWater = ccModel.IsUsingWater,
+                CompanyId = companyId
+
+            };
+
+            await _repo.AddAsync(costCenter);
+            await _repo.SaveChangesAsync();
+
+
+            var costCenterId = _repo.AllReadonly<CostCenter>()
+                .First(cc => cc.Name == ccModel.Name).Id;
+
+            var emplCC = _repo.AllReadonly<Expenses>()
+                .Where(e => e.Employee.DepartmentId == ccModel.DepartmentId);
+            
+            foreach (var employeeExpenses in emplCC)
+            {
+                employeeExpenses.CostCenterId = costCenterId;
+            }
+            await _repo.SaveChangesAsync();
         }
     }
 }

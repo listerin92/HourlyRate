@@ -10,6 +10,7 @@ namespace HourlyRate.Core.Contracts
         Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments();
 
         Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId);
+        Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId);
 
     }
 }
