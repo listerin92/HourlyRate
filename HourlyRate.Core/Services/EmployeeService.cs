@@ -28,6 +28,11 @@ namespace HourlyRate.Core.Services
             return _repo.AllReadonly<FinancialYear>()
                 .First(y => y.IsActive).Year;
         }
+        private int ActiveFinancialYearId()
+        {
+            return _repo.AllReadonly<FinancialYear>()
+                .First(y => y.IsActive).Id;
+        }
         public async Task<IEnumerable<EmployeeViewModelCurrency>> AllEmployeesWithSalary(Guid companyId)
         {
             var currentYear = ActiveFinancialYear();
@@ -111,14 +116,14 @@ namespace HourlyRate.Core.Services
 
         public async Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId)
         {
-            var currentYear = ActiveFinancialYear();
+            var activeFinancialYearId = ActiveFinancialYearId();
 
             var expense = new Expenses()
             {
                 EmployeeId = employeeId,
                 Amount = amount,
                 CompanyId = companyId,
-                FinancialYearId = currentYear
+                FinancialYearId = activeFinancialYearId
             };
             await _repo.AddAsync(expense);
             await _repo.SaveChangesAsync();

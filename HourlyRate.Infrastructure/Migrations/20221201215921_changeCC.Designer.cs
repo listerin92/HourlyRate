@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HourlyRate.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221201215739_changeCC")]
+    [Migration("20221201215921_changeCC")]
     partial class changeCC
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -893,7 +893,7 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasOne("HourlyRate.Infrastructure.Data.Models.Employee.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");

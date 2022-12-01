@@ -891,7 +891,7 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasOne("HourlyRate.Infrastructure.Data.Models.Employee.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");

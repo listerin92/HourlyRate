@@ -34,6 +34,10 @@ namespace HourlyRate.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new SalaryConfiguration());
             modelBuilder.ApplyConfiguration(new CostCategoryConfiguration());
+            modelBuilder.Entity<CostCenter>()
+                .HasOne(e => e.Department)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

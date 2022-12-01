@@ -2,6 +2,7 @@
 using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Core.Models.Employee;
 using HourlyRate.Core.Models.GeneralCost;
+using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
 using HourlyRate.Infrastructure.Data.Models.CostCategories;
@@ -13,11 +14,14 @@ namespace HourlyRate.Core.Services
     public class CostCenterService : ICostCenterService
     {
         private readonly IRepository _repo;
+        private readonly ApplicationDbContext _context;
 
         public CostCenterService(
             IRepository repo
+            ,ApplicationDbContext context
         )
         {
+            _context = context;
             _repo = repo;
         }
 
@@ -108,17 +112,18 @@ namespace HourlyRate.Core.Services
             await _repo.SaveChangesAsync();
 
 
-            var costCenterId = _repo.AllReadonly<CostCenter>()
-                .First(cc => cc.Name == ccModel.Name).Id;
+            var cc = _repo.AllReadonly<CostCenter>()
+                .First(cc => cc.Name == ccModel.Name);
 
-            var emplCC = _repo.AllReadonly<Expenses>()
-                .Where(e => e.Employee.DepartmentId == ccModel.DepartmentId);
-            
-            foreach (var employeeExpenses in emplCC)
+            var ecc = _context.Expenses
+                .Where(e => e.Employee.Department.Id == cc.DepartmentId);
+            foreach (var e in ecc)
             {
-                employeeExpenses.CostCenterId = costCenterId;
+                e.CostCenterId = cc.Id;
             }
-            await _repo.SaveChangesAsync();
+
+            _context.UpdateRange(ecc);
+            await _context.SaveChangesAsync();
         }
     }
 }
