@@ -44,7 +44,7 @@ namespace HourlyRate.Infrastructure.Configuration
                     LastName = "Todorov",
                     JobTitle = "bbb",
                     ImageUrl = "https://www.loudegg.com/wp-content/uploads/2020/10/Fred-Flintstone.jpg",
-                    DepartmentId = 1,
+                    DepartmentId = 3,
                     IsEmployee = true,
                     CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
                 },
@@ -55,7 +55,7 @@ namespace HourlyRate.Infrastructure.Configuration
                     LastName = "Antonov",
                     JobTitle = "asdf",
                     ImageUrl = "https://www.loudegg.com/wp-content/uploads/2020/10/SpongeBob-SqaurePants.jpg",
-                    DepartmentId = 1,
+                    DepartmentId = 4,
                     IsEmployee = true,
                     CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
                 },

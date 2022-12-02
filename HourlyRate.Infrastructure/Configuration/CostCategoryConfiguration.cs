@@ -18,50 +18,44 @@ namespace HourlyRate.Infrastructure.Configuration
                 new CostCategory()
                 {
                     Id = 1,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
-                    Name = "FloorSpace m2",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Water",
                 },
                 new CostCategory()
                 {
                     Id = 2,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
-                    Name = "Power Consumption kWh",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Power",
                 },
                 new CostCategory()
                 {   
                     Id = 3,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
-                    Name = "Heating",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Phones",
                 },
                 new CostCategory()
                 {
                     Id = 4,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
-                    Name = "Cooling",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Other",
                 },
                 new CostCategory()
                 {
                     Id = 5,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
-                    Name = "General Taxes",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Administration",
                 },
                 new CostCategory()
                 {
                     Id = 6,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Rent",
+                },
+                new CostCategory()
+                {
+                    Id = 6,
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
                     Name = "Direct Repairs",
-                },
-                new CostCategory()
-                {
-                    Id = 7,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
-                    Name = "Available hours",
-                },
-                new CostCategory()
-                {
-                    Id = 8,
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2"),
-                    Name = "Salable hours",
                 }
             };
             return costCategories;

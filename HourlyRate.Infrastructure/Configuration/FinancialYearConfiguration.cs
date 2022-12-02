@@ -9,7 +9,6 @@ namespace HourlyRate.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<FinancialYear> builder)
         {
             builder.HasData(CreateYears());
-
         }
 
         private List<FinancialYear> CreateYears()
@@ -26,7 +25,9 @@ namespace HourlyRate.Infrastructure.Configuration
                 years.Add(year);
             }
 
-            return years;   
+            var currentYear = years.Find(y => y.Year == DateTime.Now.Year);
+            currentYear!.IsActive = true;
+            return years;
         }
     }
 }

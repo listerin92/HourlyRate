@@ -1,10 +1,8 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.Employee;
-using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
-using HourlyRate.Infrastructure.Data.Models.CostCategories;
 using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +34,9 @@ namespace HourlyRate.Core.Services
         public async Task<IEnumerable<EmployeeViewModelCurrency>> AllEmployeesWithSalary(Guid companyId)
         {
             var currentYear = ActiveFinancialYear();
-            return await _repo.AllReadonly<Expenses>()
+
+            //TODO: after seed need to set an active financial year, implement financial year in register!!!!
+            var employees = _repo.AllReadonly<Expenses>()
                 .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId && y.Employee!.IsEmployee == true)
                 .Select(e => new EmployeeViewModelCurrency()
                 {
@@ -47,11 +47,12 @@ namespace HourlyRate.Core.Services
                     JobTitle = e.Employee.JobTitle,
                     Salary = e.Amount,
                     DefaultCurrency = e.Company.DefaultCurrency,
-                    Department = e.Employee.Department
+                    Department = e.Employee.Department!
                 })
                 .OrderBy(o => o.Department)
                 .ToListAsync();
 
+            return await employees;
         }
 
         public async Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments()

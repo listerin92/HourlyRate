@@ -19,61 +19,133 @@ namespace HourlyRate.Infrastructure.Configuration
                 {
                     Id = 1,
                     Name = "Prepress",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 2,
-                    Name = "Press",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "2 CTP",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 3,
-                    Name = "WebPress",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "SM102-8P",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 4,
-                    Name = "ManualLabor",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "SM74-5",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 5,
-                    Name = "Cutters",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "SM74-8P",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 6,
-                    Name = "Stitchers",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "GTO",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 7,
-                    Name = "Binders",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "2 Cutters",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 8,
-                    Name = "HardCover",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "5 Folders",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 9,
-                    Name = "FrontCutter",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "Lamination",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 },
                 new Department()
                 {
                     Id = 10,
-                    Name = "RotaryCutter",
-                    CompanyId = Guid.Parse("457FC37B-B204-4019-9E5D-08DACF799BB2")
+                    Name = "Binding",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 11,
+                    Name = "Stitcher",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 12,
+                    Name = "Sewing",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 13,
+                    Name = "EndPaper",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 14,
+                    Name = "CaseMaker",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 15,
+                    Name = "CasingIN",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 16,
+                    Name = "FrontKnife",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 17,
+                    Name = "Rotary Cutting",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 18,
+                    Name = "Creaser",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 19,
+                    Name = "Manual/Assistants/Packing",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 20,
+                    Name = "General",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 21,
+                    Name = "CTP Web",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 22,
+                    Name = "Man Uniman",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 }
 
             };

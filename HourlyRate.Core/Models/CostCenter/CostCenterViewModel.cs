@@ -1,6 +1,7 @@
 ﻿using HourlyRate.Core.Models.Employee;
 using HourlyRate.Infrastructure.Data.Models.Employee;
 using System.ComponentModel.DataAnnotations;
+using HourlyRate.Infrastructure.Data.Models;
 
 namespace HourlyRate.Core.Models.CostCenter
 {
@@ -21,9 +22,6 @@ namespace HourlyRate.Core.Models.CostCenter
         public int? DepartmentId { get; set; }
 
         public Department Department { get; set; } = null!;
-        public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
-            = new List<EmployeeDepartmentModel>();
-
         public decimal TotalPowerConsumption { get; set; }
 
         [Required]

@@ -175,56 +175,6 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("CostCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "FloorSpace m2"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Power Consumption kWh"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Heating"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Cooling"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "General Taxes"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Direct Repairs"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Available hours"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Salable hours"
-                        });
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.CostCenter", b =>
@@ -250,8 +200,7 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("DepartmentId")
-                        .IsRequired()
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<int>("DirectAllocatedStuff")
@@ -276,6 +225,9 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.Property<decimal>("DirectWagesCost")
                         .HasPrecision(18, 2)
                         .HasColumnType("money");
+
+                    b.Property<int>("FinancialYearId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("FloorSpace")
                         .HasPrecision(18, 2)
@@ -370,7 +322,9 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("CostCenter");
+                    b.HasIndex("FinancialYearId");
+
+                    b.ToTable("CostCenters");
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Costs.Consumable", b =>
@@ -448,68 +402,6 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Departments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Prepress"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Press"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "WebPress"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "ManualLabor"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Cutters"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Stitchers"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "Binders"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "HardCover"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "FrontCutter"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            Name = "RotaryCutter"
-                        });
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Employee.Employee", b =>
@@ -553,52 +445,6 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            DepartmentId = 1,
-                            FirstName = "Ivan",
-                            ImageUrl = "https://www.loudegg.com/wp-content/uploads/2020/10/Mickey-Mouse.jpg",
-                            IsEmployee = true,
-                            JobTitle = "asdf",
-                            LastName = "Ivanov"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            DepartmentId = 2,
-                            FirstName = "Petar",
-                            ImageUrl = "https://www.loudegg.com/wp-content/uploads/2020/10/Bugs-Bunny.jpg",
-                            IsEmployee = true,
-                            JobTitle = "asdf",
-                            LastName = "Petrov"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            DepartmentId = 1,
-                            FirstName = "Stefan",
-                            ImageUrl = "https://www.loudegg.com/wp-content/uploads/2020/10/Fred-Flintstone.jpg",
-                            IsEmployee = true,
-                            JobTitle = "bbb",
-                            LastName = "Todorov"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            DepartmentId = 1,
-                            FirstName = "Georgi",
-                            ImageUrl = "https://www.loudegg.com/wp-content/uploads/2020/10/SpongeBob-SqaurePants.jpg",
-                            IsEmployee = true,
-                            JobTitle = "asdf",
-                            LastName = "Antonov"
-                        });
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Employee.FinancialYear", b =>
@@ -665,7 +511,7 @@ namespace HourlyRate.Infrastructure.Migrations
                         new
                         {
                             Id = 8,
-                            IsActive = false,
+                            IsActive = true,
                             Year = 2022
                         },
                         new
@@ -784,40 +630,6 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasIndex("FinancialYearId");
 
                     b.ToTable("Expenses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amount = 5000m,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            EmployeeId = 1,
-                            FinancialYearId = 8
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amount = 2322m,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            EmployeeId = 2,
-                            FinancialYearId = 8
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Amount = 1211m,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            EmployeeId = 3,
-                            FinancialYearId = 8
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Amount = 855m,
-                            CompanyId = new Guid("457fc37b-b204-4019-9e5d-08dacf799bb2"),
-                            EmployeeId = 4,
-                            FinancialYearId = 8
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -993,9 +805,17 @@ namespace HourlyRate.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("HourlyRate.Infrastructure.Data.Models.Employee.FinancialYear", "FinancialYear")
+                        .WithMany()
+                        .HasForeignKey("FinancialYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Company");
 
                     b.Navigation("Department");
+
+                    b.Navigation("FinancialYear");
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Costs.Consumable", b =>

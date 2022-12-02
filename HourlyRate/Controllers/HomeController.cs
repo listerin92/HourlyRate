@@ -32,12 +32,14 @@ public class HomeController : Controller
     {
         if (User.Identity?.IsAuthenticated ?? false)
         {
-            var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
 
+            var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
             var model = await _employeeService.AllEmployeesWithSalary(companyId);
+
             return View(model);
         }
-        else return View();
+        else
+            return View();
     }
 
     [HttpGet]
@@ -80,23 +82,17 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> AddDepartment()
     {
-        var model = new AddEmployeeDepartmentViewModel()
-        {
-            EmployeeDepartments = await _employeeService.AllDepartments()
-        };
+        var model = new AddEmployeeDepartmentViewModel();
+       
         return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> AddDepartment(AddEmployeeDepartmentViewModel model)
     {
-        if ((await _employeeService.DepartmentExists(model.DepartmentId)) == false)
-        {
-            ModelState.AddModelError(nameof(model.DepartmentId), "Department does not exists");
-        }
         if (!ModelState.IsValid)
         {
-            model.EmployeeDepartments = await _employeeService.AllDepartments();
+            ModelState.AddModelError(nameof(model.Name), "Add Department Name");
 
             return View(model);
         }
@@ -106,7 +102,7 @@ public class HomeController : Controller
 
         if (result != -1) return RedirectToAction(nameof(Index));
 
-        ModelState.AddModelError("", "Department Already Exist");
+        ModelState.AddModelError(nameof(model.Name), "Department Already Exist");
         return View(model);
     }
 

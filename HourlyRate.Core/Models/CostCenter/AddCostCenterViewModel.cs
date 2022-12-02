@@ -18,6 +18,9 @@ namespace HourlyRate.Core.Models.CostCenter
         public decimal AnnualHours { get; set; }
         [Required]
         public decimal AnnualChargeableHours { get; set; }
+
+        [Required]
+        [Display(Name = "Add Employee Department Wages")]
         public int DepartmentId { get; set; }
         public IEnumerable<EmployeeDepartmentModel> EmployeeDepartments { get; set; }
             = new List<EmployeeDepartmentModel>();

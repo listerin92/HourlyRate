@@ -36,7 +36,7 @@ namespace HourlyRate.Infrastructure.Data.Models
         public decimal AnnualChargeableHours { get; set; }
 
         [ForeignKey(nameof(Department))]
-        public int? DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
 
         public Department Department { get; set; } = null!;
 
@@ -167,6 +167,9 @@ namespace HourlyRate.Infrastructure.Data.Models
         public decimal OverheadsPerHour { get; set; }
 
 
+        [ForeignKey(nameof(FinancialYear))]
+        public int FinancialYearId { get; set; }
+        public FinancialYear FinancialYear { get; set; } = null!;
 
         [ForeignKey(nameof(Company))]
         public Guid CompanyId { get; set; }

@@ -18,7 +18,7 @@ namespace HourlyRate.Core.Services
 
         public CostCenterService(
             IRepository repo
-            ,ApplicationDbContext context
+            , ApplicationDbContext context
         )
         {
             _context = context;
@@ -34,13 +34,17 @@ namespace HourlyRate.Core.Services
             return _repo.AllReadonly<FinancialYear>()
                 .First(y => y.IsActive).Year;
         }
-
-        public async Task<IEnumerable<GeneralCostTypeViewModel>> AllCostTypes()
+        private int ActiveFinancialYearId()
+        {
+            return _repo.AllReadonly<FinancialYear>()
+                .First(y => y.IsActive).Id;
+        }
+        public async Task<IEnumerable<GeneralCostCenterViewModel>> AllCostTypes()
         {
 
             return await _repo.AllReadonly<CostCategory>()
                 .OrderBy(c => c.Name)
-                .Select(c => new GeneralCostTypeViewModel()
+                .Select(c => new GeneralCostCenterViewModel()
                 {
                     Id = c.Id,
                     Name = c.Name
@@ -50,11 +54,10 @@ namespace HourlyRate.Core.Services
 
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
-            var currentYear = ActiveFinancialYear();
 
-            return await _repo.AllReadonly<CostCenter>()
-                .Where(c =>
-                            c.CompanyId == companyId)
+
+            var allCC = _context.CostCenters
+                .Where(c => c.CompanyId == companyId && c.Name != "None")
                 .Select(c => new CostCenterViewModel()
                 {
                     Name = c.Name,
@@ -66,9 +69,10 @@ namespace HourlyRate.Core.Services
                     TotalPowerConsumption = c.AnnualChargeableHours * c.AvgPowerConsumptionKwh,
                     DirectAllocatedStuff = c.DirectAllocatedStuff,
                     DirectWagesCost = c.DirectWagesCost,
-                    DirectRepairCost = c.DirectRepairCost,
 
                 }).ToListAsync();
+
+            return await allCC;
         }
 
         public async Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments()
@@ -85,16 +89,17 @@ namespace HourlyRate.Core.Services
 
         public async Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId)
         {
-            var currentYear = ActiveFinancialYear();
+            var activeYearId = ActiveFinancialYearId();
 
-            
-            var emplNo = _repo.AllReadonly<Employee>()
+
+
+            var employeeNo = _repo.AllReadonly<Employee>()
                 .Count(e => e.DepartmentId == ccModel.DepartmentId);
 
-            var emplSalary = _repo.AllReadonly<Expenses>()
-                .Where(e => e.Employee.Department.Id == ccModel.DepartmentId)
+            var employeSalary = _repo.AllReadonly<Expenses>()
+                .Where(e => e.Employee!.Department!.Id == ccModel.DepartmentId)
                 .Sum(e => e.Amount);
-            
+
 
             var costCenter = new CostCenter()
             {
@@ -105,10 +110,10 @@ namespace HourlyRate.Core.Services
                 AnnualChargeableHours = ccModel.AnnualChargeableHours,
                 DepartmentId = ccModel.DepartmentId,
                 IsUsingWater = ccModel.IsUsingWater,
-                DirectAllocatedStuff = emplNo,
-                DirectWagesCost = emplSalary,
-                DirectRepairCost = 0,
-                CompanyId = companyId
+                DirectAllocatedStuff = employeeNo,
+                DirectWagesCost = employeSalary,
+                CompanyId = companyId,
+                FinancialYearId = activeYearId
 
             };
 

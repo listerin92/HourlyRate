@@ -263,6 +263,70 @@ namespace HourlyRate.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CostCenters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FloorSpace = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    AvgPowerConsumptionKwh = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    AnnualHours = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    AnnualChargeableHours = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    TotalPowerConsumption = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IsUsingWater = table.Column<bool>(type: "bit", nullable: false),
+                    DirectAllocatedStuff = table.Column<int>(type: "int", nullable: false),
+                    DirectWagesCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    DirectRepairCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    DirectGeneraConsumablesCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    DirectDepreciationCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    DirectElectricityCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    RentCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    TotalDirectCosts = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    TotalIndex = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    WaterTotalIndex = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IndirectWaterCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IndirectTaxes = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IndirectPhonesCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IndirectOtherCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IndirectAdministrationWagesCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IndirectMaintenanceWagesCost = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    IndirectTotalCosts = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    TotalCosts = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    WagesPerMonth = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    MachinesPerMonth = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    OverheadsPerMonth = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    WagesPerHour = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    MachinesPerHour = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    OverheadsPerHour = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
+                    FinancialYearId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CostCenters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CostCenters_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CostCenters_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CostCenters_FinancialYears_FinancialYearId",
+                        column: x => x.FinancialYearId,
+                        principalTable: "FinancialYears",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
@@ -324,12 +388,14 @@ namespace HourlyRate.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmployeeId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<decimal>(type: "money", precision: 18, scale: 2, nullable: false),
                     FinancialYearId = table.Column<int>(type: "int", nullable: false),
                     ConsumableId = table.Column<int>(type: "int", nullable: true),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CostCategoryId = table.Column<int>(type: "int", nullable: true)
+                    CostCategoryId = table.Column<int>(type: "int", nullable: true),
+                    CostCenterId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -349,6 +415,11 @@ namespace HourlyRate.Infrastructure.Migrations
                         name: "FK_Expenses_CostCategories_CostCategoryId",
                         column: x => x.CostCategoryId,
                         principalTable: "CostCategories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Expenses_CostCenters_CostCenterId",
+                        column: x => x.CostCenterId,
+                        principalTable: "CostCenters",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Expenses_Employees_EmployeeId",
@@ -423,6 +494,21 @@ namespace HourlyRate.Infrastructure.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CostCenters_CompanyId",
+                table: "CostCenters",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CostCenters_DepartmentId",
+                table: "CostCenters",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CostCenters_FinancialYearId",
+                table: "CostCenters",
+                column: "FinancialYearId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Departments_CompanyId",
                 table: "Departments",
                 column: "CompanyId");
@@ -451,6 +537,11 @@ namespace HourlyRate.Infrastructure.Migrations
                 name: "IX_Expenses_CostCategoryId",
                 table: "Expenses",
                 column: "CostCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expenses_CostCenterId",
+                table: "Expenses",
+                column: "CostCenterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Expenses_EmployeeId",
@@ -501,13 +592,16 @@ namespace HourlyRate.Infrastructure.Migrations
                 name: "CostCategories");
 
             migrationBuilder.DropTable(
+                name: "CostCenters");
+
+            migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "FinancialYears");
+                name: "Machines");
 
             migrationBuilder.DropTable(
-                name: "Machines");
+                name: "FinancialYears");
 
             migrationBuilder.DropTable(
                 name: "Departments");

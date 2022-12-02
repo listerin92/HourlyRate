@@ -29,6 +29,19 @@ namespace HourlyRate.Core.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<GeneralCostCenterViewModel>> AllCostCenters()
+        {
+
+            return await _repo.AllReadonly<CostCenter>()
+                .OrderBy(c => c.Name)
+                .Select(c => new GeneralCostCenterViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<CostViewModel>> AllGeneralCost(Guid companyId)
         {
             var currentYear = ActiveFinancialYear();
@@ -41,8 +54,8 @@ namespace HourlyRate.Core.Services
                    Amount = c.Amount,
                    CostCategoryId = c.CostCategoryId,
                    Description = c.Description!,
-                   DefaultCurrency = c.Company.DefaultCurrency
-
+                   DefaultCurrency = c.Company.DefaultCurrency,
+                   CostCenterName = c.CostCenter!.Name ?? "None"
                })
                .ToListAsync();
 
@@ -56,16 +69,17 @@ namespace HourlyRate.Core.Services
 
         }
 
-        public async Task<int> CreateCost(CostViewModel model, Guid companyId)
+        public async Task<int> CreateCost(AddCostViewModel model, Guid companyId)
         {
-
+            var activeFinancialYearId = ActiveFinancialYearId();
             var cost = new Expenses()
             {
                 CompanyId = companyId,
                 Amount = model.Amount,
                 CostCategoryId = model.CostCategoryId,
+                CostCenterId = model.CostCenterId,
                 Description = model.Description,
-                FinancialYearId = 8
+                FinancialYearId = activeFinancialYearId
             };
 
             await _repo.AddAsync(cost);
@@ -75,7 +89,7 @@ namespace HourlyRate.Core.Services
 
         }
 
-        public async Task<int> CreateCostCategory(CostCategoryViewModel model, Guid companyId)
+        public async Task<int> CreateCostCategory(AddCostCategoryViewModel model, Guid companyId)
         {
             var checkExist = _repo.AllReadonly<CostCategory>()
                 .FirstOrDefault(c => c.Name == model.Description)
@@ -100,6 +114,12 @@ namespace HourlyRate.Core.Services
         {
             return _repo.AllReadonly<FinancialYear>()
                 .First(y => y.IsActive).Year;
+        }
+
+        private int ActiveFinancialYearId()
+        {
+            return _repo.AllReadonly<FinancialYear>()
+                .First(y => y.IsActive).Id;
         }
     }
 

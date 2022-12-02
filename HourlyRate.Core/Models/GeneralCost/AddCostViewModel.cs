@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+
 namespace HourlyRate.Core.Models.GeneralCost
 {
-    public class CostViewModel
+    public class AddCostViewModel
     {
         public int Id { get; set; }
 
@@ -15,12 +16,15 @@ namespace HourlyRate.Core.Models.GeneralCost
         [Range(0.00, 9000000.00, ErrorMessage = "Amount must be a positive number and less than {2} digits")]
         public decimal Amount { get; set; }
 
-        [Display(Name = "CostCategoryId")]
+        [Display(Name = "Cost Category")]
         public int? CostCategoryId { get; set; }
-        public string DefaultCurrency { get; set; } = null!;
-        public string CostCenterName { get; set; }
-            
-        public IEnumerable<GeneralCostCenterViewModel> GeneralCostType { get; set; }
+
+        public IEnumerable<GeneralCostTypeViewModel> GeneralCostType { get; set; }
+            = new List<GeneralCostTypeViewModel>();
+
+        [Display(Name = "Cost Center")]
+        public int? CostCenterId { get; set; }
+        public IEnumerable<GeneralCostCenterViewModel> GeneralCostCenter { get; set; }
             = new List<GeneralCostCenterViewModel>();
 
     }

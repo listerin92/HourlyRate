@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HourlyRate.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221126064319_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221202204857_SeedYearDefaultYear")]
+    partial class SeedYearDefaultYear
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -179,6 +179,156 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.ToTable("CostCategories");
                 });
 
+            modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.CostCenter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("AnnualChargeableHours")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("AnnualHours")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("AvgPowerConsumptionKwh")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DirectAllocatedStuff")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("DirectDepreciationCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("DirectElectricityCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("DirectGeneraConsumablesCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("DirectRepairCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("DirectWagesCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<int>("FinancialYearId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("FloorSpace")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IndirectAdministrationWagesCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IndirectMaintenanceWagesCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IndirectOtherCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IndirectPhonesCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IndirectTaxes")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IndirectTotalCosts")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IndirectWaterCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<bool>("IsUsingWater")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MachinesPerHour")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("MachinesPerMonth")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("OverheadsPerHour")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("OverheadsPerMonth")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("RentCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("TotalCosts")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("TotalDirectCosts")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("TotalIndex")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("TotalPowerConsumption")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("WagesPerHour")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("WagesPerMonth")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("WaterTotalIndex")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("money");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("FinancialYearId");
+
+                    b.ToTable("CostCenters");
+                });
+
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Costs.Consumable", b =>
                 {
                     b.Property<int>("Id")
@@ -316,6 +466,122 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FinancialYears");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsActive = false,
+                            Year = 2015
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsActive = false,
+                            Year = 2016
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsActive = false,
+                            Year = 2017
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsActive = false,
+                            Year = 2018
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsActive = false,
+                            Year = 2019
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsActive = false,
+                            Year = 2020
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsActive = false,
+                            Year = 2021
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsActive = true,
+                            Year = 2022
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsActive = false,
+                            Year = 2023
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsActive = false,
+                            Year = 2024
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IsActive = false,
+                            Year = 2025
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IsActive = false,
+                            Year = 2026
+                        },
+                        new
+                        {
+                            Id = 13,
+                            IsActive = false,
+                            Year = 2027
+                        },
+                        new
+                        {
+                            Id = 14,
+                            IsActive = false,
+                            Year = 2028
+                        },
+                        new
+                        {
+                            Id = 15,
+                            IsActive = false,
+                            Year = 2029
+                        },
+                        new
+                        {
+                            Id = 16,
+                            IsActive = false,
+                            Year = 2030
+                        },
+                        new
+                        {
+                            Id = 17,
+                            IsActive = false,
+                            Year = 2031
+                        },
+                        new
+                        {
+                            Id = 18,
+                            IsActive = false,
+                            Year = 2032
+                        },
+                        new
+                        {
+                            Id = 19,
+                            IsActive = false,
+                            Year = 2033
+                        });
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Expenses", b =>
@@ -339,6 +605,12 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.Property<int?>("CostCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CostCenterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
@@ -352,6 +624,8 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.HasIndex("ConsumableId");
 
                     b.HasIndex("CostCategoryId");
+
+                    b.HasIndex("CostCenterId");
 
                     b.HasIndex("EmployeeId");
 
@@ -519,6 +793,33 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.CostCenter", b =>
+                {
+                    b.HasOne("HourlyRate.Infrastructure.Data.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HourlyRate.Infrastructure.Data.Models.Employee.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HourlyRate.Infrastructure.Data.Models.Employee.FinancialYear", "FinancialYear")
+                        .WithMany()
+                        .HasForeignKey("FinancialYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("FinancialYear");
+                });
+
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Costs.Consumable", b =>
                 {
                     b.HasOne("HourlyRate.Infrastructure.Data.Models.Company", "Company")
@@ -591,6 +892,10 @@ namespace HourlyRate.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("CostCategoryId");
 
+                    b.HasOne("HourlyRate.Infrastructure.Data.Models.CostCenter", "CostCenter")
+                        .WithMany()
+                        .HasForeignKey("CostCenterId");
+
                     b.HasOne("HourlyRate.Infrastructure.Data.Models.Employee.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
@@ -606,6 +911,8 @@ namespace HourlyRate.Infrastructure.Migrations
                     b.Navigation("Consumable");
 
                     b.Navigation("CostCategories");
+
+                    b.Navigation("CostCenter");
 
                     b.Navigation("Employee");
 

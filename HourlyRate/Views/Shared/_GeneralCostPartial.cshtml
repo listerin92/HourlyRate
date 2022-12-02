@@ -1,4 +1,4 @@
-﻿@model CostViewModel
+﻿@model AddCostViewModel
 
 <!-- BEGIN Add Cost -->
 <div class="register">
@@ -18,7 +18,7 @@
                 <input asp-for="Amount" class="form-control form-control-lg fs-15px" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
-           <div class="form-group">
+            <div class="form-group">
                 <label asp-for="CostCategoryId"></label>
                 <select asp-for="CostCategoryId" class="form-control">
                     @foreach (var cost in Model.GeneralCostType)
@@ -27,6 +27,16 @@
                     }
                 </select>
                 <span asp-validation-for="CostCategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CostCenterId"></label>
+                <select asp-for="CostCenterId" class="form-control">
+                    @foreach (var cost in Model.GeneralCostCenter)
+                    {
+                        <option value="@cost.Id">@cost.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CostCenterId" class="text-danger"></span>
             </div>
 
             <div class="text-center">

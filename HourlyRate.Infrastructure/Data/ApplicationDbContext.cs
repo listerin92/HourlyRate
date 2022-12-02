@@ -24,21 +24,21 @@ namespace HourlyRate.Infrastructure.Data
         public DbSet<Machine> Machines { get; set; } = null!;
         public DbSet<Company> Companies { get; set; } = null!;
         public DbSet<CostCategory> CostCategories { get; set; } = null!;
+        public DbSet<CostCenter> CostCenters { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             modelBuilder.ApplyConfiguration(new FinancialYearConfiguration());
-            modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
-            modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
-            modelBuilder.ApplyConfiguration(new SalaryConfiguration());
-            modelBuilder.ApplyConfiguration(new CostCategoryConfiguration());
+            //modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
+            //modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+            //modelBuilder.ApplyConfiguration(new SalaryConfiguration());
+            //modelBuilder.ApplyConfiguration(new CostCategoryConfiguration());
             modelBuilder.Entity<CostCenter>()
                 .HasOne(e => e.Department)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
-
             base.OnModelCreating(modelBuilder);
         }
     }

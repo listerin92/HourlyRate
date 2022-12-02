@@ -35,9 +35,9 @@ else
     }
 </div>
 <div>
-    @foreach (var cc in Model)
-    {
-        <div class="card-deck" style="display: flex; margin-left: -15px; margin-right: -15px">
+    <div class="card-deck" style="display: flex; margin-left: -15px; margin-right: -15px">
+        @foreach (var cc in Model)
+        {
             <div class="card w-450px" style="display: flex; margin-left: 15px; margin-right: 15px">
                 <div class="text-muted fs-16px mb-2"><b>@cc.Name</b></div>
                 <div class="card-body">
@@ -80,71 +80,71 @@ else
                             </div>
                         </div>
                     </div>
-                    <div class="list-group">
-                        <div class="list-group-item d-flex align-items-center">
-                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                <i class="fa fa-cogs fa-lg"></i>
-                            </div>
-                            <div class="flex-fill ps-3 pe-3">
-                                <div class="fw-600">Indirect Costs</div>
-                                <div class="fs-14px text-muted">Occupation costs - @cc.RentCost</div>
-                                <div class="fs-14px text-muted">Power cost - @cc.TotalPowerConsumption</div>
-                                <div class="fs-14px text-muted">Heating cost - 7213</div>
-                                <div class="fw-600">Total Indirect Costs - 389 098</div>
-                                <div class="fs-14px text-muted">Ration - Total Indirect / current indirect - 6,7415</div>
-                                <div class="fs-14px text-muted">Water Ration - Total Indirect / current indirect - 6,7415</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list-group">
-                        <div class="list-group-item d-flex align-items-center">
-                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                <i class="fa fa-cogs fa-lg"></i>
-                            </div>
-                            <div class="flex-fill ps-3 pe-3">
-                                <div class="fw-600">Indirect Costs</div>
-                                <div class="fs-14px text-muted">Water - Based on the index - 5045,20</div>
-                                <div class="fs-14px text-muted">Taxes - 15 408,48</div>
-                                <div class="fs-14px text-muted">Phones - 2966,86</div>
-                                <div class="fs-14px text-muted">Other costs - 23 530,83</div>
-                                <div class="fs-14px text-muted">Administration costs - 182 286</div>
-                                <div class="fs-14px text-muted">Maintenance wages - 19 257,29</div>
-                                <div class="fs-14px text-muted">Absorb depreciation costs - 7799,62</div>
-                                <div class="fw-600">Total Indirect Costs - 374 594</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list-group">
-                        <div class="list-group-item d-flex align-items-center">
-                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                <i class="fa fa-cogs fa-lg"></i>
-                            </div>
-                            <div class="flex-fill ps-3 pe-3">
-                                <div class="fw-600">Total Yearly Cost - 620 078</div>
-                                <div class="fw-600">Average per month - 52 423</div>
-                                <div class="fw-600">Wages Average per month - 28 605,12</div>
-                                <div class="fw-600">Machines Average per month - 8557,46</div>
-                                <div class="fw-600">Overheads Average per month - 15 260,60</div>
-                                <div class="fw-600">Total Monthly Cost - 52 423,18</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list-group">
-                        <div class="list-group-item d-flex align-items-center">
-                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
-                                <i class="fa fa-cogs fa-lg"></i>
-                            </div>
-                            <div class="flex-fill ps-3 pe-3">
-                                <div class="fs-14px text-muted">Wages Average per hour - 94,56</div>
-                                <div class="fs-14px text-muted">Machines Average per hour - 28,29</div>
-                                <div class="fs-14px text-muted">Overheads Average per hour - 50,45</div>
-                                <div class="fw-600">Total hourly cost rate - 173,3</div>
-                            </div>
-                        </div>
-                    </div>
+                    @*                    <div class="list-group">
+                <div class="list-group-item d-flex align-items-center">
+                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                <i class="fa fa-cogs fa-lg"></i>
+                </div>
+                <div class="flex-fill ps-3 pe-3">
+                <div class="fw-600">Indirect Costs</div>
+                <div class="fs-14px text-muted">Occupation costs - @cc.RentCost</div>
+                <div class="fs-14px text-muted">Power cost - @cc.TotalPowerConsumption</div>
+                <div class="fs-14px text-muted">Heating cost - 7213</div>
+                <div class="fw-600">Total Indirect Costs - 389 098</div>
+                <div class="fs-14px text-muted">Ration - Total Indirect / current indirect - 6,7415</div>
+                <div class="fs-14px text-muted">Water Ration - Total Indirect / current indirect - 6,7415</div>
+                </div>
+                </div>
+                </div>
+                <div class="list-group">
+                <div class="list-group-item d-flex align-items-center">
+                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                <i class="fa fa-cogs fa-lg"></i>
+                </div>
+                <div class="flex-fill ps-3 pe-3">
+                <div class="fw-600">Indirect Costs</div>
+                <div class="fs-14px text-muted">Water - Based on the index - 5045,20</div>
+                <div class="fs-14px text-muted">Taxes - 15 408,48</div>
+                <div class="fs-14px text-muted">Phones - 2966,86</div>
+                <div class="fs-14px text-muted">Other costs - 23 530,83</div>
+                <div class="fs-14px text-muted">Administration costs - 182 286</div>
+                <div class="fs-14px text-muted">Maintenance wages - 19 257,29</div>
+                <div class="fs-14px text-muted">Absorb depreciation costs - 7799,62</div>
+                <div class="fw-600">Total Indirect Costs - 374 594</div>
+                </div>
+                </div>
+                </div>
+                <div class="list-group">
+                <div class="list-group-item d-flex align-items-center">
+                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                <i class="fa fa-cogs fa-lg"></i>
+                </div>
+                <div class="flex-fill ps-3 pe-3">
+                <div class="fw-600">Total Yearly Cost - 620 078</div>
+                <div class="fw-600">Average per month - 52 423</div>
+                <div class="fw-600">Wages Average per month - 28 605,12</div>
+                <div class="fw-600">Machines Average per month - 8557,46</div>
+                <div class="fw-600">Overheads Average per month - 15 260,60</div>
+                <div class="fw-600">Total Monthly Cost - 52 423,18</div>
+                </div>
+                </div>
+                </div>
+                <div class="list-group">
+                <div class="list-group-item d-flex align-items-center">
+                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
+                <i class="fa fa-cogs fa-lg"></i>
+                </div>
+                <div class="flex-fill ps-3 pe-3">
+                <div class="fs-14px text-muted">Wages Average per hour - 94,56</div>
+                <div class="fs-14px text-muted">Machines Average per hour - 28,29</div>
+                <div class="fs-14px text-muted">Overheads Average per hour - 50,45</div>
+                <div class="fw-600">Total hourly cost rate - 173,3</div>
+                </div>
+                </div>
+                </div>*@
                 </div>
             </div>
-        </div>
+            }
+    </div>
 
-    }
 </div>

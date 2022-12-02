@@ -22,16 +22,19 @@
                 <input asp-for="Name" class="form-control form-control-lg fs-15px" placeholder="e.g Occupation" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
+                
+                <input type="hidden" asp-for="@Model.DepartmentId" />
+
                 <label asp-for="DepartmentId"></label>
                 <select asp-for="DepartmentId" class="form-control">
-                    @foreach (var cost in Model.EmployeeDepartments)
-                    {
-                        <option value="@cost.Id">@cost.Name</option>
-                    }
+                @foreach (var cost in Model.EmployeeDepartments)
+                {
+                <option value="@cost.Id">@cost.Name</option>
+                }
                 </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
-            </div>
+            </div>*@
 
             <div class="text-center">
                 <input class="btn btn-primary mt-3" type="submit" value="Save" />

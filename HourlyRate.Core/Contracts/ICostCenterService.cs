@@ -6,7 +6,7 @@ namespace HourlyRate.Core.Contracts
 {
     public interface ICostCenterService
     {
-        Task<IEnumerable<GeneralCostTypeViewModel>> AllCostTypes();
+        Task<IEnumerable<GeneralCostCenterViewModel>> AllCostTypes();
         Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments();
 
         Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId);

@@ -8,7 +8,6 @@ namespace HourlyRate.Controllers
 {
     public class CostCentersController : Controller
     {
-        private readonly ILogger<CostCentersController> _logger;
         private readonly UserManager<UserIdentityExt> _userManager;
         private readonly ICostCenterService _costCenterService;
         public CostCentersController(
@@ -19,7 +18,6 @@ namespace HourlyRate.Controllers
         {
             _costCenterService = costCenterService;
             _userManager = userManager;
-            _logger = logger;
         }
         public async Task<IActionResult> Index()
         {
