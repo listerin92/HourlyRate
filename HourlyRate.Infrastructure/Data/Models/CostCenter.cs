@@ -18,6 +18,9 @@ namespace HourlyRate.Infrastructure.Data.Models
         [Precision(18, 2)]
         public decimal FloorSpace { get; set; }
 
+        /// <summary>
+        /// Average Power Consumption per Hour
+        /// </summary>
         [Column(TypeName = "money")]
         [Precision(18, 2)]
         public decimal AvgPowerConsumptionKwh { get; set; }
@@ -36,6 +39,14 @@ namespace HourlyRate.Infrastructure.Data.Models
         public int? DepartmentId { get; set; }
 
         public Department Department { get; set; } = null!;
+
+        /// <summary>
+        /// AnnualChargeableHours * AveragePowerConsumption
+        /// </summary>
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal TotalPowerConsumption { get; set; }
 
         public bool IsUsingWater { get; set; } = false;
 

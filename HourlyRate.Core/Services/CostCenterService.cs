@@ -64,6 +64,9 @@ namespace HourlyRate.Core.Services
                     AnnualChargeableHours = c.AnnualChargeableHours,
                     DepartmentId = c.DepartmentId,
                     TotalPowerConsumption = c.AnnualChargeableHours * c.AvgPowerConsumptionKwh,
+                    DirectAllocatedStuff = c.DirectAllocatedStuff,
+                    DirectWagesCost = c.DirectWagesCost,
+                    DirectRepairCost = c.DirectRepairCost,
 
                 }).ToListAsync();
         }
@@ -89,7 +92,7 @@ namespace HourlyRate.Core.Services
                 .Count(e => e.DepartmentId == ccModel.DepartmentId);
 
             var emplSalary = _repo.AllReadonly<Expenses>()
-                .Where(e => e.Employee.DepartmentId == ccModel.DepartmentId)
+                .Where(e => e.Employee.Department.Id == ccModel.DepartmentId)
                 .Sum(e => e.Amount);
             
 
@@ -102,8 +105,9 @@ namespace HourlyRate.Core.Services
                 AnnualChargeableHours = ccModel.AnnualChargeableHours,
                 DepartmentId = ccModel.DepartmentId,
                 IsUsingWater = ccModel.IsUsingWater,
-                DirectAllocatedStuff = ccModel.EmployeeDepartments.Count(),
+                DirectAllocatedStuff = emplNo,
                 DirectWagesCost = emplSalary,
+                DirectRepairCost = 0,
                 CompanyId = companyId
 
             };

@@ -72,11 +72,11 @@ else
                             </div>
                             <div class="flex-fill ps-3 pe-3">
                                 <div class="fw-600">Direct Costs</div>
-                                <div class="fs-14px text-muted">Direct wages - 141 718</div>
-                                <div class="fs-14px text-muted">Direct repairs - 30 000</div>
-                                <div class="fs-14px text-muted">General consumables - 95 889</div>
-                                <div class="fs-14px text-muted">Direct Depreciation - 16 314</div>
-                                <div class="fw-600">Total Direct Costs</div>
+                                <div class="fs-14px text-muted">Direct wages - @cc.DirectWagesCost</div>
+                                <div class="fs-14px text-muted">Direct repairs - @cc.DirectRepairCost</div>
+                                <div class="fs-14px text-muted">General consumables - @cc.DirectGeneraConsumablesCost</div>
+                                <div class="fs-14px text-muted">Direct Depreciation - @cc.DirectDepreciationCost</div>
+                                <div class="fw-600">Total Direct Costs - @cc.TotalDirectCosts</div>
                             </div>
                         </div>
                     </div>
@@ -87,8 +87,8 @@ else
                             </div>
                             <div class="flex-fill ps-3 pe-3">
                                 <div class="fw-600">Indirect Costs</div>
-                                <div class="fs-14px text-muted">Occupation costs - 49 756</div>
-                                <div class="fs-14px text-muted">Power cost - 77 655</div>
+                                <div class="fs-14px text-muted">Occupation costs - @cc.RentCost</div>
+                                <div class="fs-14px text-muted">Power cost - @cc.TotalPowerConsumption</div>
                                 <div class="fs-14px text-muted">Heating cost - 7213</div>
                                 <div class="fw-600">Total Indirect Costs - 389 098</div>
                                 <div class="fs-14px text-muted">Ration - Total Indirect / current indirect - 6,7415</div>
