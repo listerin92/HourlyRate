@@ -55,6 +55,7 @@ namespace HourlyRate.Controllers
             var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
 
             await _costCenterService.AddCostCenter(model, companyId);
+            await _costCenterService.AddCostCenterToEmployee(model);
 
             return RedirectToAction(nameof(Index));
 

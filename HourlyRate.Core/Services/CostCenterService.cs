@@ -52,7 +52,6 @@ namespace HourlyRate.Core.Services
         {
             var currentYear = ActiveFinancialYear();
 
-
             return await _repo.AllReadonly<CostCenter>()
                 .Where(c =>
                             c.CompanyId == companyId)
@@ -65,7 +64,6 @@ namespace HourlyRate.Core.Services
                     AnnualChargeableHours = c.AnnualChargeableHours,
                     DepartmentId = c.DepartmentId,
                     TotalPowerConsumption = c.AnnualChargeableHours * c.AvgPowerConsumptionKwh,
-
 
                 }).ToListAsync();
         }
@@ -104,6 +102,8 @@ namespace HourlyRate.Core.Services
                 AnnualChargeableHours = ccModel.AnnualChargeableHours,
                 DepartmentId = ccModel.DepartmentId,
                 IsUsingWater = ccModel.IsUsingWater,
+                DirectAllocatedStuff = ccModel.EmployeeDepartments.Count(),
+                DirectWagesCost = emplSalary,
                 CompanyId = companyId
 
             };
@@ -112,14 +112,19 @@ namespace HourlyRate.Core.Services
             await _repo.SaveChangesAsync();
 
 
-            var cc = _repo.AllReadonly<CostCenter>()
+        }
+
+        public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
+        {
+            var getCostCenterFromViewModel = _repo.AllReadonly<CostCenter>()
                 .First(cc => cc.Name == ccModel.Name);
 
             var ecc = _context.Expenses
-                .Where(e => e.Employee.Department.Id == cc.DepartmentId);
+                .Where(e => e.Employee.Department.Id == getCostCenterFromViewModel.DepartmentId);
+
             foreach (var e in ecc)
             {
-                e.CostCenterId = cc.Id;
+                e.CostCenterId = getCostCenterFromViewModel.Id;
             }
 
             _context.UpdateRange(ecc);

@@ -11,6 +11,7 @@ namespace HourlyRate.Core.Contracts
 
         Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId);
         Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId);
+        Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel);
 
     }
 }

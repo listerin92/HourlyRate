@@ -39,6 +39,123 @@ namespace HourlyRate.Infrastructure.Data.Models
 
         public bool IsUsingWater { get; set; } = false;
 
+        public int DirectAllocatedStuff { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal DirectWagesCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal DirectRepairCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal DirectGeneraConsumablesCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal DirectDepreciationCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal DirectElectricityCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal RentCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal TotalDirectCosts { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal TotalIndex { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal WaterTotalIndex { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal IndirectWaterCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal IndirectTaxes { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal IndirectPhonesCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal IndirectOtherCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal IndirectAdministrationWagesCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal IndirectMaintenanceWagesCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal IndirectTotalCosts { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal TotalCosts { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal WagesPerMonth { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal MachinesPerMonth { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal OverheadsPerMonth { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal WagesPerHour { get; set; }
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal MachinesPerHour { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal OverheadsPerHour { get; set; }
+
+
 
         [ForeignKey(nameof(Company))]
         public Guid CompanyId { get; set; }
