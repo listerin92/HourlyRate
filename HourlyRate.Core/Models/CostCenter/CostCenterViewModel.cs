@@ -43,6 +43,7 @@ namespace HourlyRate.Core.Models.CostCenter
         /// </summary>
         public decimal WaterTotalIndex { get; set; }
 
+        public decimal IndirectHeatingCost { get; set; }
         public decimal IndirectWaterCost { get; set; }
         public decimal IndirectTaxes { get; set; }
         public decimal IndirectPhonesCost { get; set; }

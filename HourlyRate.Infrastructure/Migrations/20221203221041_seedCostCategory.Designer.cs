@@ -4,6 +4,7 @@ using HourlyRate.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HourlyRate.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221203221041_seedCostCategory")]
+    partial class seedCostCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,10 +298,6 @@ namespace HourlyRate.Infrastructure.Migrations
                         .HasColumnType("money");
 
                     b.Property<decimal>("IndirectAdministrationWagesCost")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("money");
-
-                    b.Property<decimal>("IndirectHeatingCost")
                         .HasPrecision(18, 2)
                         .HasColumnType("money");
 

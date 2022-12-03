@@ -31,10 +31,10 @@ namespace HourlyRate.Infrastructure.Data
         {
 
             modelBuilder.ApplyConfiguration(new FinancialYearConfiguration());
+            modelBuilder.ApplyConfiguration(new CostCategoryConfiguration());
             //modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             //modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
             //modelBuilder.ApplyConfiguration(new SalaryConfiguration());
-            //modelBuilder.ApplyConfiguration(new CostCategoryConfiguration());
             modelBuilder.Entity<CostCenter>()
                 .HasOne(e => e.Department)
                 .WithMany()

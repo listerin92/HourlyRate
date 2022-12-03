@@ -62,6 +62,18 @@ namespace HourlyRate.Infrastructure.Configuration
                     Id = 8,
                     CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
                     Name = "Direct Depreciation",
+                },
+                new CostCategory()
+                {
+                    Id = 9,
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Heating",
+                },
+                new CostCategory()
+                {
+                    Id = 10,
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Taxes",
                 }
             };
             return costCategories;

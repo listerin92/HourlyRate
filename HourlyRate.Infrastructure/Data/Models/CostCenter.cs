@@ -105,6 +105,11 @@ namespace HourlyRate.Infrastructure.Data.Models
         [Required]
         [Column(TypeName = "money")]
         [Precision(18, 2)]
+        public decimal IndirectHeatingCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
         public decimal IndirectTaxes { get; set; }
 
         [Required]

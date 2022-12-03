@@ -60,7 +60,7 @@ else
                                 <div class="fs-14px text-muted">KWh - @cc.AvgPowerConsumptionKwh.ToString("n2")</div>
                                 <div class="fs-14px text-muted">Annual available hours - @cc.AnnualHours.ToString("n")</div>
                                 <div class="fs-14px text-muted">Annual chargeable hours - @cc.AnnualChargeableHours.ToString("n")</div>
-                                <div class="fs-14px text-muted">Total power consumption (kW) - @cc.TotalPowerConsumption</div>
+                                <div class="fs-14px text-muted">Total power consumption (kW) - @cc.TotalPowerConsumption.ToString("n2")</div>
                                 <div class="fs-14px text-muted">Direct Staff - @cc.DirectAllocatedStuff</div>
                             </div>
                         </div>
@@ -72,80 +72,79 @@ else
                             </div>
                             <div class="flex-fill ps-3 pe-3">
                                 <div class="fw-600">Direct Costs</div>
-                                <div class="fs-14px text-muted">Direct wages - @cc.DirectWagesCost</div>
-                                <div class="fs-14px text-muted">Direct repairs - @cc.DirectRepairCost</div>
-                                <div class="fs-14px text-muted">General consumables - @cc.DirectGeneraConsumablesCost</div>
-                                <div class="fs-14px text-muted">Direct Depreciation - @cc.DirectDepreciationCost</div>
-                                <div class="fs-14px text-muted">Power cost - @cc.DirectElectricityCost</div>
-                                <div class="fw-600">Total Direct Costs - @cc.TotalDirectCosts</div>
+                                <div class="fs-14px text-muted">Direct wages - @cc.DirectWagesCost.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Direct repairs - @cc.DirectRepairCost.ToString("n2")</div>
+                                <div class="fs-14px text-muted">General consumables - @cc.DirectGeneraConsumablesCost.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Direct Depreciation - @cc.DirectDepreciationCost.ToString("n2")</div>
+                                <div class="fw-600">Total Direct Costs - @cc.TotalDirectCosts.ToString("n2")</div>
                             </div>
                         </div>
                     </div>
-                    @*                    <div class="list-group">
-                <div class="list-group-item d-flex align-items-center">
-                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                <i class="fa fa-cogs fa-lg"></i>
-                </div>
-                <div class="flex-fill ps-3 pe-3">
-                <div class="fw-600">Indirect Costs</div>
-                <div class="fs-14px text-muted">Occupation costs - @cc.RentCost</div>
-                <div class="fs-14px text-muted">Power cost - @cc.TotalPowerConsumption</div>
-                <div class="fs-14px text-muted">Heating cost - 7213</div>
-                <div class="fw-600">Total Indirect Costs - 389 098</div>
-                <div class="fs-14px text-muted">Ration - Total Indirect / current indirect - 6,7415</div>
-                <div class="fs-14px text-muted">Water Ration - Total Indirect / current indirect - 6,7415</div>
-                </div>
-                </div>
-                </div>
-                <div class="list-group">
-                <div class="list-group-item d-flex align-items-center">
-                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                <i class="fa fa-cogs fa-lg"></i>
-                </div>
-                <div class="flex-fill ps-3 pe-3">
-                <div class="fw-600">Indirect Costs</div>
-                <div class="fs-14px text-muted">Water - Based on the index - 5045,20</div>
-                <div class="fs-14px text-muted">Taxes - 15 408,48</div>
-                <div class="fs-14px text-muted">Phones - 2966,86</div>
-                <div class="fs-14px text-muted">Other costs - 23 530,83</div>
-                <div class="fs-14px text-muted">Administration costs - 182 286</div>
-                <div class="fs-14px text-muted">Maintenance wages - 19 257,29</div>
-                <div class="fs-14px text-muted">Absorb depreciation costs - 7799,62</div>
-                <div class="fw-600">Total Indirect Costs - 374 594</div>
-                </div>
-                </div>
-                </div>
-                <div class="list-group">
-                <div class="list-group-item d-flex align-items-center">
-                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                <i class="fa fa-cogs fa-lg"></i>
-                </div>
-                <div class="flex-fill ps-3 pe-3">
-                <div class="fw-600">Total Yearly Cost - 620 078</div>
-                <div class="fw-600">Average per month - 52 423</div>
-                <div class="fw-600">Wages Average per month - 28 605,12</div>
-                <div class="fw-600">Machines Average per month - 8557,46</div>
-                <div class="fw-600">Overheads Average per month - 15 260,60</div>
-                <div class="fw-600">Total Monthly Cost - 52 423,18</div>
-                </div>
-                </div>
-                </div>
-                <div class="list-group">
-                <div class="list-group-item d-flex align-items-center">
-                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
-                <i class="fa fa-cogs fa-lg"></i>
-                </div>
-                <div class="flex-fill ps-3 pe-3">
-                <div class="fs-14px text-muted">Wages Average per hour - 94,56</div>
-                <div class="fs-14px text-muted">Machines Average per hour - 28,29</div>
-                <div class="fs-14px text-muted">Overheads Average per hour - 50,45</div>
-                <div class="fw-600">Total hourly cost rate - 173,3</div>
-                </div>
-                </div>
-                </div>*@
+                    <div class="list-group">
+                        <div class="list-group-item d-flex align-items-center">
+                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                                <i class="fa fa-cogs fa-lg"></i>
+                            </div>
+                            <div class="flex-fill ps-3 pe-3">
+                                <div class="fw-600">Indirect Costs</div>
+                                <div class="fs-14px text-muted">Occupation costs - @cc.RentCost</div>
+                                <div class="fs-14px text-muted">Power cost - @cc.DirectElectricityCost.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Heating cost - @cc.IndirectHeatingCost.ToString("n2")</div>
+                                <div class="fw-600">Total Indirect Costs - 389 098</div>
+                                <div class="fs-14px text-muted">Ration - Total Indirect / current indirect - 6,7415</div>
+                                <div class="fs-14px text-muted">Water Ration - Total Indirect / current indirect - 6,7415</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item d-flex align-items-center">
+                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                                <i class="fa fa-cogs fa-lg"></i>
+                            </div>
+                            <div class="flex-fill ps-3 pe-3">
+                                <div class="fw-600">Indirect Costs</div>
+                                <div class="fs-14px text-muted">Water - Based on the index - 5045,20</div>
+                                <div class="fs-14px text-muted">Taxes - 15 408,48</div>
+                                <div class="fs-14px text-muted">Phones - 2966,86</div>
+                                <div class="fs-14px text-muted">Other costs - 23 530,83</div>
+                                <div class="fs-14px text-muted">Administration costs - 182 286</div>
+                                <div class="fs-14px text-muted">Maintenance wages - 19 257,29</div>
+                                <div class="fs-14px text-muted">Absorb depreciation costs - 7799,62</div>
+                                <div class="fw-600">Total Indirect Costs - 374 594</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item d-flex align-items-center">
+                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                                <i class="fa fa-cogs fa-lg"></i>
+                            </div>
+                            <div class="flex-fill ps-3 pe-3">
+                                <div class="fw-600">Total Yearly Cost - 620 078</div>
+                                <div class="fw-600">Average per month - 52 423</div>
+                                <div class="fw-600">Wages Average per month - 28 605,12</div>
+                                <div class="fw-600">Machines Average per month - 8557,46</div>
+                                <div class="fw-600">Overheads Average per month - 15 260,60</div>
+                                <div class="fw-600">Total Monthly Cost - 52 423,18</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-group-item d-flex align-items-center">
+                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
+                                <i class="fa fa-cogs fa-lg"></i>
+                            </div>
+                            <div class="flex-fill ps-3 pe-3">
+                                <div class="fs-14px text-muted">Wages Average per hour - 94,56</div>
+                                <div class="fs-14px text-muted">Machines Average per hour - 28,29</div>
+                                <div class="fs-14px text-muted">Overheads Average per hour - 50,45</div>
+                                <div class="fw-600">Total hourly cost rate - 173,3</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            }
+        }
     </div>
 
 </div>

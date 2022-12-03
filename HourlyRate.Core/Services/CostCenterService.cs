@@ -67,7 +67,7 @@ namespace HourlyRate.Core.Services
                     AnnualHours = c.AnnualHours,
                     AnnualChargeableHours = c.AnnualChargeableHours,
                     DepartmentId = c.DepartmentId,
-                    TotalPowerConsumption = c.AnnualChargeableHours * c.AvgPowerConsumptionKwh,
+                    TotalPowerConsumption = c.TotalPowerConsumption,
                     DirectAllocatedStuff = c.DirectAllocatedStuff,
                     DirectWagesCost = c.DirectWagesCost,
                     DirectRepairCost = c.DirectRepairCost,
@@ -82,9 +82,9 @@ namespace HourlyRate.Core.Services
 
         private async Task UpdateAllCostCenters(Guid companyId)
         {
-
+            var activeFinancialYearId = ActiveFinancialYearId();
             var allCostCenters = _context.CostCenters
-                .Where(c => c.CompanyId == companyId && c.Name != "None");
+                .Where(c => c.CompanyId == companyId && c.Name != "None").ToList();
 
             foreach (var currentCostCenter in allCostCenters)
             {
@@ -94,42 +94,64 @@ namespace HourlyRate.Core.Services
                 var allExpenses = _context.Expenses;
 
                 var currentCostCenterEmployees = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId && c.EmployeeId != null);
+                    .Where(c => c.CostCenterId == currentCostCenterId && c.EmployeeId != null && c.FinancialYearId == activeFinancialYearId);
 
                 currentCostCenter.DirectAllocatedStuff = currentCostCenterEmployees.Count();
                 currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
                 totalDirectCostSum += currentCostCenter.DirectWagesCost;
 
                 var currentCostGeneralConsumables = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId && c.ConsumableId != null);
+                    .Where(c => c.CostCenterId == currentCostCenterId &&
+                                c.ConsumableId != null &&
+                                c.FinancialYearId == activeFinancialYearId);
 
                 currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
                 totalDirectCostSum += currentCostCenter.DirectGeneraConsumablesCost;
 
                 var directRepairCost = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 7)//TODO: Fixed CostCategories 7==Repair
+                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 7
+                    && c.FinancialYearId == activeFinancialYearId)//TODO: Fixed CostCategories 7==Repair
                     .Select(r => r.Amount).Sum();
                 currentCostCenter.DirectRepairCost = directRepairCost;
                 totalDirectCostSum += directRepairCost;
 
                 var directGeneraDepreciationCost = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 9)//TODO: Fixed CostCategories 9==Depreciation 
+                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 8
+                                                                      && c.FinancialYearId == activeFinancialYearId)
                     .Select(r => r.Amount).Sum();
                 currentCostCenter.DirectDepreciationCost = directGeneraDepreciationCost;
                 totalDirectCostSum += directGeneraDepreciationCost;
 
                 var totalElectricCost = allExpenses
-                    .Where(c => c.CostCategoryId == 2)//TODO: Fixed CostCategories 2==Electricity
+                    .Where(c => c.CostCategoryId == 2
+                                && c.FinancialYearId == activeFinancialYearId)
                     .Select(r => r.Amount).Sum();
 
-                var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
-                    allCostCenters.Select(tp => tp.TotalPowerConsumption).Sum();
 
-                currentCostCenter.DirectElectricityCost = currentCostCenter.TotalPowerConsumption *
-                                                          electricityPricePerKwhIndirectlyCalculated;
-                totalDirectCostSum += currentCostCenter.DirectElectricityCost;
 
                 currentCostCenter.TotalDirectCosts = totalDirectCostSum;
+
+                // ------------End Direct Costs 
+
+                var rentCost = allExpenses
+                    .Where(c => c.CostCategoryId == 6)
+                    .Select(r => r.Amount).Sum();
+                var totalRentSpace = allCostCenters.Select(r => r.FloorSpace).Sum();
+                var rentPerSqM = rentCost / totalRentSpace;
+
+                currentCostCenter.RentCost = currentCostCenter.FloorSpace * rentPerSqM;
+
+                var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
+                                                                 allCostCenters.Select(tp => tp.TotalPowerConsumption).Sum();
+                currentCostCenter.TotalPowerConsumption = currentCostCenter.AnnualChargeableHours * currentCostCenter.AvgPowerConsumptionKwh;
+                currentCostCenter.DirectElectricityCost = currentCostCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
+
+                var heatingCost = allExpenses
+                    .Where(c => c.CostCategoryId == 9)
+                    .Select(r => r.Amount).Sum();
+                var heatingPerSqM = heatingCost / totalRentSpace;
+                currentCostCenter.IndirectHeatingCost = currentCostCenter.FloorSpace * heatingPerSqM;
+
 
                 _context.CostCenters.Update(currentCostCenter);
             }
