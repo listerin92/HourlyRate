@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using HourlyRate.Infrastructure.Data.Models.Account
+@using HourlyRate.Core.Constants
 
 @inject SignInManager<UserIdentityExt> SignInManager
 @inject UserManager<UserIdentityExt> UserManager
@@ -32,7 +33,7 @@ else
 <div class="list-group"></div>
 
 <div class="card-header pb-2">
-    @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
+    @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated && User.IsInRole(RoleConstants.Administrator))
     {
         <a asp-controller="Home" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add Employee</a>
         <a asp-controller="Home" asp-action="AddDepartment" class="btn btn-primary btn-lg" role="button">Add Employee Department</a>
@@ -48,14 +49,17 @@ else
                 @foreach (var employee in Model)
                 {
                     <div class="col-xl-2">
-                        <div class="dropdown">
-                            <a href="#" data-bs-toggle="dropdown" class="text-muted"><i class="fa fa-ellipsis-h"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
-                                <a href="#" class="dropdown-item">Details Not ready</a>
-                                <a asp-controller="Home" asp-action="Edit" class="dropdown-item" asp-route-id="@employee.Id">Edit Employee</a>
-                                <a asp-controller="Home" asp-action="Delete" class="dropdown-item" asp-route-id="@employee.Id">Delete Employee</a>
+                        @if (User.IsInRole(RoleConstants.Administrator))
+                        {
+                            <div class="dropdown">
+                                <a href="#" data-bs-toggle="dropdown" class="text-muted"><i class="fa fa-ellipsis-h"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
+                                    <a href="#" class="dropdown-item">Details Not ready</a>
+                                    <a asp-controller="Home" asp-action="Edit" class="dropdown-item" asp-route-id="@employee.Id">Edit Employee</a>
+                                    <a asp-controller="Home" asp-action="Delete" class="dropdown-item" asp-route-id="@employee.Id">Delete Employee</a>
+                                </div>
                             </div>
-                        </div>
+                        }
                         <div class="card border-0 overflow-hidden rounded-0 rounded-top rounded-bottom" style="height: 230px">
                             <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
                             <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">

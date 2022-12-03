@@ -18,10 +18,10 @@ namespace HourlyRate.Core.Models.GeneralCost
         [Display(Name = "CostCategoryId")]
         public int? CostCategoryId { get; set; }
         public string DefaultCurrency { get; set; } = null!;
-        public string CostCenterName { get; set; }
+        public string CostCenterName { get; set; } = null!;
             
-        public IEnumerable<GeneralCostCenterViewModel> GeneralCostType { get; set; }
-            = new List<GeneralCostCenterViewModel>();
+        //public IEnumerable<GeneralCostCenterViewModel> GeneralCostType { get; set; }
+        //    = new List<GeneralCostCenterViewModel>();
 
     }
 }

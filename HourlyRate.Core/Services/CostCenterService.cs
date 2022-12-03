@@ -88,7 +88,7 @@ namespace HourlyRate.Core.Services
 
             foreach (var currentCostCenter in allCostCenters)
             {
-                var totalSum = 0.0m;
+                var totalDirectCostSum = 0.0m;
                 var currentCostCenterId = currentCostCenter.Id;
 
                 var allExpenses = _context.Expenses;
@@ -98,25 +98,25 @@ namespace HourlyRate.Core.Services
 
                 currentCostCenter.DirectAllocatedStuff = currentCostCenterEmployees.Count();
                 currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
-                totalSum += currentCostCenter.DirectWagesCost;
+                totalDirectCostSum += currentCostCenter.DirectWagesCost;
 
                 var currentCostGeneralConsumables = allExpenses
                     .Where(c => c.CostCenterId == currentCostCenterId && c.ConsumableId != null);
 
                 currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
-                totalSum += currentCostCenter.DirectGeneraConsumablesCost;
+                totalDirectCostSum += currentCostCenter.DirectGeneraConsumablesCost;
 
                 var directRepairCost = allExpenses
                     .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 7)//TODO: Fixed CostCategories 7==Repair
                     .Select(r => r.Amount).Sum();
                 currentCostCenter.DirectRepairCost = directRepairCost;
-                totalSum += directRepairCost;
+                totalDirectCostSum += directRepairCost;
 
                 var directGeneraDepreciationCost = allExpenses
                     .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 9)//TODO: Fixed CostCategories 9==Depreciation 
                     .Select(r => r.Amount).Sum();
                 currentCostCenter.DirectDepreciationCost = directGeneraDepreciationCost;
-                totalSum += directGeneraDepreciationCost;
+                totalDirectCostSum += directGeneraDepreciationCost;
 
                 var totalElectricCost = allExpenses
                     .Where(c => c.CostCategoryId == 2)//TODO: Fixed CostCategories 2==Electricity
@@ -127,9 +127,9 @@ namespace HourlyRate.Core.Services
 
                 currentCostCenter.DirectElectricityCost = currentCostCenter.TotalPowerConsumption *
                                                           electricityPricePerKwhIndirectlyCalculated;
-                totalSum += currentCostCenter.DirectElectricityCost;
+                totalDirectCostSum += currentCostCenter.DirectElectricityCost;
 
-                currentCostCenter.TotalDirectCosts = totalSum;
+                currentCostCenter.TotalDirectCosts = totalDirectCostSum;
 
                 _context.CostCenters.Update(currentCostCenter);
             }
@@ -188,18 +188,18 @@ namespace HourlyRate.Core.Services
 
         public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
         {
-            var getCostCenterFromViewModel = _repo.AllReadonly<CostCenter>()
+            var getCostCenter = _repo.AllReadonly<CostCenter>()
                 .First(cc => cc.Name == ccModel.Name);
 
-            var ecc = _context.Expenses
-                .Where(e => e.Employee.Department.Id == getCostCenterFromViewModel.DepartmentId);
+            var employeeExpenses = _context.Expenses
+                .Where(e => e.Employee!.Department!.Id == getCostCenter.DepartmentId);
 
-            foreach (var e in ecc)
+            foreach (var e in employeeExpenses)
             {
-                e.CostCenterId = getCostCenterFromViewModel.Id;
+                e.CostCenterId = getCostCenter.Id;
             }
 
-            _context.UpdateRange(ecc);
+            _context.UpdateRange(employeeExpenses);
             await _context.SaveChangesAsync();
         }
     }

@@ -123,14 +123,14 @@ namespace HourlyRate.Core.Services
 
             try
             {
-                var matchedCostCenter = _dbContext.CostCenters.FirstOrDefault(c => c.DepartmentId == employee.DepartmentId);
+                var matchedCostCenter = _dbContext.CostCenters.FirstOrDefault(c => c.DepartmentId == employee!.DepartmentId);
 
                 {
                     expense.EmployeeId = employeeId;
                     expense.Amount = amount;
                     expense.CompanyId = companyId;
                     expense.FinancialYearId = activeFinancialYearId;
-                    expense.CostCenterId = matchedCostCenter.Id;
+                    expense.CostCenterId = matchedCostCenter!.Id;
                 };
             }
             catch (Exception)
@@ -181,7 +181,7 @@ namespace HourlyRate.Core.Services
         {
             var getEmployeeId = await _repo.GetByIdAsync<Employee>(employeeId);
 
-            return (int)getEmployeeId.DepartmentId;
+            return (int)getEmployeeId.DepartmentId!;
 
         }
 

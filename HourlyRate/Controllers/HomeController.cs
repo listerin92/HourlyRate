@@ -85,10 +85,10 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> AddDepartment()
+    public IActionResult AddDepartment()
     {
         var model = new AddEmployeeDepartmentViewModel();
-       
+
         return View(model);
     }
 
@@ -229,7 +229,8 @@ public class HomeController : Controller
 
         var user = users.First();
         if (role.Contains(RoleConstants.Administrator) ||
-            role.Contains(RoleConstants.Viewer))
+            role.Contains(RoleConstants.Viewer) ||
+            role.Contains(RoleConstants.User))
         {
             await _userManager.AddToRolesAsync(user, role);
         }

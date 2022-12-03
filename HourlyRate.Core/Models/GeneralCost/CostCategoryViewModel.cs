@@ -11,7 +11,7 @@ namespace HourlyRate.Core.Models.GeneralCost
         public string Description { get; set; } = null!;
         public int? CostCategoryId { get; set; }
 
-        public IEnumerable<GeneralCostTypeViewModel> GeneralCostType { get; set; }
-            = new List<GeneralCostTypeViewModel>();
+        //public IEnumerable<GeneralCostTypeViewModel> GeneralCostType { get; set; }
+        //    = new List<GeneralCostTypeViewModel>();
     }
 }

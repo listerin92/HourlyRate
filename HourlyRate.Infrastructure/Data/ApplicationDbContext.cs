@@ -24,7 +24,7 @@ namespace HourlyRate.Infrastructure.Data
         public DbSet<Machine> Machines { get; set; } = null!;
         public DbSet<Company> Companies { get; set; } = null!;
         public DbSet<CostCategory> CostCategories { get; set; } = null!;
-        public DbSet<CostCenter> CostCenters { get; set; }
+        public DbSet<CostCenter> CostCenters { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +36,10 @@ namespace HourlyRate.Infrastructure.Data
             //modelBuilder.ApplyConfiguration(new SalaryConfiguration());
             //modelBuilder.ApplyConfiguration(new CostCategoryConfiguration());
             modelBuilder.Entity<CostCenter>()
+                .HasOne(e => e.Department)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Department)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);

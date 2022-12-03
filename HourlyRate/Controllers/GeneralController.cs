@@ -69,7 +69,7 @@ namespace HourlyRate.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddCostCategory()
+        public IActionResult AddCostCategory()
         {
             var model = new AddCostCategoryViewModel();
 

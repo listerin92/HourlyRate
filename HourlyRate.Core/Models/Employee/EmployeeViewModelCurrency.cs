@@ -5,7 +5,7 @@ namespace HourlyRate.Core.Models.Employee
     public class EmployeeViewModelCurrency : EmployeeViewModel
     {
         public string DefaultCurrency { get; set; } = null!;
-        public Department Department { get; set; }
+        public Department Department { get; set; } = null!;
 
     }
 }

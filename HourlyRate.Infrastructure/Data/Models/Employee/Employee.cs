@@ -23,7 +23,8 @@ namespace HourlyRate.Infrastructure.Data.Models.Employee
 
         [ForeignKey(nameof(Department))]
         public int? DepartmentId { get; set; }
-        public Department? Department { get; set; }
+
+        public Department Department { get; set; } = null!;
 
         [Required]
         public bool IsEmployee { get; set; } = true;

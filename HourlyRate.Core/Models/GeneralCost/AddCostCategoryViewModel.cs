@@ -3,6 +3,6 @@
     public class AddCostCategoryViewModel
     {
         public int Id { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
     }
 }
