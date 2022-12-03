@@ -53,9 +53,15 @@ namespace HourlyRate.Infrastructure.Configuration
                 },
                 new CostCategory()
                 {
-                    Id = 6,
+                    Id = 7,
                     CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
                     Name = "Direct Repairs",
+                },
+                new CostCategory()
+                {
+                    Id = 8,
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Direct Depreciation",
                 }
             };
             return costCategories;

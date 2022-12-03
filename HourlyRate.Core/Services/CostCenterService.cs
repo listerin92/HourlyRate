@@ -54,12 +54,13 @@ namespace HourlyRate.Core.Services
 
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
+            await UpdateAllCostCenters(companyId);
 
-
-            var allCC = _context.CostCenters
+            var allCostCentersUpdated = _context.CostCenters
                 .Where(c => c.CompanyId == companyId && c.Name != "None")
                 .Select(c => new CostCenterViewModel()
                 {
+                    Id = c.Id,
                     Name = c.Name,
                     FloorSpace = c.FloorSpace,
                     AvgPowerConsumptionKwh = c.AvgPowerConsumptionKwh,
@@ -69,10 +70,69 @@ namespace HourlyRate.Core.Services
                     TotalPowerConsumption = c.AnnualChargeableHours * c.AvgPowerConsumptionKwh,
                     DirectAllocatedStuff = c.DirectAllocatedStuff,
                     DirectWagesCost = c.DirectWagesCost,
+                    DirectRepairCost = c.DirectRepairCost,
+                    DirectDepreciationCost = c.DirectDepreciationCost,
+                    DirectElectricityCost = c.DirectElectricityCost,
+                    RentCost = c.RentCost,
+                    TotalDirectCosts = c.TotalDirectCosts,
 
                 }).ToListAsync();
+            return await allCostCentersUpdated;
+        }
 
-            return await allCC;
+        private async Task UpdateAllCostCenters(Guid companyId)
+        {
+
+            var allCostCenters = _context.CostCenters
+                .Where(c => c.CompanyId == companyId && c.Name != "None");
+
+            foreach (var currentCostCenter in allCostCenters)
+            {
+                var currentCostCenterId = currentCostCenter.Id;
+
+                var allExpenses = _context.Expenses;
+
+                var currentCostCenterEmployees = allExpenses
+                    .Where(c => c.CostCenterId == currentCostCenterId && c.EmployeeId != null);
+
+                currentCostCenter.DirectAllocatedStuff = currentCostCenterEmployees.Count();
+                currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
+
+
+                var currentCostGeneralConsumables = allExpenses
+                    .Where(c => c.CostCenterId == currentCostCenterId && c.ConsumableId != null);
+
+                currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
+
+
+                var directRepairCost = allExpenses
+                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 7)//TODO: Fixed CostCategories 7==Repair
+                    .Select(r => r.Amount).Sum();
+                currentCostCenter.DirectRepairCost = directRepairCost;
+
+
+                var directGeneraDepreciationCost = allExpenses
+                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 9)//TODO: Fixed CostCategories 9==Depreciation 
+                    .Select(r => r.Amount).Sum();
+                currentCostCenter.DirectDepreciationCost = directGeneraDepreciationCost;
+
+                var totalElectricCost = allExpenses
+                    .Where(c => c.CostCategoryId == 2)//TODO: Fixed CostCategories 2==Electricity
+                    .Select(r => r.Amount).Sum();
+
+                var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
+                    allCostCenters.Select(tp => tp.TotalPowerConsumption).Sum();
+
+                currentCostCenter.DirectElectricityCost = currentCostCenter.TotalPowerConsumption *
+                                                          electricityPricePerKwhIndirectlyCalculated;
+
+
+
+                _context.CostCenters.Update(currentCostCenter);
+            }
+
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments()

@@ -7,6 +7,7 @@ using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using HourlyRate.Core.Constants;
 
 namespace HourlyRate.Controllers;
 
@@ -15,11 +16,14 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly UserManager<UserIdentityExt> _userManager;
     private readonly IEmployeeService _employeeService;
+    private readonly RoleManager<IdentityRole> _roleManager;
+
 
     public HomeController(
         IEmployeeService employeeService
         , ILogger<HomeController> logger
         , UserManager<UserIdentityExt> userManager
+        , RoleManager<IdentityRole> roleManager
         )
 
     {
@@ -202,6 +206,38 @@ public class HomeController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    /// <summary>
+    /// CreateRoles
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> CreateRoles()
+    {
+        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.Administrator));
+        await _roleManager.CreateAsync(new IdentityRole(RoleConstants.Viewer));
+        return RedirectToAction("Index", "Home");
+    }
+
+    /// <summary>
+    /// Add User To Role
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> AddUsersToRoles(string[] role)
+    {
+        var users = _userManager.Users.ToList();
+
+        var user = users.First();
+        if (role.Contains(RoleConstants.Administrator) ||
+            role.Contains(RoleConstants.Viewer))
+        {
+            await _userManager.AddToRolesAsync(user, role);
+        }
+
+        return RedirectToAction("Index", "Home");
+
+
+    }
+
 
     private Guid GetCompanyId()
     {
