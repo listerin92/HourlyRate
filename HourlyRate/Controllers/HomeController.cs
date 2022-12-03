@@ -27,6 +27,7 @@ public class HomeController : Controller
         )
 
     {
+        _roleManager = roleManager;
         _employeeService = employeeService;
         _userManager = userManager;
         _logger = logger;

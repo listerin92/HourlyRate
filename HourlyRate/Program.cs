@@ -43,7 +43,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("My Policy", policy =>
     {
-        policy.RequireRole("Admin");
+        policy.RequireRole("Administrator");
         policy.RequireClaim("CompanyId");
     });
 });
