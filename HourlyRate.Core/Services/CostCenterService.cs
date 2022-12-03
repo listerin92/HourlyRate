@@ -93,9 +93,11 @@ namespace HourlyRate.Core.Services
 
                 var allExpenses = _context.Expenses;
 
+
                 var currentCostCenterEmployees = allExpenses
                     .Where(c => c.CostCenterId == currentCostCenterId && c.EmployeeId != null && c.FinancialYearId == activeFinancialYearId);
 
+                //----------- Employees count wages
                 currentCostCenter.DirectAllocatedStuff = currentCostCenterEmployees.Count();
                 currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
                 totalDirectCostSum += currentCostCenter.DirectWagesCost;
@@ -105,6 +107,7 @@ namespace HourlyRate.Core.Services
                                 c.ConsumableId != null &&
                                 c.FinancialYearId == activeFinancialYearId);
 
+                //----------- Consumables
                 currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
                 totalDirectCostSum += currentCostCenter.DirectGeneraConsumablesCost;
 
@@ -115,6 +118,7 @@ namespace HourlyRate.Core.Services
                 currentCostCenter.DirectRepairCost = directRepairCost;
                 totalDirectCostSum += directRepairCost;
 
+                //----------- Depreciation
                 var directGeneraDepreciationCost = allExpenses
                     .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 8
                                                                       && c.FinancialYearId == activeFinancialYearId)
@@ -122,17 +126,9 @@ namespace HourlyRate.Core.Services
                 currentCostCenter.DirectDepreciationCost = directGeneraDepreciationCost;
                 totalDirectCostSum += directGeneraDepreciationCost;
 
-                var totalElectricCost = allExpenses
-                    .Where(c => c.CostCategoryId == 2
-                                && c.FinancialYearId == activeFinancialYearId)
-                    .Select(r => r.Amount).Sum();
-
-
-
-                currentCostCenter.TotalDirectCosts = totalDirectCostSum;
-
                 // ------------End Direct Costs 
 
+                //-------------Rent
                 var rentCost = allExpenses
                     .Where(c => c.CostCategoryId == 6)
                     .Select(r => r.Amount).Sum();
@@ -140,17 +136,32 @@ namespace HourlyRate.Core.Services
                 var rentPerSqM = rentCost / totalRentSpace;
 
                 currentCostCenter.RentCost = currentCostCenter.FloorSpace * rentPerSqM;
+                
+                totalDirectCostSum += currentCostCenter.RentCost;
 
+                //-----------Electric
+                var totalElectricCost = allExpenses
+                    .Where(c => c.CostCategoryId == 2
+                                && c.FinancialYearId == activeFinancialYearId)
+                    .Select(r => r.Amount).Sum();
                 var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
                                                                  allCostCenters.Select(tp => tp.TotalPowerConsumption).Sum();
                 currentCostCenter.TotalPowerConsumption = currentCostCenter.AnnualChargeableHours * currentCostCenter.AvgPowerConsumptionKwh;
                 currentCostCenter.DirectElectricityCost = currentCostCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
 
+                totalDirectCostSum += currentCostCenter.DirectElectricityCost;
+
+                //---------Heating
                 var heatingCost = allExpenses
                     .Where(c => c.CostCategoryId == 9)
                     .Select(r => r.Amount).Sum();
                 var heatingPerSqM = heatingCost / totalRentSpace;
                 currentCostCenter.IndirectHeatingCost = currentCostCenter.FloorSpace * heatingPerSqM;
+                
+                totalDirectCostSum += currentCostCenter.FloorSpace * heatingPerSqM;
+
+                //--------Total Direct Cost
+                currentCostCenter.TotalDirectCosts = totalDirectCostSum;
 
 
                 _context.CostCenters.Update(currentCostCenter);
