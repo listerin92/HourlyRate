@@ -22,7 +22,7 @@ namespace HourlyRate.Core.Models.Employee
         public string ImageUrl { get; set; } = null!;
 
         [Required]
-        [Display(Name = "Price per month")]
+        [Display(Name = "Salary per year")]
         [Range(0.00, 9000000.00, ErrorMessage = "Price per month must be a positive number and less than {2} digits")]
         public decimal Salary { get; set; }
 

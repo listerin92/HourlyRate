@@ -118,14 +118,32 @@ namespace HourlyRate.Core.Services
         public async Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId)
         {
             var activeFinancialYearId = ActiveFinancialYearId();
+            var employee = _dbContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+            var expense = new Expenses();
 
-            var expense = new Expenses()
+            try
             {
-                EmployeeId = employeeId,
-                Amount = amount,
-                CompanyId = companyId,
-                FinancialYearId = activeFinancialYearId
-            };
+                var matchedCostCenter = _dbContext.CostCenters.FirstOrDefault(c => c.DepartmentId == employee.DepartmentId);
+
+                {
+                    expense.EmployeeId = employeeId;
+                    expense.Amount = amount;
+                    expense.CompanyId = companyId;
+                    expense.FinancialYearId = activeFinancialYearId;
+                    expense.CostCenterId = matchedCostCenter.Id;
+                };
+            }
+            catch (Exception)
+            {
+                expense.EmployeeId = employeeId;
+                expense.Amount = amount;
+                expense.CompanyId = companyId;
+                expense.FinancialYearId = activeFinancialYearId;
+            }
+
+            //find if Department is added to CostCenter                        
+
+
             await _repo.AddAsync(expense);
             await _repo.SaveChangesAsync();
         }
@@ -152,7 +170,7 @@ namespace HourlyRate.Core.Services
 
             var salary = GetEmployeeSalary(employeeId);
             var changeSalary = await _repo.GetByIdAsync<Expenses>(salary.Result.Id);
-            
+
             changeSalary.Amount = model.Salary;
             await _repo.SaveChangesAsync();
 
@@ -191,7 +209,7 @@ namespace HourlyRate.Core.Services
                 .FirstAsync();
         }
 
-        
+
         public async Task Delete(int employeeId)
         {
             var employee = await _repo.GetByIdAsync<Employee>(employeeId);
