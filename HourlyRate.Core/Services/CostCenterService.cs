@@ -75,6 +75,8 @@ namespace HourlyRate.Core.Services
                     DirectElectricityCost = c.DirectElectricityCost,
                     RentCost = c.RentCost,
                     TotalDirectCosts = c.TotalDirectCosts,
+                    IndirectHeatingCost = c.IndirectHeatingCost,
+                    TotalIndex = c.TotalIndex,
 
                 }).ToListAsync();
             return await allCostCentersUpdated;
@@ -94,74 +96,57 @@ namespace HourlyRate.Core.Services
                 var allExpenses = _context.Expenses;
 
 
-                var currentCostCenterEmployees = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId && c.EmployeeId != null && c.FinancialYearId == activeFinancialYearId);
-
                 //----------- Employees count wages
-                currentCostCenter.DirectAllocatedStuff = currentCostCenterEmployees.Count();
-                currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
-                totalDirectCostSum += currentCostCenter.DirectWagesCost;
+                CurrentEmployeeCount(allExpenses, currentCostCenterId, activeFinancialYearId, currentCostCenter);
 
-                var currentCostGeneralConsumables = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId &&
-                                c.ConsumableId != null &&
-                                c.FinancialYearId == activeFinancialYearId);
+                //---------- EmployeesWages
+                totalDirectCostSum += CurrentCostCenterEmployeesWagesSum(allExpenses, currentCostCenterId, activeFinancialYearId, currentCostCenter);
 
                 //----------- Consumables
-                currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
-                totalDirectCostSum += currentCostCenter.DirectGeneraConsumablesCost;
+                totalDirectCostSum += CurrentCostCenterConsumablesTotal(allExpenses, currentCostCenterId, activeFinancialYearId, currentCostCenter);
 
-                var directRepairCost = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 7
-                    && c.FinancialYearId == activeFinancialYearId)//TODO: Fixed CostCategories 7==Repair
-                    .Select(r => r.Amount).Sum();
-                currentCostCenter.DirectRepairCost = directRepairCost;
-                totalDirectCostSum += directRepairCost;
+                //---------- Repair
+                //TODO: Not Implemented Getting CostCategories Names or Id's  In my case 7 == Repairs
+                totalDirectCostSum += CurrentCostCenterDirectRepairSum(allExpenses, currentCostCenterId, activeFinancialYearId, currentCostCenter, 7);
 
                 //----------- Depreciation
-                var directGeneraDepreciationCost = allExpenses
-                    .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == 8
-                                                                      && c.FinancialYearId == activeFinancialYearId)
-                    .Select(r => r.Amount).Sum();
-                currentCostCenter.DirectDepreciationCost = directGeneraDepreciationCost;
-                totalDirectCostSum += directGeneraDepreciationCost;
-
-                // ------------End Direct Costs 
+                //TODO: Not Implemented Getting CostCategories Names or Id's  In my case 8 == Depreciation
+                totalDirectCostSum += CurrentCostCenterDepreciationSum(allExpenses, currentCostCenterId, activeFinancialYearId, currentCostCenter, 8);
 
                 //-------------Rent
-                var rentCost = allExpenses
-                    .Where(c => c.CostCategoryId == 6)
-                    .Select(r => r.Amount).Sum();
-                var totalRentSpace = allCostCenters.Select(r => r.FloorSpace).Sum();
-                var rentPerSqM = rentCost / totalRentSpace;
+                var totalRentSpace = TotalRentSpace(allCostCenters);
 
-                currentCostCenter.RentCost = currentCostCenter.FloorSpace * rentPerSqM;
-                
-                totalDirectCostSum += currentCostCenter.RentCost;
+                //TODO: Not Implemented Getting CostCategories Names or Id's  In my case 6 == Rent
+                var rentCost = RentCostTotal(allExpenses, 6);
 
-                //-----------Electric
-                var totalElectricCost = allExpenses
-                    .Where(c => c.CostCategoryId == 2
-                                && c.FinancialYearId == activeFinancialYearId)
-                    .Select(r => r.Amount).Sum();
-                var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
-                                                                 allCostCenters.Select(tp => tp.TotalPowerConsumption).Sum();
-                currentCostCenter.TotalPowerConsumption = currentCostCenter.AnnualChargeableHours * currentCostCenter.AvgPowerConsumptionKwh;
-                currentCostCenter.DirectElectricityCost = currentCostCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
+                totalDirectCostSum += CurrentCostCenterRent(rentCost, totalRentSpace, currentCostCenter);
+
+                //-----------Electricity
+                var totalElectricCost = TotalElectricCost(allExpenses, activeFinancialYearId, 2);
+
+                currentCostCenter.TotalPowerConsumption =
+                    currentCostCenter.AnnualChargeableHours * currentCostCenter.AvgPowerConsumptionKwh;
+
+                var electricityPricePerKwhIndirectlyCalculated =
+                    ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
+
+                currentCostCenter.DirectElectricityCost =
+                    currentCostCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
 
                 totalDirectCostSum += currentCostCenter.DirectElectricityCost;
 
                 //---------Heating
-                var heatingCost = allExpenses
-                    .Where(c => c.CostCategoryId == 9)
-                    .Select(r => r.Amount).Sum();
+                var heatingCost = GetHeatingCost(allExpenses);
+
                 var heatingPerSqM = heatingCost / totalRentSpace;
                 currentCostCenter.IndirectHeatingCost = currentCostCenter.FloorSpace * heatingPerSqM;
-                
+
                 totalDirectCostSum += currentCostCenter.FloorSpace * heatingPerSqM;
+                currentCostCenter.TotalDirectCosts = totalDirectCostSum;
 
                 //--------Total Direct Cost
-                currentCostCenter.TotalDirectCosts = totalDirectCostSum;
+                var sumTotalDirectCosts = allCostCenters.Sum(s => s.TotalDirectCosts);
+                currentCostCenter.TotalIndex = sumTotalDirectCosts / currentCostCenter.TotalDirectCosts;
 
 
                 _context.CostCenters.Update(currentCostCenter);
@@ -169,6 +154,136 @@ namespace HourlyRate.Core.Services
 
 
             await _context.SaveChangesAsync();
+        }
+
+        private static decimal GetHeatingCost(DbSet<Expenses> allExpenses)
+        {
+            var heatingCost = allExpenses
+                .Where(c => c.CostCategoryId == 9)
+                .Select(r => r.Amount).Sum();
+            return heatingCost;
+        }
+
+        private static decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters)
+        {
+            var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
+                                                             allCostCenters.Select(tp => tp.TotalPowerConsumption).Sum();
+            return electricityPricePerKwhIndirectlyCalculated;
+        }
+
+        private static decimal TotalElectricCost(DbSet<Expenses> allExpenses, int activeFinancialYearId, int costCategoryId)
+        {
+            var totalElectricCost = allExpenses
+                .Where(c => c.CostCategoryId == costCategoryId
+                            && c.FinancialYearId == activeFinancialYearId)
+                .Select(r => r.Amount).Sum();
+            return totalElectricCost;
+        }
+
+        private static decimal CurrentCostCenterRent(decimal rentCost, decimal totalRentSpace, CostCenter currentCostCenter)
+        {
+
+            var rentPerSqM = rentCost / totalRentSpace;
+
+            return currentCostCenter.RentCost = currentCostCenter.FloorSpace * rentPerSqM;
+        }
+
+        private static decimal RentCostTotal(DbSet<Expenses> allExpenses, int costCategoryId)
+        {
+            var rentCost = allExpenses
+                .Where(c => c.CostCategoryId == costCategoryId)
+                .Select(r => r.Amount).Sum();
+            return rentCost;
+        }
+
+        /// <summary>
+        /// All CostCenter Rented Space in m2
+        /// </summary>
+        /// <param name="allCostCenters"></param>
+        /// <returns>Return Rented Space in m2</returns>
+        private static decimal TotalRentSpace(List<CostCenter> allCostCenters)
+        {
+            var totalRentSpace = allCostCenters.Select(r => r.FloorSpace).Sum();
+            return totalRentSpace;
+        }
+
+        private static decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId)
+        {
+
+            var directGeneraDepreciationCost = allExpenses
+                .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == costCategoryId
+                                                                  && c.FinancialYearId == activeFinancialYearId)
+                .Select(r => r.Amount).Sum();
+
+            currentCostCenter.DirectDepreciationCost = directGeneraDepreciationCost;
+            decimal totalDirectCostSum = directGeneraDepreciationCost;
+
+            return totalDirectCostSum;
+        }
+
+        /// <summary>
+        /// Calculate All Cost of Repairs Directly assign to Current Cost Center
+        /// </summary>
+        /// <param name="allExpenses"></param>
+        /// <param name="currentCostCenterId"></param>
+        /// <param name="activeFinancialYearId"></param>
+        /// <param name="currentCostCenter"></param>
+        /// <param name="costCategoryId"></param>
+        /// <returns>Return Sum</returns>
+        private static decimal CurrentCostCenterDirectRepairSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId)
+        {
+            var directRepairCost = allExpenses
+                .Where(c => c.CostCenterId == currentCostCenterId && c.CostCategoryId == costCategoryId
+                                                                  && c.FinancialYearId ==
+                                                                  activeFinancialYearId)
+                .Select(r => r.Amount).Sum();
+            currentCostCenter.DirectRepairCost = directRepairCost;
+            decimal totalDirectCostSum = directRepairCost;
+            return totalDirectCostSum;
+        }
+
+        /// <summary>
+        /// Calculate All Cost of Consumables assign to Current Cost Center
+        /// </summary>
+        /// <param name="allExpenses"></param>
+        /// <param name="currentCostCenterId"></param>
+        /// <param name="activeFinancialYearId"></param>
+        /// <param name="currentCostCenter"></param>
+        /// <returns>Return Sum</returns>
+        private static decimal CurrentCostCenterConsumablesTotal(DbSet<Expenses> allExpenses, int currentCostCenterId,
+            int activeFinancialYearId, CostCenter currentCostCenter)
+        {
+            var currentCostGeneralConsumables = allExpenses
+                .Where(c => c.CostCenterId == currentCostCenterId &&
+                            c.ConsumableId != null &&
+                            c.FinancialYearId == activeFinancialYearId);
+
+            currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
+            decimal totalDirectCostSum = currentCostCenter.DirectGeneraConsumablesCost;
+            return totalDirectCostSum;
+        }
+
+        private static decimal CurrentCostCenterEmployeesWagesSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+            int activeFinancialYearId, CostCenter currentCostCenter)
+        {
+            var currentCostCenterEmployees1 = allExpenses
+                .Where(c => c.CostCenterId == currentCostCenterId && c.EmployeeId != null &&
+                            c.FinancialYearId == activeFinancialYearId);
+            currentCostCenter.DirectWagesCost = currentCostCenterEmployees1.Sum(a => a.Amount);
+            decimal totalDirectCostSum = currentCostCenter.DirectWagesCost;
+            return totalDirectCostSum;
+        }
+
+        private static void CurrentEmployeeCount(DbSet<Expenses> allExpenses, int currentCostCenterId, int activeFinancialYearId,
+            CostCenter currentCostCenter)
+        {
+            var currentCostCenterEmployees = allExpenses
+                .Where(c => c.CostCenterId == currentCostCenterId && c.EmployeeId != null &&
+                            c.FinancialYearId == activeFinancialYearId);
+
+            currentCostCenter.DirectAllocatedStuff = currentCostCenterEmployees.Count();
         }
 
         public async Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments()
