@@ -1,7 +1,5 @@
 ﻿using HourlyRate.Core.Models.Employee;
-using HourlyRate.Infrastructure.Data.Models.Employee;
 using System.ComponentModel.DataAnnotations;
-using HourlyRate.Core.Models.GeneralCost;
 
 namespace HourlyRate.Core.Models.CostCenter
 {
