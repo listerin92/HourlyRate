@@ -176,6 +176,11 @@ namespace HourlyRate.Infrastructure.Data.Models
         [Precision(18, 2)]
         public decimal OverheadsPerHour { get; set; }
 
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
+        public decimal TotalHourlyCostRate { get; set; }
+
 
         [ForeignKey(nameof(FinancialYear))]
         public int FinancialYearId { get; set; }

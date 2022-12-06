@@ -119,12 +119,10 @@ else
                                 <i class="fa fa-cogs fa-lg"></i>
                             </div>
                             <div class="flex-fill ps-3 pe-3">
-                                <div class="fw-600">Total Yearly Cost - @cc.TotalCosts</div>
-                                <div class="fw-600">Average per month - </div>
-                                <div class="fw-600">Wages Average per month - ??</div>
-                                <div class="fw-600">Machines Average per month - ??</div>
-                                <div class="fw-600">Overheads Average per month - ??</div>
-                                <div class="fw-600">Total Monthly Cost - ??</div>
+                                <div class="fw-600">Total Yearly Cost - @cc.TotalCosts.ToString("n2")</div>
+                                <div class="fw-600">Wages Average per month - @cc.WagesPerMonth.ToString("n2")</div>
+                                <div class="fw-600">Machines Average per month - @cc.MachinesPerMonth.ToString("n2")</div>
+                                <div class="fw-600">Overheads Average per month - @cc.OverheadsPerMonth.ToString("n2")</div>
                             </div>
                         </div>
                     </div>
@@ -134,10 +132,10 @@ else
                                 <i class="fa fa-cogs fa-lg"></i>
                             </div>
                             <div class="flex-fill ps-3 pe-3">
-                                <div class="fs-14px text-muted">Wages Average per hour -??</div>
-                                <div class="fs-14px text-muted">Machines Average per hour - ??</div>
-                                <div class="fs-14px text-muted">Overheads Average per hour - ??</div>
-                                <div class="fw-600">Total hourly cost rate - ??</div>
+                                <div class="fs-14px text-muted">Wages Average per hour - @cc.WagesPerHour.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Machines Average per hour - @cc.MachinesPerHour.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Overheads Average per hour - @cc.OverheadsPerHour.ToString("n2")</div>
+                                <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate</div>
                             </div>
                         </div>
                     </div>

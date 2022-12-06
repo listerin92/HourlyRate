@@ -60,8 +60,9 @@ namespace HourlyRate.Core.Models.CostCenter
         public decimal OverheadsPerMonth { get; set; }
 
         public decimal WagesPerHour { get; set; }
-        public decimal MachinesPerHour{ get; set; }
+        public decimal MachinesPerHour { get; set; }
         public decimal OverheadsPerHour { get; set; }
+        public decimal TotalHourlyCostRate { get; set; }
 
 
     }

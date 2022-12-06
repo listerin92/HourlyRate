@@ -156,7 +156,13 @@ namespace HourlyRate.Core.Services
                     IndirectDepreciationCost = c.IndirectDepreciationCost,
                     IndirectTotalCosts = c.IndirectTotalCosts,
                     TotalCosts = c.TotalCosts,
-
+                    WagesPerMonth = c.WagesPerMonth,
+                    MachinesPerMonth = c.MachinesPerMonth,
+                    OverheadsPerMonth = c.OverheadsPerMonth,
+                    WagesPerHour = c.WagesPerHour,
+                    MachinesPerHour = c.MachinesPerHour,
+                    OverheadsPerHour = c.OverheadsPerHour,
+                    TotalHourlyCostRate = c.TotalHourlyCostRate,
                 }).ToListAsync();
             return await allCostCentersUpdated;
         }
@@ -281,7 +287,55 @@ namespace HourlyRate.Core.Services
 
                 costCenter.IndirectTotalCosts = totalIndirectCostSum;
 
-                //costCenter.WagesPerMonth 
+                //-------- Wages per Month
+                costCenter.WagesPerMonth =
+                    (costCenter.DirectWagesCost +
+                     costCenter.IndirectAdministrationWagesCost +
+                     costCenter.IndirectMaintenanceWagesCost) / 12;
+
+                //--------Machine per Month
+                costCenter.MachinesPerMonth =
+                    (costCenter.DirectRepairCost +
+                    costCenter.DirectGeneraConsumablesCost +
+                    costCenter.DirectDepreciationCost +
+                    costCenter.IndirectDepreciationCost) / 12;
+
+                //---------- Overheads per Month
+                //TODO: -----missing indirect consumables
+                costCenter.OverheadsPerMonth =
+                    (costCenter.DirectGeneraConsumablesCost +
+                     costCenter.RentCost +
+                     costCenter.DirectElectricityCost +
+                     costCenter.IndirectHeatingCost +
+                     costCenter.IndirectWaterCost +
+                     costCenter.IndirectTaxes +
+                     costCenter.IndirectPhonesCost +
+                     costCenter.IndirectOtherCost) / 12;
+
+                //-------- Wages per Hour
+                costCenter.WagesPerHour =
+                    (costCenter.DirectWagesCost +
+                     costCenter.IndirectAdministrationWagesCost +
+                     costCenter.IndirectMaintenanceWagesCost) / costCenter.AnnualChargeableHours;
+
+                //--------Machine per Hour
+                costCenter.MachinesPerHour =
+                    (costCenter.DirectRepairCost +
+                     costCenter.DirectGeneraConsumablesCost +
+                     costCenter.DirectDepreciationCost +
+                     costCenter.IndirectDepreciationCost) / costCenter.AnnualChargeableHours;
+
+                //---------- Overheads per Hour
+                //TODO: -----missing indirect consumables
+                costCenter.OverheadsPerHour =
+                    (costCenter.DirectGeneraConsumablesCost +
+                     costCenter.RentCost +
+                     costCenter.DirectElectricityCost +
+                     costCenter.IndirectHeatingCost +
+                     costCenter.IndirectWaterCost +
+                     costCenter.IndirectTaxes +
+                     costCenter.IndirectPhonesCost +
+                     costCenter.IndirectOtherCost) / costCenter.AnnualChargeableHours;
 
                 _context.CostCenters.Update(costCenter);
             }
