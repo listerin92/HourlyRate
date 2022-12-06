@@ -1,10 +1,8 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.GeneralCost;
-using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace HourlyRate.Controllers
 {

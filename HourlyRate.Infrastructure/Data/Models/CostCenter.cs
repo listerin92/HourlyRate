@@ -135,6 +135,11 @@ namespace HourlyRate.Infrastructure.Data.Models
         [Required]
         [Column(TypeName = "money")]
         [Precision(18, 2)]
+        public decimal IndirectDepreciationCost { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
         public decimal IndirectTotalCosts { get; set; }
 
         [Required]

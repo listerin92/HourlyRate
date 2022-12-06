@@ -50,6 +50,7 @@ namespace HourlyRate.Core.Models.CostCenter
         public decimal IndirectOtherCost { get; set; }
         public decimal IndirectAdministrationWagesCost { get; set; }
         public decimal IndirectMaintenanceWagesCost { get; set; }
+        public decimal IndirectDepreciationCost { get; set; }
         public decimal IndirectTotalCosts { get; set; }
 
         public decimal TotalCosts { get; set; }

@@ -55,6 +55,7 @@ namespace HourlyRate.Core.Services
                    CostCategoryId = c.CostCategoryId,
                    Description = c.Description!,
                    DefaultCurrency = c.Company.DefaultCurrency,
+                   CostCategoryName = c.CostCategories!.Name ?? "None",
                    CostCenterName = c.CostCenter!.Name ?? "None"
                })
                .ToListAsync();

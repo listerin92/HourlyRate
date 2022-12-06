@@ -146,6 +146,12 @@ namespace HourlyRate.Infrastructure.Configuration
                     Id = 22,
                     Name = "Man Uniman",
                     CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
+                },
+                new Department()
+                {
+                    Id = 23,
+                    Name = "Maintenance",
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB")
                 }
 
             };

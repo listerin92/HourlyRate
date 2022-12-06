@@ -107,9 +107,9 @@ else
                                 <div class="fs-14px text-muted">Phones - @cc.IndirectPhonesCost.ToString("n2")</div>
                                 <div class="fs-14px text-muted">Other costs - @cc.IndirectOtherCost.ToString("n2")</div>
                                 <div class="fs-14px text-muted">Administration costs - @cc.IndirectAdministrationWagesCost.ToString("n2")</div>
-                                <div class="fs-14px text-muted">Maintenance wages - ??</div>
-                                <div class="fs-14px text-muted">Absorb depreciation costs - ??</div>
-                                <div class="fw-600">Total Indirect Costs - ??</div>
+                                <div class="fs-14px text-muted">Maintenance wages - @cc.IndirectMaintenanceWagesCost.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Absorb depreciation costs - @cc.IndirectDepreciationCost.ToString("n2")</div>
+                                <div class="fw-600">Total Indirect Costs - @cc.IndirectTotalCosts.ToString("n2")</div>
                             </div>
                         </div>
                     </div>
@@ -119,8 +119,8 @@ else
                                 <i class="fa fa-cogs fa-lg"></i>
                             </div>
                             <div class="flex-fill ps-3 pe-3">
-                                <div class="fw-600">Total Yearly Cost - ??</div>
-                                <div class="fw-600">Average per month - ??</div>
+                                <div class="fw-600">Total Yearly Cost - @cc.TotalCosts</div>
+                                <div class="fw-600">Average per month - </div>
                                 <div class="fw-600">Wages Average per month - ??</div>
                                 <div class="fw-600">Machines Average per month - ??</div>
                                 <div class="fw-600">Overheads Average per month - ??</div>

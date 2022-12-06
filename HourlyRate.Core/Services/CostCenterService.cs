@@ -150,7 +150,12 @@ namespace HourlyRate.Core.Services
                     IndirectWaterCost = c.IndirectWaterCost,
                     IndirectTaxes = c.IndirectTaxes,
                     IndirectPhonesCost = c.IndirectPhonesCost,
+                    IndirectAdministrationWagesCost = c.IndirectAdministrationWagesCost,
                     IndirectOtherCost = c.IndirectOtherCost,
+                    IndirectMaintenanceWagesCost = c.IndirectMaintenanceWagesCost,
+                    IndirectDepreciationCost = c.IndirectDepreciationCost,
+                    IndirectTotalCosts = c.IndirectTotalCosts,
+                    TotalCosts = c.TotalCosts,
 
                 }).ToListAsync();
             return await allCostCentersUpdated;
@@ -160,70 +165,76 @@ namespace HourlyRate.Core.Services
         {
             var activeFinancialYearId = ActiveFinancialYearId();
             var allCostCenters = _context.CostCenters
-                .Where(c => c.CompanyId == companyId && c.Name != "None"
-                                                     && c.FinancialYearId == activeFinancialYearId).ToList();
+                .Where(c =>
+                            c.CompanyId == companyId &&
+                            c.Name != "None" &&
+                            c.FinancialYearId == activeFinancialYearId).ToList();
 
-            foreach (var currentCostCenter in allCostCenters)
+            var allExpenses = _context.Expenses;
+            var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses);
+
+            foreach (var costCenter in allCostCenters)
             {
                 var totalDirectCostSum = 0.0m;
-                var currentCostCenterId = currentCostCenter.Id;
+                var totalIndirectCostSum = 0.0m;
+                var currentCostCenterId = costCenter.Id;
 
-                var allExpenses = _context.Expenses;
 
                 //----------- Employees count wages
-                CurrentEmployeeCount(allExpenses, currentCostCenterId, activeFinancialYearId, currentCostCenter);
+                CurrentEmployeeCount(allExpenses, currentCostCenterId, activeFinancialYearId, costCenter);
 
                 //---------- EmployeesWages
                 totalDirectCostSum += CurrentCostCenterEmployeesWagesSum(allExpenses, currentCostCenterId,
-                    activeFinancialYearId, currentCostCenter);
+                    activeFinancialYearId, costCenter);
 
                 //----------- Consumables
                 totalDirectCostSum += CurrentCostCenterConsumablesTotal(allExpenses, currentCostCenterId,
-                    activeFinancialYearId, currentCostCenter);
+                    activeFinancialYearId, costCenter);
 
                 //---------- Repair
                 //TODO: All 10 predefined CostCategories can be Switched, but will not follow vertical flow of the View
+
                 totalDirectCostSum += CurrentCostCenterDirectRepairSum(allExpenses, currentCostCenterId,
-                    activeFinancialYearId, currentCostCenter, 7);
+                    activeFinancialYearId, costCenter, 7);
 
                 //----------- Direct Depreciation
                 totalDirectCostSum += CurrentCostCenterDepreciationSum(allExpenses, currentCostCenterId,
-                    activeFinancialYearId, currentCostCenter, 8);
+                    activeFinancialYearId, costCenter, 8);
 
                 //-------------Rent
                 var totalRentSpace = TotalRentSpace(allCostCenters);
 
                 var rentCost = RentCostTotal(allExpenses, 6);
 
-                totalDirectCostSum += CurrentCostCenterRent(rentCost, totalRentSpace, currentCostCenter);
+                totalIndirectCostSum += CurrentCostCenterRent(rentCost, totalRentSpace, costCenter);
 
                 //-----------Electricity
                 var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 2);
 
-                currentCostCenter.TotalPowerConsumption =
-                    currentCostCenter.AnnualChargeableHours * currentCostCenter.AvgPowerConsumptionKwh;
+                costCenter.TotalPowerConsumption =
+                    costCenter.AnnualChargeableHours * costCenter.AvgPowerConsumptionKwh;
 
                 var electricityPricePerKwhIndirectlyCalculated =
                     ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
 
-                currentCostCenter.DirectElectricityCost =
-                    currentCostCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
+                costCenter.DirectElectricityCost =
+                    costCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
 
-                totalDirectCostSum += currentCostCenter.DirectElectricityCost;
+                totalIndirectCostSum += costCenter.DirectElectricityCost;
 
                 //---------Heating
                 var heatingCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 9);
 
                 var heatingPerSqM = heatingCost / totalRentSpace;
-                currentCostCenter.IndirectHeatingCost = currentCostCenter.FloorSpace * heatingPerSqM;
+                costCenter.IndirectHeatingCost = costCenter.FloorSpace * heatingPerSqM;
+                totalIndirectCostSum += costCenter.FloorSpace * heatingPerSqM;
 
                 //--------Total Direct Cost
-                totalDirectCostSum += currentCostCenter.FloorSpace * heatingPerSqM;
-                currentCostCenter.TotalDirectCosts = totalDirectCostSum;
+                costCenter.TotalDirectCosts = totalDirectCostSum;
 
                 //--------Total Index - Total Direct Cost / Current Total Direct cost
                 var sumTotalDirectCosts = SumTotalDirectCosts(allCostCenters);
-                currentCostCenter.TotalIndex = sumTotalDirectCosts / currentCostCenter.TotalDirectCosts;
+                costCenter.TotalIndex = sumTotalDirectCosts / costCenter.TotalDirectCosts;
 
 
                 //----WaterIndex - Total Direct Of CC Using Water / Current Total Direct 
@@ -232,33 +243,65 @@ namespace HourlyRate.Core.Services
                     .Sum(s => s.TotalDirectCosts);
                 var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 1);
 
-                SetWaterCost(currentCostCenter, tDirectCostOfCcUsingWater, totalWaterCost);
+                totalIndirectCostSum += SetWaterCost(costCenter, tDirectCostOfCcUsingWater, totalWaterCost);
 
                 //-------Taxes
                 var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 10);
-                currentCostCenter.IndirectTaxes = taxCosts / currentCostCenter.TotalIndex;
+                costCenter.IndirectTaxes = taxCosts / costCenter.TotalIndex;
 
                 // ---- Phones
                 var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 3);
-                currentCostCenter.IndirectTaxes = phonesCosts / currentCostCenter.TotalIndex;
+                costCenter.IndirectPhonesCost = phonesCosts / costCenter.TotalIndex;
+                totalIndirectCostSum += costCenter.IndirectPhonesCost;
 
                 // -----Other
                 var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 4);
-                currentCostCenter.IndirectOtherCost = otherCosts / currentCostCenter.TotalIndex;
+                costCenter.IndirectOtherCost = otherCosts / costCenter.TotalIndex;
+                totalIndirectCostSum += costCenter.IndirectOtherCost;
 
                 //------General Administration
                 var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 5);
-                currentCostCenter.IndirectAdministrationWagesCost = administrationCost / currentCostCenter.TotalIndex;
+                costCenter.IndirectAdministrationWagesCost = administrationCost / costCenter.TotalIndex;
+                totalIndirectCostSum += costCenter.IndirectAdministrationWagesCost;
+
 
                 //---------- EmployeesMaintenanceWages
-                //var employeesMaintenanceWages= MaintenanceCostCenterEmployeesWagesSum(allExpenses, currentCostCenterId,
-                //    activeFinancialYearId, currentCostCenter);
+                costCenter.IndirectMaintenanceWagesCost =
+                    totalSalaryMaintenance / costCenter.TotalIndex;
+                totalIndirectCostSum += costCenter.IndirectMaintenanceWagesCost;
 
-                _context.CostCenters.Update(currentCostCenter);
+                //---------- Indirect Depreciation
+                var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 11);
+                costCenter.IndirectDepreciationCost = indirectDepreciationCost / costCenter.TotalIndex;
+                totalIndirectCostSum += costCenter.IndirectDepreciationCost;
+
+                //--------- Total Costs
+
+                costCenter.TotalCosts = costCenter.TotalDirectCosts + costCenter.IndirectTotalCosts;
+
+                costCenter.IndirectTotalCosts = totalIndirectCostSum;
+
+                //costCenter.WagesPerMonth 
+
+                _context.CostCenters.Update(costCenter);
             }
 
 
             await _context.SaveChangesAsync();
+        }
+
+        private decimal TotalSalaryMaintenanceDepartment(DbSet<Expenses> allExpenses)
+        {
+            var employeesFromMaintenanceDept = _context.Employees
+                .Where(e => e.Department.Name == "Maintenance").ToList();
+            var totalSalaryMaintenance = 0.0m;
+            foreach (var employee in employeesFromMaintenanceDept)
+            {
+                totalSalaryMaintenance += allExpenses
+                    .First(e => e.EmployeeId == employee.Id).Amount;
+            }
+
+            return totalSalaryMaintenance;
         }
 
         private static decimal GetSumOfTotalIndirectCostOfCc(DbSet<Expenses> allExpenses, int activeFinancialYearId, int costCategoryId)
@@ -275,19 +318,19 @@ namespace HourlyRate.Core.Services
             return sumTotalDirectCosts;
         }
 
-        private static void SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
+        private static decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
             decimal totalWaterCost)
         {
             if (currentCostCenter.IsUsingWater)
             {
                 currentCostCenter.WaterTotalIndex = tDirectCostOfCcUsingWater / currentCostCenter.TotalDirectCosts;
-                currentCostCenter.IndirectWaterCost = totalWaterCost / currentCostCenter.WaterTotalIndex;
+                return currentCostCenter.IndirectWaterCost =
+                    totalWaterCost / currentCostCenter.WaterTotalIndex;
+
             }
-            else
-            {
-                currentCostCenter.WaterTotalIndex = 0;
-                currentCostCenter.IndirectWaterCost = 0;
-            }
+
+            currentCostCenter.WaterTotalIndex = 0;
+            return currentCostCenter.IndirectWaterCost = 0;
         }
 
 
@@ -385,7 +428,7 @@ namespace HourlyRate.Core.Services
             return totalDirectCostSum;
         }
 
-        private static decimal MaintenanceCostCenterEmployeesWagesSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+        private static decimal CurrentCostCenterEmployeesWagesSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
             int activeFinancialYearId, CostCenter currentCostCenter)
         {
             var currentCostCenterEmployees = allExpenses
@@ -395,12 +438,6 @@ namespace HourlyRate.Core.Services
             decimal totalDirectCostSum = currentCostCenter.DirectWagesCost;
             return totalDirectCostSum;
         }
-
-        //private static decimal CurrentCostCenterEmployeesWagesSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
-        //    int activeFinancialYearId, CostCenter currentCostCenter)
-        //{
-        //    var emplMaint = 
-        //}
 
         private static void CurrentEmployeeCount(DbSet<Expenses> allExpenses, int currentCostCenterId, int activeFinancialYearId,
             CostCenter currentCostCenter)

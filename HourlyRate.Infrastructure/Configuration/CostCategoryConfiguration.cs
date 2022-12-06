@@ -74,6 +74,12 @@ namespace HourlyRate.Infrastructure.Configuration
                     Id = 10,
                     CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
                     Name = "Taxes",
+                },
+                new CostCategory()
+                {
+                    Id = 11,
+                    CompanyId = Guid.Parse("4B609DF0-6F9C-4226-1BCE-08DAD4A028BB"),
+                    Name = "Indirect Depreciation",
                 }
             };
             return costCategories;
