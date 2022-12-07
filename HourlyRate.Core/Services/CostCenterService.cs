@@ -124,6 +124,9 @@ namespace HourlyRate.Core.Services
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
             await UpdateAllCostCenters(companyId);
+            var defaultCurrency = _context.Companies
+                .First(c => c.Id == companyId).DefaultCurrency;
+
 
             var allCostCentersUpdated = _context.CostCenters
                 .Where(c => c.CompanyId == companyId && c.Name != "None")
@@ -131,6 +134,7 @@ namespace HourlyRate.Core.Services
                 {
                     Id = c.Id,
                     Name = c.Name,
+                    DefaultCurrency = defaultCurrency!,
                     FloorSpace = c.FloorSpace,
                     AvgPowerConsumptionKwh = c.AvgPowerConsumptionKwh,
                     AnnualHours = c.AnnualHours,
@@ -220,11 +224,11 @@ namespace HourlyRate.Core.Services
                 costCenter.TotalPowerConsumption =
                     costCenter.AnnualChargeableHours * costCenter.AvgPowerConsumptionKwh;
 
-                var electricityPricePerKwhIndirectlyCalculated =
+                var totalPowerConsumption =
                     ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
 
                 costCenter.DirectElectricityCost =
-                    costCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
+                    costCenter.TotalPowerConsumption * totalPowerConsumption;
 
                 totalIndirectCostSum += costCenter.DirectElectricityCost;
 
@@ -235,6 +239,7 @@ namespace HourlyRate.Core.Services
                 costCenter.IndirectHeatingCost = costCenter.FloorSpace * heatingPerSqM;
                 totalIndirectCostSum += costCenter.FloorSpace * heatingPerSqM;
 
+                //TODO: need to change it exactly like the original business logic !!!!!!!!!!
                 //--------Total Direct Cost
                 costCenter.TotalDirectCosts = totalDirectCostSum;
 
@@ -254,6 +259,7 @@ namespace HourlyRate.Core.Services
                 //-------Taxes
                 var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 10);
                 costCenter.IndirectTaxes = taxCosts / costCenter.TotalIndex;
+                totalIndirectCostSum += costCenter.IndirectTaxes; 
 
                 // ---- Phones
                 var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 3);
@@ -316,14 +322,16 @@ namespace HourlyRate.Core.Services
                 costCenter.WagesPerHour =
                     (costCenter.DirectWagesCost +
                      costCenter.IndirectAdministrationWagesCost +
-                     costCenter.IndirectMaintenanceWagesCost) / costCenter.AnnualChargeableHours;
+                     costCenter.IndirectMaintenanceWagesCost) /
+                    costCenter.AnnualChargeableHours;
 
                 //--------Machine per Hour
                 costCenter.MachinesPerHour =
                     (costCenter.DirectRepairCost +
                      costCenter.DirectGeneraConsumablesCost +
                      costCenter.DirectDepreciationCost +
-                     costCenter.IndirectDepreciationCost) / costCenter.AnnualChargeableHours;
+                     costCenter.IndirectDepreciationCost) /
+                    costCenter.AnnualChargeableHours;
 
                 //---------- Overheads per Hour
                 //TODO: -----missing indirect consumables
@@ -335,7 +343,13 @@ namespace HourlyRate.Core.Services
                      costCenter.IndirectWaterCost +
                      costCenter.IndirectTaxes +
                      costCenter.IndirectPhonesCost +
-                     costCenter.IndirectOtherCost) / costCenter.AnnualChargeableHours;
+                     costCenter.IndirectOtherCost) /
+                    costCenter.AnnualChargeableHours;
+
+                costCenter.TotalHourlyCostRate =
+                    costCenter.WagesPerHour +
+                    costCenter.MachinesPerHour +
+                    costCenter.OverheadsPerHour;
 
                 _context.CostCenters.Update(costCenter);
             }

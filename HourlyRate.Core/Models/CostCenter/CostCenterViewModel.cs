@@ -11,6 +11,8 @@ namespace HourlyRate.Core.Models.CostCenter
         [Required]
         [StringLength(50)]
         public string Name { get; set; } = null!;
+
+        public string DefaultCurrency { get; set; } = null!;
         [Required]
         public decimal FloorSpace { get; set; }
         public decimal AvgPowerConsumptionKwh { get; set; }
