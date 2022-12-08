@@ -1,7 +1,5 @@
-﻿using HourlyRate.Core.Models.Employee;
-using HourlyRate.Infrastructure.Data.Models.Employee;
+﻿using HourlyRate.Infrastructure.Data.Models.Employee;
 using System.ComponentModel.DataAnnotations;
-using HourlyRate.Infrastructure.Data.Models;
 
 namespace HourlyRate.Core.Models.CostCenter
 {
@@ -31,9 +29,11 @@ namespace HourlyRate.Core.Models.CostCenter
         public decimal DirectRepairCost { get; set; }
         public decimal DirectGeneraConsumablesCost { get; set; }
         public decimal DirectDepreciationCost { get; set; }
+        public decimal TotalDirectCosts { get; set; }
         public decimal DirectElectricityCost { get; set; }
         public decimal RentCost { get; set; }
-        public decimal TotalDirectCosts { get; set; }
+
+        public decimal TotalMixCosts { get; set; }
 
         /// <summary>
         /// TotalDirectCostOfAllCostCategories / CurrentCostCategoryDirectTotalCost

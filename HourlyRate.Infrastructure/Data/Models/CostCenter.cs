@@ -75,6 +75,11 @@ namespace HourlyRate.Infrastructure.Data.Models
         [Required]
         [Column(TypeName = "money")]
         [Precision(18, 2)]
+        public decimal TotalDirectCosts { get; set; }
+
+        [Required]
+        [Column(TypeName = "money")]
+        [Precision(18, 2)]
         public decimal DirectElectricityCost { get; set; }
 
         [Required]
@@ -85,7 +90,9 @@ namespace HourlyRate.Infrastructure.Data.Models
         [Required]
         [Column(TypeName = "money")]
         [Precision(18, 2)]
-        public decimal TotalDirectCosts { get; set; }
+        public decimal TotalMixCosts { get; set; }
+
+
 
         [Required]
         [Column(TypeName = "money")]

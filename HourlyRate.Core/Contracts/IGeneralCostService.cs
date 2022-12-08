@@ -4,8 +4,8 @@ namespace HourlyRate.Core.Contracts
 {
     public interface IGeneralCostService
     {
-        Task<IEnumerable<GeneralCostTypeViewModel>> AllCostTypes();
-        Task<IEnumerable<GeneralCostCenterViewModel>> AllCostCenters();
+        Task<IEnumerable<GeneralCostTypeViewModel>> AllCostCategoryTypes();
+        Task<IEnumerable<GeneralCostCenterViewModel>> AllCostCentersTypes();
 
         Task<IEnumerable<CostViewModel>> AllGeneralCost(Guid companyId);
         Task<bool> CostCategoryTypeExist(int? departmentId);

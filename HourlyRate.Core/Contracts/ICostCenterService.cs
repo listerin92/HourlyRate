@@ -1,17 +1,19 @@
 ﻿using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Core.Models.Employee;
 using HourlyRate.Core.Models.GeneralCost;
+using HourlyRate.Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HourlyRate.Core.Contracts
 {
     public interface ICostCenterService
     {
-        Task<IEnumerable<GeneralCostCenterViewModel>> AllCostTypes();
         Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments();
 
         Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId);
         Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId);
         Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel);
-
+        Task UpdateAllCostCenters(Guid companyId);
+        decimal TotalSalaryMaintenanceDepartment(DbSet<Expenses> allExpenses, int activeFinancialYearId);
     }
 }

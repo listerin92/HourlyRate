@@ -38,8 +38,8 @@ namespace HourlyRate.Controllers
         {
             var model = new AddCostViewModel()
             {
-                GeneralCostType = await _generalCostService.AllCostTypes(),
-                GeneralCostCenter = await _generalCostService.AllCostCenters()
+                GeneralCostType = await _generalCostService.AllCostCategoryTypes(),
+                GeneralCostCenter = await _generalCostService.AllCostCentersTypes()
             };
 
             return View(model);
@@ -55,7 +55,7 @@ namespace HourlyRate.Controllers
 
             if (!ModelState.IsValid)
             {
-                cost.GeneralCostType = await _generalCostService.AllCostTypes();
+                cost.GeneralCostType = await _generalCostService.AllCostCategoryTypes();
 
                 return View(cost);
             }

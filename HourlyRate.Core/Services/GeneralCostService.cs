@@ -16,7 +16,7 @@ namespace HourlyRate.Core.Services
         {
             _repo = repo;
         }
-        public async Task<IEnumerable<GeneralCostTypeViewModel>> AllCostTypes()
+        public async Task<IEnumerable<GeneralCostTypeViewModel>> AllCostCategoryTypes()
         {
 
             return await _repo.AllReadonly<CostCategory>()
@@ -29,7 +29,7 @@ namespace HourlyRate.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<GeneralCostCenterViewModel>> AllCostCenters()
+        public async Task<IEnumerable<GeneralCostCenterViewModel>> AllCostCentersTypes()
         {
 
             return await _repo.AllReadonly<CostCenter>()

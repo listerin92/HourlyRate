@@ -35,10 +35,10 @@ else
     }
 </div>
 <div>
-    <div class="card-deck w-1920px" style="display: flex; margin-left: -15px; margin-right: -15px">
+    <div class="card-deck" style="display: flex; flex-wrap: wrap; margin-left: -15px; margin-right: -15px;">
         @foreach (var cc in Model)
         {
-            <div class="card w-450px" style="display: flex; margin-left: 15px; margin-right: 15px">
+            <div class="card w-420px" style="display: flex; margin-left: 15px; margin-right: 15px;  margin-top: 15px;">
                 <div class="text-blue fs-16px mb-2" style="margin-left: 15px; margin-top: 15px"><b>@cc.Name</b></div>
                 <div class="card-body">
                     <div class="dropdown">
@@ -80,6 +80,8 @@ else
                                 <div class="fs-14px text-muted">Occupation costs - @cc.RentCost @cc.DefaultCurrency.</div>
                                 <div class="fs-14px text-muted">Power cost - @cc.DirectElectricityCost.ToString("n2") @cc.DefaultCurrency.</div>
                                 <div class="fs-14px text-muted">Heating cost - @cc.IndirectHeatingCost.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fw-600">Total Direct Costs - @cc.TotalMixCosts.ToString("n2") @cc.DefaultCurrency.</div>
+
                             </div>
                         </div>
                     </div>
