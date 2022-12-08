@@ -25,6 +25,8 @@ namespace HourlyRate.Controllers
             {
                 var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
 
+                await _costCenterService.UpdateAllCostCenters(companyId);
+
                 var model = await _costCenterService.AllCostCenters(companyId);
                 return View(model);
             }

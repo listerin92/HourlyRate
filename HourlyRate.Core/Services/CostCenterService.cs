@@ -68,7 +68,6 @@ namespace HourlyRate.Core.Services
             await _context.AddAsync(costCenter);
             await _context.SaveChangesAsync();
 
-
         }
 
         public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
@@ -88,16 +87,7 @@ namespace HourlyRate.Core.Services
             await _context.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// Same for all services, add it to a general service
-        /// </summary>
-        /// <returns></returns>
-        private int ActiveFinancialYear()
-        {
-            return _context.FinancialYears
-                .First(y => y.IsActive).Year;
-        }
-        private int ActiveFinancialYearId()
+        public int ActiveFinancialYearId()
         {
             return _context.FinancialYears
                 .First(y => y.IsActive).Id;
@@ -105,7 +95,6 @@ namespace HourlyRate.Core.Services
 
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
-            await UpdateAllCostCenters(companyId);
 
             var defaultCurrency = _context.Companies
                 .First(c => c.Id == companyId).DefaultCurrency;
@@ -208,6 +197,8 @@ namespace HourlyRate.Core.Services
                 totalMixCostSum += CurrentCostCenterRent(rentCost, totalRentSpace, costCenter);
 
                 //-----------Electricity
+
+                //All Electricity bills through the year
                 var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 2);
 
                 costCenter.TotalPowerConsumption =
@@ -351,7 +342,7 @@ namespace HourlyRate.Core.Services
             return employeesFromMaintenanceDept.Sum(s => s.Amount);
         }
 
-        public static decimal GetSumOfTotalIndirectCostOfCc(DbSet<Expenses> allExpenses, int activeFinancialYearId, int costCategoryId)
+        public decimal GetSumOfTotalIndirectCostOfCc(DbSet<Expenses> allExpenses, int activeFinancialYearId, int costCategoryId)
         {
             var totalIndirectCost = allExpenses
                 .Where(c => c.CostCategoryId == costCategoryId
@@ -359,13 +350,14 @@ namespace HourlyRate.Core.Services
                 .Select(r => r.Amount).Sum();
             return totalIndirectCost;
         }
-        public static decimal SumTotalDirectCosts(List<CostCenter> allCostCenters)
+
+        public decimal SumTotalDirectCosts(List<CostCenter> allCostCenters)
         {
             var sumTotalDirectCosts = allCostCenters.Sum(s => s.TotalDirectCosts);
             return sumTotalDirectCosts;
         }
 
-        public static decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
+        public decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
             decimal totalWaterCost)
         {
             if (currentCostCenter.IsUsingWater)

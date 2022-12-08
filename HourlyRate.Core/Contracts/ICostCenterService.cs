@@ -15,5 +15,11 @@ namespace HourlyRate.Core.Contracts
         Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel);
         Task UpdateAllCostCenters(Guid companyId);
         decimal TotalSalaryMaintenanceDepartment(DbSet<Expenses> allExpenses, int activeFinancialYearId);
+
+        decimal GetSumOfTotalIndirectCostOfCc(DbSet<Expenses> allExpenses, int activeFinancialYearId,
+            int costCategoryId);
+
+        int ActiveFinancialYearId();
+        decimal SumTotalDirectCosts(List<CostCenter> allCostCenters);
     }
 }
