@@ -8,11 +8,14 @@ namespace HourlyRate.Core.Contracts
 {
     public interface ICostCenterService
     {
+        Task<bool> Exists(int id);
+        Task<AddCostCenterViewModel> GetCostCenterDetailsById(int id, Guid companyId);
         Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments();
 
         Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId);
         Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId);
         Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel);
+        Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId);
         Task UpdateAllCostCenters(Guid companyId);
         decimal TotalSalaryMaintenanceDepartment(DbSet<Expenses> allExpenses, int activeFinancialYearId);
 
@@ -21,5 +24,8 @@ namespace HourlyRate.Core.Contracts
 
         int ActiveFinancialYearId();
         decimal SumTotalDirectCosts(List<CostCenter> allCostCenters);
+
+        decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
+            decimal totalWaterCost);
     }
 }

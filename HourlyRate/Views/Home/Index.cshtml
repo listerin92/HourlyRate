@@ -1,12 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using HourlyRate.Infrastructure.Data.Models.Account
-@using HourlyRate.Core.Constants
 
 @inject SignInManager<UserIdentityExt> SignInManager
 @inject UserManager<UserIdentityExt> UserManager
 
-@model IEnumerable<EmployeeViewModelCurrency>
+@model IEnumerable<CostCenterViewModel>
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -26,58 +24,55 @@ else
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <h1 class="page-header">Employes</h1>
+    <h1 class="page-header">Cost Centers Overview</h1>
 }
 
-
-<div class="list-group"></div>
-
 <div class="card-header pb-2">
-    @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated && User.IsInRole(RoleConstants.Administrator))
+    @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
     {
-        <a asp-controller="Home" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add Employee</a>
-        <a asp-controller="Home" asp-action="AddDepartment" class="btn btn-primary btn-lg" role="button">Add Employee Department</a>
+        <a asp-controller="Home" asp-action="Update" class="btn btn-primary btn-lg" role="button">Update Cost Center</a>
     }
 </div>
+<div>
+    <div class="card-deck" style="display: flex; flex-wrap: wrap; margin-left: -15px; margin-right: -15px;">
+        @foreach (var cc in Model)
+        {
+            <div class="card w-420px" style="display: flex; margin-left: 15px; margin-right: 15px;  margin-top: 15px;">
+                <div class="text-blue fs-16px mb-2" style="margin-left: 15px; margin-top: 15px"><b>@cc.Name</b></div>
+                <div class="card-body">
 
-
-<div class="card">
-    <div class="card-body" style="width: auto">
-        <div class="row">
-            @if (SignInManager.IsSignedIn(User))
-            {
-                @foreach (var employee in Model)
-                {
-                    <div class="col-xl-2">
-                        @if (User.IsInRole(RoleConstants.Administrator))
-                        {
-                            <div class="dropdown">
-                                <a href="#" data-bs-toggle="dropdown" class="text-muted"><i class="fa fa-ellipsis-h"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
-                                    <a href="#" class="dropdown-item">Details Not ready</a>
-                                    <a asp-controller="Home" asp-action="Edit" class="dropdown-item" asp-route-id="@employee.Id">Edit Employee</a>
-                                    <a asp-controller="Home" asp-action="Delete" class="dropdown-item" asp-route-id="@employee.Id">Delete Employee</a>
-                                </div>
+                    <div class="list-group">
+                        <div class="list-group-item d-flex align-items-center">
+                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                                <i class="fa fa-book fa-lg"></i>
                             </div>
-                        }
-                        <div class="card border-0 overflow-hidden rounded-0 rounded-top rounded-bottom" style="height: 230px">
-                            <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
-                            <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">
-                                <div class="mb-2">
-                                    <img src="@employee.ImageUrl" alt="" width="80" height="80" class="rounded-circle" />
-                                </div>
-                                <div>
-                                    <div class="fs-18px fw-600">@employee.FirstName @employee.LastName</div>
-                                    <div class="fs-14px">@employee.JobTitle</div>
-                                    <div class="fs-18px">@employee.Salary.ToString("n2") @employee.DefaultCurrency</div>
-                                    <div class="fs-16px">@employee.Department.Name</div>
-
-                                </div>
+                            <div class="flex-fill ps-3 pe-3">
+                                <div class="fw-600">Cost Center - General</div>
+                                <div class="fs-14px text-muted">Floor space(SqM) - @cc.FloorSpace.ToString("n0")</div>
+                                <div class="fs-14px text-muted">KWh - @cc.AvgPowerConsumptionKwh.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Annual available hours - @cc.AnnualHours.ToString("n")</div>
+                                <div class="fs-14px text-muted">Annual chargeable hours - @cc.AnnualChargeableHours.ToString("n")</div>
+                                <div class="fs-14px text-muted">Total power consumption (kW) - @cc.TotalPowerConsumption.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Direct Staff - @cc.DirectAllocatedStuff</div>
                             </div>
                         </div>
                     </div>
-                }
-            }
-        </div>
+                    <div class="list-group">
+                        <div class="list-group-item d-flex align-items-center">
+                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
+                                <i class="fa fa-cogs fa-lg"></i>
+                            </div>
+                            <div class="flex-fill ps-3 pe-3">
+                                <div class="fs-14px text-muted">Wages Avg. per hour - @cc.WagesPerHour.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Machines Avg. per hour - @cc.MachinesPerHour.ToString("n2")</div>
+                                <div class="fs-14px text-muted">Overheads Avg. per hour - @cc.OverheadsPerHour.ToString("n2")</div>
+                                <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate.ToString("n2")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
+
 </div>

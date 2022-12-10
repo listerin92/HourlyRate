@@ -20,6 +20,7 @@ namespace HourlyRate.UnitTests
         private IEnumerable<CostCenter>? costCenter;
         private ICostCenterService service;
         private Guid companyId;
+
         [OneTimeSetUp]
         public void TestInitialize()
         {
@@ -54,6 +55,7 @@ namespace HourlyRate.UnitTests
                 new Department() {Id = 1,Name = "Maintenance"},
                 new Department() {Id = 2,Name = "Lamination"},
                 new Department() {Id = 3,Name = "SM103"},
+                new Department() {Id = 4,Name = "SM104"},
             };
             financialYears = new List<FinancialYear>()
             {
@@ -66,7 +68,7 @@ namespace HourlyRate.UnitTests
                 new CostCenter()
                 {
                     Id = 1,
-                    Name = "SM102-8",
+                    Name = "SM102-8P",
                     FloorSpace = 180,
                     AvgPowerConsumptionKwh = 80,
                     AnnualHours = 4000,
@@ -113,8 +115,8 @@ namespace HourlyRate.UnitTests
             _dbContext.AddRange(employees);
             _dbContext.AddRange(departments);
             _dbContext.AddRange(financialYears);
-            _dbContext.Add(costCategory);
-            _dbContext.Add(costCenter);
+            _dbContext.AddRange(costCategory);
+            _dbContext.AddRange(costCenter);
             _dbContext.SaveChanges();
 
             service = new CostCenterService(_dbContext);
@@ -145,13 +147,12 @@ namespace HourlyRate.UnitTests
                 Is.EqualTo(expected: departments.Where(n => n.Id == 1).Select(d => d.Name)));
         }
 
-
         [Test]
         public void AddCostCenterTest()
         {
             var model = new AddCostCenterViewModel()
             {
-                Id = 1,
+                Id = 2,
                 Name = "SM103",
                 FloorSpace = 130,
                 AvgPowerConsumptionKwh = 80,
@@ -163,10 +164,10 @@ namespace HourlyRate.UnitTests
 
             service.AddCostCenter(model, companyId);
 
-            var costCenter = _dbContext.CostCenters.First(n => n.Id == 1);
+            var costCenter = _dbContext.CostCenters.First(n => n.Id == 2);
 
             Assert.That(actual: costCenter.Name, Is.EqualTo("SM103"));
-            Assert.That(actual: costCenter.FloorSpace, Is.EqualTo(130));
+            Assert.That(actual: costCenter.FloorSpace, Is.EqualTo(130.0m));
             Assert.That(actual: costCenter.AvgPowerConsumptionKwh, Is.EqualTo(80));
             Assert.That(actual: costCenter.AnnualHours, Is.EqualTo(4000));
             Assert.That(actual: costCenter.AnnualChargeableHours, Is.EqualTo(2000));
@@ -190,13 +191,13 @@ namespace HourlyRate.UnitTests
         {
             var model = new AddCostCenterViewModel()
             {
-                Id = 1,
-                Name = "SM103",
+                Id = 3,
+                Name = "SM104",
                 FloorSpace = 130,
                 AvgPowerConsumptionKwh = 80,
                 AnnualHours = 4000,
                 AnnualChargeableHours = 2000,
-                DepartmentId = 3,
+                DepartmentId = 4,
                 IsUsingWater = true,
             };
 
@@ -204,12 +205,12 @@ namespace HourlyRate.UnitTests
 
             var expensesByEmployeeForGivenCostCenter =
                 _dbContext!.Expenses
-                    .Where(e => e.CostCenterId == 1
+                    .Where(e => e.CostCenterId == 3
                     && e.EmployeeId != null).Sum(s => s.Amount);
             Assert.That(actual: expensesByEmployeeForGivenCostCenter, Is.EqualTo(expected: 1111));
 
             var countOfEmployeesInGivenCostCenter =
-                _dbContext.Expenses.Count(e => e.CostCenterId == 1
+                _dbContext.Expenses.Count(e => e.CostCenterId == 3
                                                && e.EmployeeId != null);
 
             Assert.That(actual: countOfEmployeesInGivenCostCenter, Is.EqualTo(expected: 2));
@@ -255,7 +256,9 @@ namespace HourlyRate.UnitTests
         public void SetWaterCost()
         {
             var currentCostCenter = _dbContext.CostCenters.First(cc => cc.Id == 1);
-            service.SetWaterCost();
+            var directCostOfCcUsingWater = currentCostCenter.TotalDirectCosts;
+            var totalWaterCost = 1000m;
+            var result = service.SetWaterCost(currentCostCenter, directCostOfCcUsingWater, totalWaterCost);
         }
 
     }

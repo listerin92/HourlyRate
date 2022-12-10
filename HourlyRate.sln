@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HourlyRate.Core", "HourlyRa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HourlyRate.Infrastructure", "HourlyRate.Infrastructure\HourlyRate.Infrastructure.csproj", "{E1ECC9AB-E4F2-453D-9FCD-D06CDF509DD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HourlyRate.UnitTests", "HourlyRate.UnitTests\HourlyRate.UnitTests.csproj", "{A84A2F86-2185-4F04-BE5C-CFE0C9312C74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HourlyRate.UnitTests", "HourlyRate.UnitTests\HourlyRate.UnitTests.csproj", "{A84A2F86-2185-4F04-BE5C-CFE0C9312C74}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3807FF04-0FD6-4692-AE15-A53D2C639E5B} = {3807FF04-0FD6-4692-AE15-A53D2C639E5B}
 		{9B25EBD2-AD43-4A80-BEF1-94E5239C7A20} = {9B25EBD2-AD43-4A80-BEF1-94E5239C7A20}

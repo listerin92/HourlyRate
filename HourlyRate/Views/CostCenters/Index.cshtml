@@ -32,6 +32,7 @@ else
     @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
     {
         <a asp-controller="CostCenters" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add Cost Center</a>
+       
     }
 </div>
 <div>
@@ -44,8 +45,7 @@ else
                     <div class="dropdown">
                         <a href="#" data-bs-toggle="dropdown" class="text-muted" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
                         <div class="dropdown-menu dropdown-menu-right" style="">
-                            <a href="#" class="dropdown-item">View</a>
-                            <a href="#" class="dropdown-item">Analytic</a>
+                            <a asp-controller="CostCenters" asp-action="Edit" class="dropdown-item" asp-route-id="@cc.Id">Edit Cost Center</a>
                             <a href="#" class="dropdown-item">Report</a>
                         </div>
                     </div>
@@ -104,13 +104,13 @@ else
                             </div>
                             <div class="flex-fill ps-3 pe-3">
                                 <div class="fw-600">Indirect Costs</div>
-                                <div class="fs-14px text-blue">Water - @cc.IndirectWaterCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fs-14px text-blue">Taxes - @cc.IndirectTaxes.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fs-14px text-blue">Phones - @cc.IndirectPhonesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fs-14px text-blue">Other costs - @cc.IndirectOtherCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fs-14px text-blue">Administration costs - @cc.IndirectAdministrationWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fs-14px text-blue">Maintenance wages - @cc.IndirectMaintenanceWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fs-14px text-blue">Absorb depreciation costs - @cc.IndirectDepreciationCost.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px text-muted">Water - @cc.IndirectWaterCost.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px text-muted">Taxes - @cc.IndirectTaxes.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px text-muted">Phones - @cc.IndirectPhonesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px text-muted">Other costs - @cc.IndirectOtherCost.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px text-muted">Administration costs - @cc.IndirectAdministrationWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px text-muted">Maintenance wages - @cc.IndirectMaintenanceWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px text-muted">Absorb depreciation costs - @cc.IndirectDepreciationCost.ToString("n2") @cc.DefaultCurrency.</div>
                                 <div class="fw-600">Total Indirect Costs - @cc.IndirectTotalCosts.ToString("n2") @cc.DefaultCurrency.</div>
                             </div>
                         </div>
@@ -121,10 +121,10 @@ else
                                 <i class="fa fa-cogs fa-lg"></i>
                             </div>
                             <div class="flex-fill ps-3 pe-3">
+                                <div class="fs-14px">Wages Avg. per month - @cc.WagesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px">Machines Avg. per month - @cc.MachinesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
+                                <div class="fs-14px">Overheads Avg. per month - @cc.OverheadsPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
                                 <div class="fw-600">Total Yearly Cost - @cc.TotalCosts.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fw-600">Wages Avg. per month - @cc.WagesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fw-600">Machines Avg. per month - @cc.MachinesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
-                                <div class="fw-600">Overheads Avg. per month - @cc.OverheadsPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
                             </div>
                         </div>
                     </div>

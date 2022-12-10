@@ -8,18 +8,24 @@
       "controller": "Home",
       "action": "Index",
       "icon": "fa fa-home",
-      "text": "Employees"
+      "text": "Home"
+    },
+    {
+      "controller": "Employee",
+      "action": "Index",
+      "icon": "fa fa-user-circle",
+      "text": "Employee"
     },
     {
       "controller": "General",
       "action": "Index",
-      "icon": "fa fa-home",
+      "icon": "fa fa-file-alt",
       "text": "GeneralCost"
     },
     {
       "controller": "CostCenters",
       "action": "Index",
-      "icon": "fa fa-home",
+      "icon": "fa fa-code-branch",
       "text": "CostCenters"
     }
   ]

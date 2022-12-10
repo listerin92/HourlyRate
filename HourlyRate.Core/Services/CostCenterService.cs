@@ -1,11 +1,8 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Core.Models.Employee;
-using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Infrastructure.Data;
-using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
-using HourlyRate.Infrastructure.Data.Models.CostCategories;
 using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +19,29 @@ namespace HourlyRate.Core.Services
             _context = context;
         }
 
+        public async Task<bool> Exists(int id)
+        {
+            return await _context.CostCenters
+                .AnyAsync(h => h.Id == id);
+        }
+
+        public async Task<AddCostCenterViewModel> GetCostCenterDetailsById(int id, Guid companyId)
+        {
+            return await _context.CostCenters
+                .Where(costCenter => costCenter.CompanyId == companyId && costCenter.Id == id)
+                .Select(cc => new AddCostCenterViewModel()
+                {
+                    Id = id,
+                    Name = cc.Name,
+                    AnnualHours = cc.AnnualHours,
+                    AnnualChargeableHours = cc.AnnualChargeableHours,
+                    AvgPowerConsumptionKwh = cc.AvgPowerConsumptionKwh,
+                    FloorSpace = cc.FloorSpace,
+                    IsUsingWater = cc.IsUsingWater,
+                    DepartmentId = cc.DepartmentId,
+                })
+                .FirstAsync();
+        }
 
         public async Task<IEnumerable<EmployeeDepartmentModel>> AllDepartments()
         {
@@ -85,6 +105,33 @@ namespace HourlyRate.Core.Services
 
             _context.UpdateRange(employeeExpenses);
             await _context.SaveChangesAsync();
+            
+        }
+
+        public async Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId)
+        {
+            var activeYearId = ActiveFinancialYearId();
+
+            var costCenter = _context.CostCenters
+                .Where(costCenter => costCenter.CompanyId == companyId && costCenter.Id == costCenterId)
+                .Select(costCenter => new CostCenter()
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    FloorSpace = model.FloorSpace,
+                    AnnualHours = model.AnnualHours,
+                    AnnualChargeableHours = model.AnnualChargeableHours,
+                    AvgPowerConsumptionKwh = model.AvgPowerConsumptionKwh,
+                    DepartmentId = model.DepartmentId,
+                    IsUsingWater = model.IsUsingWater,
+                    CompanyId = companyId,
+                    FinancialYearId = activeYearId
+                }).First();
+
+            _context.CostCenters.Update(costCenter);
+            await _context.SaveChangesAsync();
+
+
         }
 
         public int ActiveFinancialYearId()
@@ -201,14 +248,15 @@ namespace HourlyRate.Core.Services
                 //All Electricity bills through the year
                 var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 2);
 
+                //indirectly calculated power consumption for a year 
                 costCenter.TotalPowerConsumption =
                     costCenter.AnnualChargeableHours * costCenter.AvgPowerConsumptionKwh;
 
-                var totalPowerConsumption =
+                var electricityPricePerKwhIndirectlyCalculated =
                     ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
 
                 costCenter.DirectElectricityCost =
-                    costCenter.TotalPowerConsumption * totalPowerConsumption;
+                    costCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
 
                 totalMixCostSum += costCenter.DirectElectricityCost;
 

@@ -1,0 +1,73 @@
+﻿@model AddCostCenterViewModel
+@{
+    ViewData["Title"] = "Add";
+    //ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
+    //ViewData["AppWithoutHeader"] = true;
+    //ViewData["AppWithoutSidebar"] = true;
+    //ViewData["AppWithoutContainer"] = true;
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<!-- BEGIN Add Cost -->
+<div class="register">
+    <!-- BEGIN add-content -->
+    <div class="register-content">
+        <form method="post">
+            <input type="hidden" asp-for="@Model.Id" />
+            <h1 class="text-center">Add Cost Center</h1>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control form-control-lg fs-15px" placeholder="e.g Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AvgPowerConsumptionKwh" class="form-label"></label>
+                <input asp-for="AvgPowerConsumptionKwh" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="AvgPowerConsumptionKwh" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="FloorSpace" class="form-label"></label>
+                <input asp-for="FloorSpace" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="FloorSpace" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AnnualHours" class="form-label"></label>
+                <input asp-for="AnnualHours" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="AnnualHours" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AnnualChargeableHours" class="form-label"></label>
+                <input asp-for="AnnualChargeableHours" class="form-control form-control-lg fs-15px" />
+                <span asp-validation-for="AnnualChargeableHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentId"></label>
+                <select asp-for="DepartmentId" class="form-control">
+                    @foreach (var costType in Model.EmployeeDepartments)
+                    {
+                            <option value="@costType.Id">@costType.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input asp-for="IsUsingWater" class="form-check-input form-control-sm fs-15px mt-10px" />
+                <label asp-for="IsUsingWater" class="form-label mt-10px"></label>
+                <span asp-validation-for="IsUsingWater" class="text-danger"></span>
+            </div>          
+
+
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+    <!-- END Add-content -->
+</div>
+<!-- END Add -->
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

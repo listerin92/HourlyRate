@@ -84,16 +84,16 @@
 
             }
             <div class="menu-item">
-@*                <a href="/Identity/Account/Manage" class="menu-link">
-                    <span class="menu-icon">
-                        <i class="fa fa-fingerprint"></i>
-                    </span>
-                    <span class="menu-text">ASP Identity</span>
+                @*                <a href="/Identity/Account/Manage" class="menu-link">
+                <span class="menu-icon">
+                <i class="fa fa-fingerprint"></i>
+                </span>
+                <span class="menu-text">ASP Identity</span>
                 </a>*@
             </div>
             <div class="p-3 px-4 mt-auto hide-on-minified">
-                <a href="#" class="btn d-block w-100 btn-secondary font-weight-600 rounded-pill">
-                    <i class="fa fa-code-branch me-1 ms-n1 opacity-5"></i> Documentation
+                <a class="btn d-block w-100 btn-secondary font-weight-600 rounded-pill" asp-area="Admin" asp-controller="Settings" asp-action="Index" title="Settings">
+                    <i class="fa fa-code-branch me-1 ms-n1 opacity-5"></i> Settings
                 </a>
             </div>
         </div>

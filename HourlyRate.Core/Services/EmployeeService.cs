@@ -195,8 +195,7 @@ namespace HourlyRate.Core.Services
         public async Task<EmployeeViewModel> EmployeeDetailsById(int id, Guid companyId)
         {
             return await _repo.AllReadonly<Employee>()
-                .Where(e => e.IsEmployee && e.CompanyId == companyId)
-                .Where(e => e.Id == id)
+                .Where(e => e.IsEmployee && e.CompanyId == companyId && e.Id == id)
                 .Select(e => new EmployeeViewModel()
                 {
                     Id = id,

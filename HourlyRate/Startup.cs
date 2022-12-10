@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+
 namespace HourlyRate
 {
     public class Startup
@@ -45,9 +47,15 @@ namespace HourlyRate
                                     name: "Identity",
                                     areaName: "Identity",
                                     pattern: "Identity/{controller=Home}/{action=Index}");
+
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Dashboard}/{action=Index}");
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                
+                endpoints.MapControllerRoute(
+                     name: "default",
+                     pattern: "{controller=Dashboard}/{action=Index}");
+
                 endpoints.MapRazorPages();
             });
         }
