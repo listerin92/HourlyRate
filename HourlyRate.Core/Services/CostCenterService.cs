@@ -3,7 +3,6 @@ using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Core.Models.Employee;
 using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Models;
-using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
 namespace HourlyRate.Core.Services
@@ -142,13 +141,14 @@ namespace HourlyRate.Core.Services
 
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
+            var currentYear = ActiveFinancialYearId();
 
             var defaultCurrency = _context.Companies
                 .First(c => c.Id == companyId).DefaultCurrency;
 
 
             var allCostCentersUpdated = _context.CostCenters
-                .Where(c => c.CompanyId == companyId && c.Name != "None")
+                .Where(c => c.CompanyId == companyId && c.Name != "None" && c.FinancialYearId == currentYear)
                 .Select(c => new CostCenterViewModel()
                 {
                     Id = c.Id,

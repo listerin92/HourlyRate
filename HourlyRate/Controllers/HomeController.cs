@@ -1,13 +1,7 @@
 ﻿using HourlyRate.Core.Contracts;
-using HourlyRate.Core.Models;
-using HourlyRate.Core.Models.Employee;
-using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
-using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using HourlyRate.Core.Constants;
 
 namespace HourlyRate.Controllers;
 

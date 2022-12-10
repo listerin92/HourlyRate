@@ -28,7 +28,7 @@ namespace HourlyRate.Controllers
             _userManager = userManager;
             _logger = logger;
         }
-        public async Task<IActionResult> Index()    
+        public async Task<IActionResult> Index()
         {
             if (User.Identity?.IsAuthenticated ?? false)
             {
@@ -38,8 +38,7 @@ namespace HourlyRate.Controllers
 
                 return View(model);
             }
-            else
-                return View();
+            return View();
         }
         [HttpGet]
         public async Task<IActionResult> Add()

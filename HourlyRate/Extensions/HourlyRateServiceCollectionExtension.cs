@@ -1,4 +1,5 @@
-﻿using HourlyRate.Core.Contracts;
+﻿using HourlyRate.Areas.Admin.Data;
+using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Common;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ namespace HourlyRate.Extensions
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IGeneralCostService, GeneralCostService>();
             services.AddScoped<ICostCenterService, CostCenterService> ();
+            services.AddScoped<ISettingsService, SettingsService>();
             
             return services;
         }
