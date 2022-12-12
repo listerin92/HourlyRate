@@ -31,5 +31,11 @@ namespace HourlyRate.Core.Contracts
         decimal CurrentCostCenterRent(decimal rentCost, decimal totalRentSpace, CostCenter currentCostCenter);
 
         decimal TotalRentSpace(List<CostCenter> allCostCenters);
+        decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters);
+
+        decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
+
+        decimal RentCostTotal(DbSet<Expenses> allExpenses, int costCategoryId);
     }
 }

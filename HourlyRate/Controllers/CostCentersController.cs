@@ -107,6 +107,7 @@ namespace HourlyRate.Controllers
             var companyId = CompanyId();
 
             await _costCenterService.Edit(id, model, companyId);
+            await _costCenterService.UpdateAllCostCenters(companyId);
 
             return RedirectToAction(nameof(Index));
         }

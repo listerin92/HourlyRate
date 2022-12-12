@@ -420,7 +420,7 @@ namespace HourlyRate.Core.Services
             return currentCostCenter.IndirectWaterCost = 0;
         }
 
-        public static decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters)
+        public decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters)
         {
             var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
                                                              allCostCenters.Select(tp => tp.TotalPowerConsumption).Sum();
@@ -436,7 +436,7 @@ namespace HourlyRate.Core.Services
             return currentCostCenter.RentCost = currentCostCenter.FloorSpace * rentPerSqM;
         }
 
-        public static decimal RentCostTotal(DbSet<Expenses> allExpenses, int costCategoryId)
+        public decimal RentCostTotal(DbSet<Expenses> allExpenses, int costCategoryId)
         {
             var rentCost = allExpenses
                 .Where(c => c.CostCategoryId == costCategoryId)
@@ -455,7 +455,7 @@ namespace HourlyRate.Core.Services
             return totalRentSpace;
         }
 
-        private static decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+        public decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
             int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId)
         {
 
@@ -489,8 +489,8 @@ namespace HourlyRate.Core.Services
                                  && c.FinancialYearId == activeFinancialYearId)
                 .Select(r => r.Amount).Sum();
             currentCostCenter.DirectRepairCost = directRepairCost;
-            decimal totalDirectCostSum = directRepairCost;
-            return totalDirectCostSum;
+            return directRepairCost;
+             
         }
 
         /// <summary>
