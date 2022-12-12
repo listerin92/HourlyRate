@@ -39,5 +39,8 @@ namespace HourlyRate.Core.Contracts
         decimal RentCostTotal(DbSet<Expenses> allExpenses, int costCategoryId);
 
         Task Delete(int costCenterId, Guid companyId);
+
+        decimal CurrentCostCenterDirectRepairSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
     }
 }

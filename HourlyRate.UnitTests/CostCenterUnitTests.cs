@@ -24,7 +24,7 @@ namespace HourlyRate.UnitTests
         private AddCostCenterViewModel modelAddCostCenter;
         private AddCostCenterViewModel modelAddCostCenterToEmployee;
         private List<CostCenter> allCostCenters;
-        private CostCenter currentCostCenter;
+        private CostCenter costCenter1;
 
         private DbSet<Expenses> allExpenses;
 
@@ -60,6 +60,7 @@ namespace HourlyRate.UnitTests
                 new Expenses() { Id = 8, Amount = 1234, CostCategoryId = 1, FinancialYearId = 1},
                 new Expenses() { Id = 9, Amount = 9999, CostCategoryId = 8, FinancialYearId = 1, CostCenterId = 1},
                 new Expenses() { Id = 10, Amount = 5555, CostCategoryId = 6, FinancialYearId = 1},
+                new Expenses() { Id = 11, Amount = 1111, CostCategoryId = 7, FinancialYearId = 1, CostCenterId = 1},
 
             };
             employees = new List<Employee>()
@@ -123,9 +124,34 @@ namespace HourlyRate.UnitTests
                     MachinesPerHour = 0,
                     OverheadsPerHour = 0,
                     TotalHourlyCostRate = 0,
+                    IsActive = true,
                 }
             };
 
+            modelAddCostCenter = new AddCostCenterViewModel()
+            {
+                Id = 2,
+                Name = "SM103",
+                FloorSpace = 130,
+                AvgPowerConsumptionKwh = 80,
+                AnnualHours = 4000,
+                AnnualChargeableHours = 2000,
+                DepartmentId = 3,
+                IsUsingWater = true,
+                IsActive = true,
+            };
+            modelAddCostCenterToEmployee = new AddCostCenterViewModel()
+            {
+                Id = 3,
+                Name = "SM104",
+                FloorSpace = 130,
+                AvgPowerConsumptionKwh = 80,
+                AnnualHours = 4000,
+                AnnualChargeableHours = 2000,
+                DepartmentId = 4,
+                IsUsingWater = true,
+                IsActive = true,
+            };
 
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: "ExpensesInMemoryDb")
@@ -142,31 +168,10 @@ namespace HourlyRate.UnitTests
 
             service = new CostCenterService(_dbContext);
 
-            modelAddCostCenter = new AddCostCenterViewModel()
-            {
-                Id = 2,
-                Name = "SM103",
-                FloorSpace = 130,
-                AvgPowerConsumptionKwh = 80,
-                AnnualHours = 4000,
-                AnnualChargeableHours = 2000,
-                DepartmentId = 3,
-                IsUsingWater = true,
-            };
-            modelAddCostCenterToEmployee = new AddCostCenterViewModel()
-            {
-                Id = 3,
-                Name = "SM104",
-                FloorSpace = 130,
-                AvgPowerConsumptionKwh = 80,
-                AnnualHours = 4000,
-                AnnualChargeableHours = 2000,
-                DepartmentId = 4,
-                IsUsingWater = true,
-            };
+
             allCostCenters = _dbContext!.CostCenters.ToList();
             allExpenses = _dbContext!.Expenses;
-            currentCostCenter = _dbContext!.CostCenters.First(cc => cc.Id == 1);
+            costCenter1 = _dbContext!.CostCenters.First(cc => cc.Id == 1);
 
         }
 
@@ -201,19 +206,19 @@ namespace HourlyRate.UnitTests
 
             service.AddCostCenter(modelAddCostCenter, companyId);
 
-            var costCenter = _dbContext!.CostCenters.First(n => n.Id == 2);
+            var costCenter2 = _dbContext!.CostCenters.First(n => n.Id == 2);
 
-            Assert.That(actual: costCenter.Name, Is.EqualTo("SM103"));
-            Assert.That(actual: costCenter.FloorSpace, Is.EqualTo(130.0m));
-            Assert.That(actual: costCenter.AvgPowerConsumptionKwh, Is.EqualTo(80));
-            Assert.That(actual: costCenter.AnnualHours, Is.EqualTo(4000));
-            Assert.That(actual: costCenter.AnnualChargeableHours, Is.EqualTo(2000));
-            Assert.That(actual: costCenter.DepartmentId, Is.EqualTo(3));
-            Assert.That(actual: costCenter.IsUsingWater, Is.EqualTo(true));
-            Assert.That(actual: costCenter.DirectAllocatedStuff, Is.EqualTo(2));
-            Assert.That(actual: costCenter.DirectWagesCost, Is.EqualTo(1111));
-            Assert.That(actual: costCenter.CompanyId, Is.EqualTo(companyId));
-            Assert.That(actual: costCenter.FinancialYearId, Is.EqualTo(1));
+            Assert.That(actual: costCenter2.Name, Is.EqualTo("SM103"));
+            Assert.That(actual: costCenter2.FloorSpace, Is.EqualTo(130.0m));
+            Assert.That(actual: costCenter2.AvgPowerConsumptionKwh, Is.EqualTo(80));
+            Assert.That(actual: costCenter2.AnnualHours, Is.EqualTo(4000));
+            Assert.That(actual: costCenter2.AnnualChargeableHours, Is.EqualTo(2000));
+            Assert.That(actual: costCenter2.DepartmentId, Is.EqualTo(3));
+            Assert.That(actual: costCenter2.IsUsingWater, Is.EqualTo(true));
+            Assert.That(actual: costCenter2.DirectAllocatedStuff, Is.EqualTo(2));
+            Assert.That(actual: costCenter2.DirectWagesCost, Is.EqualTo(1111));
+            Assert.That(actual: costCenter2.CompanyId, Is.EqualTo(companyId));
+            Assert.That(actual: costCenter2.FinancialYearId, Is.EqualTo(1));
         }
 
         [Test]
@@ -281,9 +286,9 @@ namespace HourlyRate.UnitTests
         [Test]
         public void SetWaterCostTest()
         {
-            var directCostOfCcUsingWater = currentCostCenter.TotalDirectCosts;
+            var directCostOfCcUsingWater = costCenter1.TotalDirectCosts;
             var totalWaterCost = 1000m;
-            var result = service.SetWaterCost(currentCostCenter, directCostOfCcUsingWater, totalWaterCost);
+            var result = service.SetWaterCost(costCenter1, directCostOfCcUsingWater, totalWaterCost);
             Assert.That(actual: result, Is.EqualTo(expected: 1000m));
 
         }
@@ -294,7 +299,7 @@ namespace HourlyRate.UnitTests
             
             var totalRentSpace = service.TotalRentSpace(allCostCenters);
 
-            var result = service.CurrentCostCenterRent(100000, totalRentSpace, currentCostCenter);
+            var result = service.CurrentCostCenterRent(100000, totalRentSpace, costCenter1);
             Assert.That(actual: result, Is.EqualTo(expected: 100000m));
 
         }
@@ -320,9 +325,18 @@ namespace HourlyRate.UnitTests
         public void CurrentCostCenterDepreciationSumTest()
         {
             var result = service.CurrentCostCenterDepreciationSum(allExpenses, 1,
-                1, currentCostCenter, 8);
+                1, costCenter1, 8);
             Assert.That(actual: result, Is.EqualTo(expected: 9999m));
 
         }
+
+        [Test]
+        public void CurrentCostCenterDirectRepairSumTest()
+        {
+            var result = service.CurrentCostCenterDirectRepairSum(allExpenses, 1, 1, costCenter1, 7);
+            Assert.That(actual: result, Is.EqualTo(expected: 1111m));
+
+        }
+
     }
 }

@@ -487,7 +487,7 @@ namespace HourlyRate.Core.Services
         /// <param name="currentCostCenter"></param>
         /// <param name="costCategoryId"></param>
         /// <returns>Return Sum</returns>
-        private static decimal CurrentCostCenterDirectRepairSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+        public decimal CurrentCostCenterDirectRepairSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
             int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId)
         {
             var directRepairCost = allExpenses

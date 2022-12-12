@@ -47,7 +47,7 @@ else
                         <div class="dropdown-menu dropdown-menu-right" style="">
                             <a asp-controller="CostCenters" asp-action="Edit" class="dropdown-item" asp-route-id="@cc.Id">Edit Cost Center</a>
                             <form method="post" asp-controller="CostCenters" asp-action="Delete" asp-route-id="@cc.Id">
-                                <a onclick="$(this).closest('form').submit()"  class="dropdown-item">Delete Cost Center</a>
+                                <a onclick="$(this).closest('form').submit()" class="dropdown-item">Delete Cost Center</a>
                             </form>
                         </div>
                     </div>
