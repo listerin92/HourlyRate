@@ -49,17 +49,17 @@ else
                 @foreach (var employee in Model)
                 {
                     <div class="col-xl-2">
-                        @if (User.IsInRole(RoleConstants.Administrator))
-                        {
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" class="text-muted"><i class="fa fa-ellipsis-h"></i></a>
+                        @if (User.IsInRole(RoleConstants.Administrator))
+                        {
                                 <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
                                     @*<a href="#" class="dropdown-item">Details Not ready</a>*@
                                     <a asp-controller="Employee" asp-action="Edit" class="dropdown-item" asp-route-id="@employee.Id">Edit Employee</a>
                                     <a asp-controller="Employee" asp-action="Delete" class="dropdown-item" asp-route-id="@employee.Id">Delete Employee</a>
                                 </div>
-                            </div>
                         }
+                            </div>
                         <div class="card border-0 overflow-hidden rounded-0 rounded-top rounded-bottom" style="height: 230px">
                             <img src="/img/gallery/widget-cover-1.jpg" class="card-img rounded-0" alt="" />
                             <div class="card-img-overlay text-white text-center bg-gray-800 bg-opacity-50">

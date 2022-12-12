@@ -12,9 +12,13 @@ namespace HourlyRate.Core.Models.CostCenter
         [Required]
         public decimal FloorSpace { get; set; }
         public decimal AvgPowerConsumptionKwh { get; set; }
+        
         [Required]
+        [Display(Name = "AnnualHours")]
         public decimal AnnualHours { get; set; }
+
         [Required]
+        [Display(Name = "AnnualChargeableHours")]
         public decimal AnnualChargeableHours { get; set; }
 
         [Required]

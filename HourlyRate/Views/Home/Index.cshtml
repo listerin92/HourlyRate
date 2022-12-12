@@ -25,6 +25,8 @@ else
 @if (SignInManager.IsSignedIn(User))
 {
     <h1 class="page-header">Cost Centers Overview</h1>
+    <h2 class="text-center">@ViewBag.Title</h2>
+
 }
 
 <div class="card-header pb-2">
@@ -34,45 +36,48 @@ else
     }
 </div>
 <div>
-    <div class="card-deck" style="display: flex; flex-wrap: wrap; margin-left: -15px; margin-right: -15px;">
-        @foreach (var cc in Model)
-        {
-            <div class="card w-420px" style="display: flex; margin-left: 15px; margin-right: 15px;  margin-top: 15px;">
-                <div class="text-blue fs-16px mb-2" style="margin-left: 15px; margin-top: 15px"><b>@cc.Name</b></div>
-                <div class="card-body">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="card-deck" style="display: flex; flex-wrap: wrap; margin-left: -15px; margin-right: -15px;">
+            @foreach (var cc in Model)
+            {
+                <div class="card w-420px" style="display: flex; margin-left: 15px; margin-right: 15px;  margin-top: 15px;">
+                    <div class="text-blue fs-16px mb-2" style="margin-left: 15px; margin-top: 15px"><b>@cc.Name</b></div>
+                    <div class="card-body">
 
-                    <div class="list-group">
-                        <div class="list-group-item d-flex align-items-center">
-                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                <i class="fa fa-book fa-lg"></i>
-                            </div>
-                            <div class="flex-fill ps-3 pe-3">
-                                <div class="fw-600">Cost Center - General</div>
-                                <div class="fs-14px text-muted">Floor space(SqM) - @cc.FloorSpace.ToString("n0")</div>
-                                <div class="fs-14px text-muted">KWh - @cc.AvgPowerConsumptionKwh.ToString("n2")</div>
-                                <div class="fs-14px text-muted">Annual available hours - @cc.AnnualHours.ToString("n")</div>
-                                <div class="fs-14px text-muted">Annual chargeable hours - @cc.AnnualChargeableHours.ToString("n")</div>
-                                <div class="fs-14px text-muted">Total power consumption (kW) - @cc.TotalPowerConsumption.ToString("n2")</div>
-                                <div class="fs-14px text-muted">Direct Staff - @cc.DirectAllocatedStuff</div>
+                        <div class="list-group">
+                            <div class="list-group-item d-flex align-items-center">
+                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                                    <i class="fa fa-book fa-lg"></i>
+                                </div>
+                                <div class="flex-fill ps-3 pe-3">
+                                    <div class="fw-600">Cost Center - General</div>
+                                    <div class="fs-14px text-muted">Floor space(SqM) - @cc.FloorSpace.ToString("n0")</div>
+                                    <div class="fs-14px text-muted">KWh - @cc.AvgPowerConsumptionKwh.ToString("n2")</div>
+                                    <div class="fs-14px text-muted">Annual available hours - @cc.AnnualHours.ToString("n")</div>
+                                    <div class="fs-14px text-muted">Annual chargeable hours - @cc.AnnualChargeableHours.ToString("n")</div>
+                                    <div class="fs-14px text-muted">Total power consumption (kW) - @cc.TotalPowerConsumption.ToString("n2")</div>
+                                    <div class="fs-14px text-muted">Direct Staff - @cc.DirectAllocatedStuff</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="list-group">
-                        <div class="list-group-item d-flex align-items-center">
-                            <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
-                                <i class="fa fa-cogs fa-lg"></i>
-                            </div>
-                            <div class="flex-fill ps-3 pe-3">
-                                <div class="fs-14px text-muted">Wages Avg. per hour - @cc.WagesPerHour.ToString("n2")</div>
-                                <div class="fs-14px text-muted">Machines Avg. per hour - @cc.MachinesPerHour.ToString("n2")</div>
-                                <div class="fs-14px text-muted">Overheads Avg. per hour - @cc.OverheadsPerHour.ToString("n2")</div>
-                                <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate.ToString("n2")</div>
+                        <div class="list-group">
+                            <div class="list-group-item d-flex align-items-center">
+                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
+                                    <i class="fa fa-cogs fa-lg"></i>
+                                </div>
+                                <div class="flex-fill ps-3 pe-3">
+                                    <div class="fs-14px text-muted">Wages Avg. per hour - @cc.WagesPerHour.ToString("n2")</div>
+                                    <div class="fs-14px text-muted">Machines Avg. per hour - @cc.MachinesPerHour.ToString("n2")</div>
+                                    <div class="fs-14px text-muted">Overheads Avg. per hour - @cc.OverheadsPerHour.ToString("n2")</div>
+                                    <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate.ToString("n2")</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
 
 </div>

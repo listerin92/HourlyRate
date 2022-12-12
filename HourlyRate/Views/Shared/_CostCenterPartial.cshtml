@@ -1,6 +1,5 @@
 ﻿@model AddCostCenterViewModel
 @{
-    ViewData["Title"] = "Add";
     //ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
     //ViewData["AppWithoutHeader"] = true;
     //ViewData["AppWithoutSidebar"] = true;
@@ -16,7 +15,6 @@
     <div class="register-content">
         <form method="post">
             <input type="hidden" asp-for="@Model.Id" />
-            <h1 class="text-center">Add Cost Center</h1>
             <div class="mb-3">
                 <label asp-for="Name" class="form-label"></label>
                 <input asp-for="Name" class="form-control form-control-lg fs-15px" placeholder="e.g Name" />

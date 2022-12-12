@@ -89,7 +89,11 @@ namespace HourlyRate.Core.Services
             await _context.SaveChangesAsync();
 
         }
-
+        /// <summary>
+        /// Add Cost Center To Employee Expenses(Salary)
+        /// </summary>
+        /// <param name="ccModel"></param>
+        /// <returns></returns>
         public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
         {
             var getCostCenter = _context.CostCenters
@@ -108,6 +112,13 @@ namespace HourlyRate.Core.Services
 
         }
 
+        /// <summary>
+        /// Edit Cost Center
+        /// </summary>
+        /// <param name="costCenterId"></param>
+        /// <param name="model"></param>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         public async Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId)
         {
             var activeYearId = ActiveFinancialYearId();
@@ -135,12 +146,21 @@ namespace HourlyRate.Core.Services
 
         }
 
+        /// <summary>
+        /// Get Active Financial Year Id
+        /// </summary>
+        /// <returns></returns>
         public int ActiveFinancialYearId()
         {
             return _context.FinancialYears
                 .First(y => y.IsActive).Id;
         }
 
+        /// <summary>
+        /// Show All CostCenters
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
             var currentYear = ActiveFinancialYearId();
@@ -193,6 +213,11 @@ namespace HourlyRate.Core.Services
             return await allCostCentersUpdated;
         }
 
+        /// <summary>
+        /// Update/Recalculate All CostCenter
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         public async Task UpdateAllCostCenters(Guid companyId)
         {
             var activeFinancialYearId = ActiveFinancialYearId();
