@@ -35,7 +35,6 @@ namespace HourlyRate.Core.Services
         {
             var currentYear = ActiveFinancialYear();
 
-            //TODO: after seed need to set an active financial year, implement financial year in register!!!!
             var employees = _repo.AllReadonly<Expenses>()
                 .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId && y.Employee!.IsEmployee == true)
                 .Select(e => new EmployeeViewModelCurrency()

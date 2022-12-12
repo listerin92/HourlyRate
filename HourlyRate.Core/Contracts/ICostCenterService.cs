@@ -33,14 +33,22 @@ namespace HourlyRate.Core.Contracts
         decimal TotalRentSpace(List<CostCenter> allCostCenters);
         decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters);
 
-        decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+        decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses,
             int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
 
         decimal RentCostTotal(DbSet<Expenses> allExpenses, int costCategoryId);
 
         Task Delete(int costCenterId, Guid companyId);
 
-        decimal CurrentCostCenterDirectRepairSum(DbSet<Expenses> allExpenses, int currentCostCenterId,
+        decimal CurrentCostCenterDirectRepairSum(DbSet<Expenses> allExpenses,
             int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
+
+        decimal CurrentCostCenterConsumablesTotal(DbSet<Expenses> allExpenses, int activeFinancialYearId, CostCenter currentCostCenter);
+
+        decimal CurrentCostCenterEmployeesWagesSum(DbSet<Expenses> allExpenses,
+            int activeFinancialYearId, CostCenter currentCostCenter);
+
+        int CurrentEmployeeCount(DbSet<Expenses> allExpenses, int activeFinancialYearId,
+            CostCenter currentCostCenter);
     }
 }

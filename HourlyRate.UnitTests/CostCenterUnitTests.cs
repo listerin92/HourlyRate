@@ -50,8 +50,8 @@ namespace HourlyRate.UnitTests
 
             expenses = new List<Expenses>()
             {
-                new Expenses() { Id = 1, Amount = 500, EmployeeId = 1, FinancialYearId = 1},
-                new Expenses() { Id = 2, Amount = 500, EmployeeId = 2, FinancialYearId = 1},
+                new Expenses() { Id = 1, Amount = 500, EmployeeId = 1, FinancialYearId = 1,CostCenterId = 1},
+                new Expenses() { Id = 2, Amount = 500, EmployeeId = 2, FinancialYearId = 1,CostCenterId = 1},
                 new Expenses() { Id = 3, Amount = 500, EmployeeId = 3, FinancialYearId = 1},
                 new Expenses() { Id = 4, Amount = 500, EmployeeId = 4, FinancialYearId = 1,CostCenterId = 3},
                 new Expenses() { Id = 5, Amount = 611, EmployeeId = 5, FinancialYearId = 1,CostCenterId = 3},
@@ -61,6 +61,7 @@ namespace HourlyRate.UnitTests
                 new Expenses() { Id = 9, Amount = 9999, CostCategoryId = 8, FinancialYearId = 1, CostCenterId = 1},
                 new Expenses() { Id = 10, Amount = 5555, CostCategoryId = 6, FinancialYearId = 1},
                 new Expenses() { Id = 11, Amount = 1111, CostCategoryId = 7, FinancialYearId = 1, CostCenterId = 1},
+                new Expenses() { Id = 12, Amount = 2222, ConsumableId = 1, FinancialYearId = 1, CostCenterId = 1},
 
             };
             employees = new List<Employee>()
@@ -261,7 +262,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void GetSumOfTotalIndirectCostOfCcTest()
         {
-            
+
             var activeFinancialYearId = service.ActiveFinancialYearId();
 
             var result = service.GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 1);
@@ -281,6 +282,7 @@ namespace HourlyRate.UnitTests
         public void UpdateAllCostCentersTest()
         {
             service.UpdateAllCostCenters(companyId);
+            //TODO: What Assert in this one ??????
         }
 
         [Test]
@@ -296,7 +298,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentCostCenterRentTest()
         {
-            
+
             var totalRentSpace = service.TotalRentSpace(allCostCenters);
 
             var result = service.CurrentCostCenterRent(100000, totalRentSpace, costCenter1);
@@ -324,8 +326,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentCostCenterDepreciationSumTest()
         {
-            var result = service.CurrentCostCenterDepreciationSum(allExpenses, 1,
-                1, costCenter1, 8);
+            var result = service.CurrentCostCenterDepreciationSum(allExpenses, 1, costCenter1, 8);
             Assert.That(actual: result, Is.EqualTo(expected: 9999m));
 
         }
@@ -333,10 +334,33 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentCostCenterDirectRepairSumTest()
         {
-            var result = service.CurrentCostCenterDirectRepairSum(allExpenses, 1, 1, costCenter1, 7);
+            var result = service.CurrentCostCenterDirectRepairSum(allExpenses, 1, costCenter1, 7);
             Assert.That(actual: result, Is.EqualTo(expected: 1111m));
 
         }
 
+        [Test]
+        public void CurrentCostCenterConsumablesTotalTest()
+        {
+            var result = service.CurrentCostCenterConsumablesTotal(allExpenses, 1, costCenter1);
+            Assert.That(actual: result, Is.EqualTo(expected: 2222m));
+
+        }
+
+        [Test]
+        public void CurrentCostCenterEmployeesWagesSumTest()
+        {
+            var result = service.CurrentCostCenterEmployeesWagesSum(allExpenses, 1, costCenter1);
+            Assert.That(actual: result, Is.EqualTo(expected: 1000m));
+
+        }
+
+        [Test]
+        public void CurrentEmployeeCountTest()
+        {
+            var result = service.CurrentEmployeeCount(allExpenses, 1, costCenter1);
+            Assert.That(actual: result, Is.EqualTo(expected: 2));
+
+        }
     }
 }
