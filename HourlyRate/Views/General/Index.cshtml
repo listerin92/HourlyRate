@@ -17,18 +17,10 @@ else
     ViewData["Title"] = $"General Costs";
 }
 
-
-
-<ul class="breadcrumb">
-    <li class="breadcrumb-item"><a href="">Index</a></li>
-    <li class="breadcrumb-item active">STARTER PAGE</li>
-</ul>
-
 <h1 class="page-header">
     @if (SignInManager.IsSignedIn(User))
     {
         @UserManager.GetUserAsync(User).Result.CompanyName
-
     }
 
     Starting Page

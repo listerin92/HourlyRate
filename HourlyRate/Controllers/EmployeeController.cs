@@ -6,27 +6,30 @@ using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using HourlyRate.Core.Services;
 
 namespace HourlyRate.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly UserManager<UserIdentityExt> _userManager;
         private readonly IEmployeeService _employeeService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ICostCenterService _costCenterService;
+
 
         public EmployeeController(
             IEmployeeService employeeService
             , ILogger<HomeController> logger
             , UserManager<UserIdentityExt> userManager
             , RoleManager<IdentityRole> roleManager
+            , ICostCenterService costCenterService
             )
         {
             _roleManager = roleManager;
             _employeeService = employeeService;
             _userManager = userManager;
-            _logger = logger;
+            _costCenterService = costCenterService;
         }
         public async Task<IActionResult> Index()
         {
@@ -72,6 +75,7 @@ namespace HourlyRate.Controllers
             var amount = employee.Salary;
 
             await _employeeService.CreateExpensesByEmployee(employeeId, amount, companyId);
+            await _costCenterService.UpdateAllCostCenters(companyId);
 
             return RedirectToAction(nameof(Index), new { id = employeeId });
 
@@ -163,6 +167,8 @@ namespace HourlyRate.Controllers
             var companyId = user.Result.CompanyId;
             await _employeeService.Edit(model.Id, model, companyId);
 
+            await _costCenterService.UpdateAllCostCenters(companyId);
+
             return RedirectToAction(nameof(Index), new { model.Id });
         }
 
@@ -197,6 +203,9 @@ namespace HourlyRate.Controllers
 
 
             await _employeeService.Delete(id);
+            var companyId = GetCompanyId();
+
+            await _costCenterService.UpdateAllCostCenters(companyId);
 
             return RedirectToAction(nameof(Index));
         }

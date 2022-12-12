@@ -17,13 +17,6 @@ else
     ViewData["Title"] = $"Starting Page";
 }
 
-
-
-<ul class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">LAYOUT</a></li>
-    <li class="breadcrumb-item active"></li>
-</ul>
-
 @if (SignInManager.IsSignedIn(User))
 {
     <h1 class="page-header">Employes</h1>
@@ -51,7 +44,7 @@ else
                     <div class="col-xl-2">
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" class="text-muted"><i class="fa fa-ellipsis-h"></i></a>
-                        @if (User.IsInRole(RoleConstants.Administrator))
+                        @if (User!.IsInRole(RoleConstants.Administrator))
                         {
                                 <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
                                     @*<a href="#" class="dropdown-item">Details Not ready</a>*@

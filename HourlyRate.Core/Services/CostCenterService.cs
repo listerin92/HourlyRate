@@ -236,7 +236,6 @@ namespace HourlyRate.Core.Services
                 var totalDirectCostSum = 0.0m;
                 var totalMixCostSum = 0.0m;
                 var totalIndirectCostSum = 0.0m;
-                var currentCostCenterId = costCenter.Id;
 
 
                 //----------- Employees count wages
@@ -512,11 +511,11 @@ namespace HourlyRate.Core.Services
             return rentCost;
         }
 
-        public Task Delete(int costCenterId, Guid companyId)
+        public async Task Delete(int costCenterId, Guid companyId)
         {
             var currentCostCenter = _context.CostCenters.First(cc => cc.Id == costCenterId && cc.CompanyId == companyId);
             currentCostCenter.IsActive = false;
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>

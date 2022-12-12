@@ -15,13 +15,6 @@ else
     ViewData["Title"] = $"Starting Page";
 }
 
-
-
-<ul class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">LAYOUT</a></li>
-    <li class="breadcrumb-item active"></li>
-</ul>
-
 @if (SignInManager.IsSignedIn(User))
 {
     <h1 class="page-header">Cost Centers Overview</h1>
@@ -29,14 +22,14 @@ else
 
 }
 
-<div class="card-header pb-2">
+@*<div class="card-header pb-2">
     @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
     {
         <a asp-controller="Home" asp-action="Update" class="btn btn-primary btn-lg" role="button">Update Cost Center</a>
     }
-</div>
+</div>*@
 <div>
-    @if (User.Identity.IsAuthenticated)
+    @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
     {
         <div class="card-deck" style="display: flex; flex-wrap: wrap; margin-left: -15px; margin-right: -15px;">
             @foreach (var cc in Model)
@@ -67,10 +60,10 @@ else
                                     <i class="fa fa-cogs fa-lg"></i>
                                 </div>
                                 <div class="flex-fill ps-3 pe-3">
-                                    <div class="fs-14px text-muted">Wages Avg. per hour - @cc.WagesPerHour.ToString("n2")</div>
-                                    <div class="fs-14px text-muted">Machines Avg. per hour - @cc.MachinesPerHour.ToString("n2")</div>
-                                    <div class="fs-14px text-muted">Overheads Avg. per hour - @cc.OverheadsPerHour.ToString("n2")</div>
-                                    <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate.ToString("n2")</div>
+                                    <div class="fs-14px text-muted">Wages Avg. per hour - @cc.WagesPerHour.ToString("n2") @cc.DefaultCurrency.</div>
+                                    <div class="fs-14px text-muted">Machines Avg. per hour - @cc.MachinesPerHour.ToString("n2") @cc.DefaultCurrency.</div>
+                                    <div class="fs-14px text-muted">Overheads Avg. per hour - @cc.OverheadsPerHour.ToString("n2") @cc.DefaultCurrency.</div>
+                                    <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate.ToString("n2") @cc.DefaultCurrency.</div>
                                 </div>
                             </div>
                         </div>
@@ -79,5 +72,4 @@ else
             }
         </div>
     }
-
 </div>

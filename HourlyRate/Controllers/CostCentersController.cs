@@ -24,11 +24,9 @@ namespace HourlyRate.Controllers
         {
             if (User.Identity?.IsAuthenticated ?? false)
             {
-                var companyId = CompanyId();
-
-                await _costCenterService.UpdateAllCostCenters(companyId);
-
+                var companyId = GetCompanyId();
                 var model = await _costCenterService.AllCostCenters(companyId);
+
                 return View(model);
             }
             return View();
@@ -41,6 +39,7 @@ namespace HourlyRate.Controllers
             {
                 EmployeeDepartments = await _costCenterService.AllDepartments()
             };
+            
             return View(model);
         }
 
@@ -53,10 +52,11 @@ namespace HourlyRate.Controllers
                 return View(model);
 
             }
-            var companyId = CompanyId();
+            var companyId = GetCompanyId();
 
             await _costCenterService.AddCostCenter(model, companyId);
             await _costCenterService.AddCostCenterToEmployee(model);
+            await _costCenterService.UpdateAllCostCenters(companyId);
 
             return RedirectToAction(nameof(Index));
 
@@ -69,7 +69,7 @@ namespace HourlyRate.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            var companyId = CompanyId();
+            var companyId = GetCompanyId();
             var cc = await _costCenterService.GetCostCenterDetailsById(id, companyId);
 
             var model = new AddCostCenterViewModel()
@@ -104,7 +104,7 @@ namespace HourlyRate.Controllers
                 return View(model);
             }
 
-            var companyId = CompanyId();
+            var companyId = GetCompanyId();
 
             await _costCenterService.Edit(id, model, companyId);
             await _costCenterService.UpdateAllCostCenters(companyId);
@@ -121,10 +121,9 @@ namespace HourlyRate.Controllers
             }
 
             
-            var companyId = CompanyId();
+            var companyId = GetCompanyId();
 
             await _costCenterService.Delete(id, companyId);
-
 
             await _costCenterService.UpdateAllCostCenters(companyId);
             
@@ -132,7 +131,7 @@ namespace HourlyRate.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private Guid CompanyId()
+        private Guid GetCompanyId()
         {
             var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
             return companyId;
