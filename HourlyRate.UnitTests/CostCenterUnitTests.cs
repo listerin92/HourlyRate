@@ -20,6 +20,8 @@ namespace HourlyRate.UnitTests
         private IEnumerable<CostCenter>? costCenter;
         private ICostCenterService service;
         private Guid companyId;
+        private AddCostCenterViewModel modelAddCostCenter;
+        private AddCostCenterViewModel modelAddCostCenterToEmployee;
 
         [OneTimeSetUp]
         public void TestInitialize()
@@ -36,10 +38,11 @@ namespace HourlyRate.UnitTests
                 new Expenses() { Id = 1, Amount = 500, EmployeeId = 1, FinancialYearId = 1},
                 new Expenses() { Id = 2, Amount = 500, EmployeeId = 2, FinancialYearId = 1},
                 new Expenses() { Id = 3, Amount = 500, EmployeeId = 3, FinancialYearId = 1},
-                new Expenses() { Id = 4, Amount = 500, EmployeeId = 4, FinancialYearId = 1},
-                new Expenses() { Id = 5, Amount = 611, EmployeeId = 5, FinancialYearId = 1},
+                new Expenses() { Id = 4, Amount = 500, EmployeeId = 4, FinancialYearId = 1,CostCenterId = 3},
+                new Expenses() { Id = 5, Amount = 611, EmployeeId = 5, FinancialYearId = 1,CostCenterId = 3},
                 new Expenses() { Id = 6, Amount = 666, CostCategoryId = 1, FinancialYearId = 1},
                 new Expenses() { Id = 7, Amount = 666, CostCategoryId = 1, FinancialYearId = 1},
+                new Expenses() { Id = 8, Amount = 1234, CostCategoryId = 1, FinancialYearId = 1},
 
             };
             employees = new List<Employee>()
@@ -85,6 +88,7 @@ namespace HourlyRate.UnitTests
                     TotalMixCosts = 0,
                     IndirectHeatingCost =0,
                     TotalIndex = 0,
+                    IsUsingWater = true,
                     WaterTotalIndex = 0,
                     IndirectWaterCost = 0,
                     IndirectTaxes = 0,
@@ -121,6 +125,29 @@ namespace HourlyRate.UnitTests
 
             service = new CostCenterService(_dbContext);
 
+            modelAddCostCenter = new AddCostCenterViewModel()
+            {
+                Id = 2,
+                Name = "SM103",
+                FloorSpace = 130,
+                AvgPowerConsumptionKwh = 80,
+                AnnualHours = 4000,
+                AnnualChargeableHours = 2000,
+                DepartmentId = 3,
+                IsUsingWater = true,
+            };
+            modelAddCostCenterToEmployee = new AddCostCenterViewModel()
+            {
+                Id = 3,
+                Name = "SM104",
+                FloorSpace = 130,
+                AvgPowerConsumptionKwh = 80,
+                AnnualHours = 4000,
+                AnnualChargeableHours = 2000,
+                DepartmentId = 4,
+                IsUsingWater = true,
+            };
+
         }
 
 
@@ -150,19 +177,9 @@ namespace HourlyRate.UnitTests
         [Test]
         public void AddCostCenterTest()
         {
-            var model = new AddCostCenterViewModel()
-            {
-                Id = 2,
-                Name = "SM103",
-                FloorSpace = 130,
-                AvgPowerConsumptionKwh = 80,
-                AnnualHours = 4000,
-                AnnualChargeableHours = 2000,
-                DepartmentId = 3,
-                IsUsingWater = true,
-            };
 
-            service.AddCostCenter(model, companyId);
+
+            service.AddCostCenter(modelAddCostCenter, companyId);
 
             var costCenter = _dbContext.CostCenters.First(n => n.Id == 2);
 
@@ -189,19 +206,9 @@ namespace HourlyRate.UnitTests
         [Test]
         public void AddCostCenterToEmployeeTest()
         {
-            var model = new AddCostCenterViewModel()
-            {
-                Id = 3,
-                Name = "SM104",
-                FloorSpace = 130,
-                AvgPowerConsumptionKwh = 80,
-                AnnualHours = 4000,
-                AnnualChargeableHours = 2000,
-                DepartmentId = 4,
-                IsUsingWater = true,
-            };
 
-            service.AddCostCenterToEmployee(model);
+
+            service.AddCostCenterToEmployee(modelAddCostCenterToEmployee);
 
             var expensesByEmployeeForGivenCostCenter =
                 _dbContext!.Expenses
@@ -235,14 +242,15 @@ namespace HourlyRate.UnitTests
 
             var result = service.GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 1);
 
-            Assert.That(actual: result, Is.EqualTo(expected: 1332));
+            Assert.That(actual: result, Is.EqualTo(expected: 2566m));
         }
 
         [Test]
         public void SumTotalDirectCosts()
         {
             var allCostCenters = _dbContext!.CostCenters.ToList();
-            service.SumTotalDirectCosts(allCostCenters);
+            var result = service.SumTotalDirectCosts(allCostCenters);
+            Assert.That(actual: result, Is.EqualTo(expected: 279011m));
         }
 
 
@@ -253,13 +261,29 @@ namespace HourlyRate.UnitTests
         }
 
         [Test]
-        public void SetWaterCost()
+        public void SetWaterCostTest()
         {
             var currentCostCenter = _dbContext.CostCenters.First(cc => cc.Id == 1);
             var directCostOfCcUsingWater = currentCostCenter.TotalDirectCosts;
             var totalWaterCost = 1000m;
             var result = service.SetWaterCost(currentCostCenter, directCostOfCcUsingWater, totalWaterCost);
+            Assert.That(actual: result, Is.EqualTo(expected: 1000m));
+
         }
 
+        [Test]
+        public void CurrentCostCenterRentTest()
+        {
+            var activeFinancialYearId = service.ActiveFinancialYearId();
+
+            var allCostCenters = _dbContext!.CostCenters.ToList();
+
+            var currentCostCenter = _dbContext.CostCenters.First(cc => cc.Id == 1);
+            var totalRentSpace = service.TotalRentSpace(allCostCenters);
+
+            var result = service.CurrentCostCenterRent(100000, totalRentSpace, currentCostCenter);
+            Assert.That(actual: result, Is.EqualTo(expected: 58064.516129032258064516129032m));
+
+        }
     }
 }

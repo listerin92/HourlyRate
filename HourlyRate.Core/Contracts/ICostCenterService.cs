@@ -27,5 +27,9 @@ namespace HourlyRate.Core.Contracts
 
         decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
             decimal totalWaterCost);
+
+        decimal CurrentCostCenterRent(decimal rentCost, decimal totalRentSpace, CostCenter currentCostCenter);
+
+        decimal TotalRentSpace(List<CostCenter> allCostCenters);
     }
 }

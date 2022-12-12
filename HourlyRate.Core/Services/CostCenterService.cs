@@ -428,7 +428,7 @@ namespace HourlyRate.Core.Services
         }
 
 
-        public static decimal CurrentCostCenterRent(decimal rentCost, decimal totalRentSpace, CostCenter currentCostCenter)
+        public decimal CurrentCostCenterRent(decimal rentCost, decimal totalRentSpace, CostCenter currentCostCenter)
         {
 
             var rentPerSqM = rentCost / totalRentSpace;
@@ -449,7 +449,7 @@ namespace HourlyRate.Core.Services
         /// </summary>
         /// <param name="allCostCenters"></param>
         /// <returns>Return Rented Space in m2</returns>
-        private static decimal TotalRentSpace(List<CostCenter> allCostCenters)
+        public decimal TotalRentSpace(List<CostCenter> allCostCenters)
         {
             var totalRentSpace = allCostCenters.Select(r => r.FloorSpace).Sum();
             return totalRentSpace;
