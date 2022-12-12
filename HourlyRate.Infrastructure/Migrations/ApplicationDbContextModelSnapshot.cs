@@ -152,7 +152,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.CostCategories.CostCategory", b =>
@@ -174,7 +174,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("CostCategories");
+                    b.ToTable("CostCategories", (string)null);
 
                     b.HasData(
                         new
@@ -337,6 +337,9 @@ namespace HourlyRate.Infrastructure.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("money");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsUsingWater")
                         .HasColumnType("bit");
 
@@ -408,7 +411,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("FinancialYearId");
 
-                    b.ToTable("CostCenters");
+                    b.ToTable("CostCenters", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Costs.Consumable", b =>
@@ -435,7 +438,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("MachineId");
 
-                    b.ToTable("Consumables");
+                    b.ToTable("Consumables", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Costs.Machine", b =>
@@ -463,7 +466,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Machines");
+                    b.ToTable("Machines", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Employee.Department", b =>
@@ -485,7 +488,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Employee.Employee", b =>
@@ -529,7 +532,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("HourlyRate.Infrastructure.Data.Models.Employee.FinancialYear", b =>
@@ -548,7 +551,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FinancialYears");
+                    b.ToTable("FinancialYears", (string)null);
 
                     b.HasData(
                         new
@@ -714,7 +717,7 @@ namespace HourlyRate.Infrastructure.Migrations
 
                     b.HasIndex("FinancialYearId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expenses", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

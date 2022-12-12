@@ -112,6 +112,26 @@ namespace HourlyRate.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if ((await _costCenterService.Exists(id)) == false)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            
+            var companyId = CompanyId();
+
+            await _costCenterService.Delete(id, companyId);
+
+
+            await _costCenterService.UpdateAllCostCenters(companyId);
+            
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private Guid CompanyId()
         {
             var companyId = _userManager.GetUserAsync(User).Result.CompanyId;

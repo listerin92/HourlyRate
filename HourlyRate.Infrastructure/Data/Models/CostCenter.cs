@@ -196,5 +196,7 @@ namespace HourlyRate.Infrastructure.Data.Models
         [ForeignKey(nameof(Company))]
         public Guid CompanyId { get; set; }
         public Company Company { get; set; } = null!;
+
+        public bool IsActive { get; set; }
     }
 }

@@ -104,7 +104,7 @@ namespace HourlyRate.Core.Services
 
             _context.UpdateRange(employeeExpenses);
             await _context.SaveChangesAsync();
-            
+
         }
 
         public async Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId)
@@ -148,7 +148,7 @@ namespace HourlyRate.Core.Services
 
 
             var allCostCentersUpdated = _context.CostCenters
-                .Where(c => c.CompanyId == companyId && c.Name != "None" && c.FinancialYearId == currentYear)
+                .Where(c => c.CompanyId == companyId && c.Name != "None" && c.FinancialYearId == currentYear && c.IsActive == true)
                 .Select(c => new CostCenterViewModel()
                 {
                     Id = c.Id,
@@ -187,7 +187,7 @@ namespace HourlyRate.Core.Services
                     MachinesPerHour = c.MachinesPerHour,
                     OverheadsPerHour = c.OverheadsPerHour,
                     TotalHourlyCostRate = c.TotalHourlyCostRate,
-                }).ToListAsync();
+                    }).ToListAsync();
             return await allCostCentersUpdated;
         }
 
@@ -198,7 +198,8 @@ namespace HourlyRate.Core.Services
                 .Where(c =>
                             c.CompanyId == companyId &&
                             c.Name != "None" &&
-                            c.FinancialYearId == activeFinancialYearId).ToList();
+                            c.FinancialYearId == activeFinancialYearId &&
+                            c.IsActive == true).ToList();
 
             var allExpenses = _context.Expenses;
             var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses, activeFinancialYearId);
@@ -223,7 +224,6 @@ namespace HourlyRate.Core.Services
                     activeFinancialYearId, costCenter);
 
                 //---------- Repair
-                //TODO: All 10 predefined CostCategories can be Switched, but will not follow vertical flow of the View
 
                 totalDirectCostSum += CurrentCostCenterDirectRepairSum(allExpenses, currentCostCenterId,
                     activeFinancialYearId, costCenter, 7);
@@ -232,7 +232,7 @@ namespace HourlyRate.Core.Services
                 totalDirectCostSum += CurrentCostCenterDepreciationSum(allExpenses, currentCostCenterId,
                     activeFinancialYearId, costCenter, 8);
 
-                //TODO: need to change it exactly like the original business logic !!!!!!!!!!
+
                 //--------Total Direct Cost
                 costCenter.TotalDirectCosts = totalDirectCostSum;
 
@@ -444,6 +444,13 @@ namespace HourlyRate.Core.Services
             return rentCost;
         }
 
+        public Task Delete(int costCenterId, Guid companyId)
+        {
+            var currentCostCenter = _context.CostCenters.First(cc => cc.Id == costCenterId && cc.CompanyId == companyId);
+            currentCostCenter.IsActive = false;
+            return Task.CompletedTask;
+        }
+
         /// <summary>
         /// All CostCenter Rented Space in m2
         /// </summary>
@@ -490,7 +497,7 @@ namespace HourlyRate.Core.Services
                 .Select(r => r.Amount).Sum();
             currentCostCenter.DirectRepairCost = directRepairCost;
             return directRepairCost;
-             
+
         }
 
         /// <summary>

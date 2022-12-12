@@ -24,5 +24,7 @@ namespace HourlyRate.Core.Models.CostCenter
             = new List<EmployeeDepartmentModel>();
         [Display(Name = "Using Water")]
         public bool IsUsingWater { get; set; } = false;
+
+        public bool IsActive { get; set; } = true;
     }
 }
