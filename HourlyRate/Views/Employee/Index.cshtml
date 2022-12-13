@@ -49,7 +49,9 @@ else
                                 <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
                                     @*<a href="#" class="dropdown-item">Details Not ready</a>*@
                                     <a asp-controller="Employee" asp-action="Edit" class="dropdown-item" asp-route-id="@employee.Id">Edit Employee</a>
-                                    <a asp-controller="Employee" asp-action="Delete" class="dropdown-item" asp-route-id="@employee.Id">Delete Employee</a>
+                                    <form method="post" asp-controller="Employee" asp-action="Delete" asp-route-id="@employee.Id">
+                                        <a onclick="$(this).closest('form').submit()" class="dropdown-item">Delete Employee</a>
+                                    </form>
                                 </div>
                         }
                             </div>

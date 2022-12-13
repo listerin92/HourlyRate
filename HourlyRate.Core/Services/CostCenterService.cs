@@ -614,8 +614,10 @@ namespace HourlyRate.Core.Services
             CostCenter currentCostCenter)
         {
             var currentCostCenterEmployees = allExpenses
-                .Where(c => c.CostCenterId == currentCostCenter.Id && c.EmployeeId != null &&
-                            c.FinancialYearId == activeFinancialYearId);
+                .Where(c => c.CostCenterId == currentCostCenter.Id 
+                            && c.EmployeeId != null 
+                            && c.FinancialYearId == activeFinancialYearId
+                            && c.Employee.IsEmployee == true);
 
             return currentCostCenterEmployees.Count();
         }
