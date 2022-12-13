@@ -6,7 +6,6 @@ using HourlyRate.Infrastructure.Data.Models;
 using HourlyRate.Infrastructure.Data.Models.CostCategories;
 using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace HourlyRate.UnitTests
 {
@@ -61,7 +60,8 @@ namespace HourlyRate.UnitTests
                 new Expenses() { Id = 9, Amount = 9999, CostCategoryId = 8, FinancialYearId = 1, CostCenterId = 1},
                 new Expenses() { Id = 10, Amount = 5555, CostCategoryId = 6, FinancialYearId = 1},
                 new Expenses() { Id = 11, Amount = 1111, CostCategoryId = 7, FinancialYearId = 1, CostCenterId = 1},
-                new Expenses() { Id = 12, Amount = 2222, ConsumableId = 1, FinancialYearId = 1, CostCenterId = 1},
+                new Expenses() { Id = 12, Amount = 2222, ConsumableId = 1, FinancialYearId = 1, CostCenterId = 1, IsDeleted = false},
+                new Expenses() { Id = 13, Amount = 2222, ConsumableId = 1, FinancialYearId = 1, CostCenterId = 1, IsDeleted = true},
 
             };
             employees = new List<Employee>()
@@ -70,7 +70,7 @@ namespace HourlyRate.UnitTests
                 new Employee() {Id = 2, DepartmentId = 1, FirstName = "Petar", LastName = "Ivanov", JobTitle = "asdf", ImageUrl = ""},
                 new Employee() {Id = 3, DepartmentId = 2, FirstName = "Stefan", LastName = "Ivanov", JobTitle = "asdf", ImageUrl = ""},
                 new Employee() {Id = 4, DepartmentId = 3, FirstName = "Gancho", LastName = "Ivanov", JobTitle = "asdf", ImageUrl = ""},
-                new Employee() {Id = 5, DepartmentId = 3, FirstName = "Dragancho", LastName = "Ivanov", JobTitle = "asdf", ImageUrl = ""},
+                new Employee() {Id = 5, DepartmentId = 3, FirstName = "Dragancho", LastName = "Ivanov", JobTitle = "asdf", ImageUrl = "", IsEmployee = false},
             };
             departments = new List<Department>()
             {
