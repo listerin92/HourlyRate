@@ -1,4 +1,5 @@
 ﻿using HourlyRate.Core.Contracts;
+using HourlyRate.Core.Models.Employee;
 using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
@@ -27,6 +28,12 @@ namespace HourlyRate.Core.Services
                     Name = c.Name
                 })
                 .ToListAsync();
+        }
+
+        public async Task<bool> Exists(int id)
+        {
+            return await _repo.AllReadonly<Expenses>()
+                .AnyAsync(h => h.Id == id);
         }
 
         public async Task<IEnumerable<GeneralCostCenterViewModel>> AllCostCentersTypes()
@@ -90,6 +97,21 @@ namespace HourlyRate.Core.Services
 
         }
 
+        public async Task Edit(AddCostViewModel model, Guid companyId)
+        {
+            var activeFinancialYearId = ActiveFinancialYearId();
+            var generalCost = await _repo.GetByIdAsync<Expenses>(model.Id);
+
+            generalCost.Description = model.Description;
+            generalCost.Amount = model.Amount;
+            generalCost.CostCategoryId = model.CostCategoryId;
+            generalCost.CostCenterId = model.CostCenterId;
+            generalCost.CompanyId = companyId;
+            generalCost.FinancialYearId = activeFinancialYearId;
+
+            await _repo.SaveChangesAsync();
+        }
+
         public async Task<int> CreateCostCategory(AddCostCategoryViewModel model, Guid companyId)
         {
             var checkExist = _repo.AllReadonly<CostCategory>()
@@ -110,6 +132,22 @@ namespace HourlyRate.Core.Services
             await _repo.SaveChangesAsync();
             return costCategory.Id;
         }
+        public async Task<AddCostViewModel> GeneralCostDetailsById(int id, Guid companyId)
+        {
+            return await _repo.AllReadonly<Expenses>()
+                .Where(e => e.CompanyId == companyId && e.Id == id)
+                .Select(e => new AddCostViewModel()
+                {
+                    Id = id,
+                    Description = e.Description!,
+                    CostCategoryId = e.CostCategoryId,
+                    CostCenterId = e.CostCenterId,
+                    Amount = e.Amount,
+                })
+                .FirstAsync();
+        }
+
+
 
         private int ActiveFinancialYear()
         {
