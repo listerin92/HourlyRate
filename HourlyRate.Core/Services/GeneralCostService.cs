@@ -54,7 +54,7 @@ namespace HourlyRate.Core.Services
             var currentYear = ActiveFinancialYear();
 
             var allGeneralCost = await _repo.AllReadonly<Expenses>()
-               .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId && y.CostCategoryId != null)
+               .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId && y.CostCategoryId != null && y.IsDeleted == false)
                .Select(c => new CostViewModel()
                {
                    Id = c.Id,
@@ -63,7 +63,7 @@ namespace HourlyRate.Core.Services
                    Description = c.Description!,
                    DefaultCurrency = c.Company.DefaultCurrency,
                    CostCategoryName = c.CostCategories!.Name ?? "None",
-                   CostCenterName = c.CostCenter!.Name ?? "None"
+                   CostCenterName = c.CostCenter!.Name ?? "None",
                })
                .ToListAsync();
 
@@ -147,7 +147,12 @@ namespace HourlyRate.Core.Services
                 .FirstAsync();
         }
 
-
+        public async Task Delete(int generalCostId)
+        {
+            var generalCost = await _repo.GetByIdAsync<Expenses>(generalCostId);
+            generalCost.IsDeleted = true;
+            await _repo.SaveChangesAsync();
+        }
 
         private int ActiveFinancialYear()
         {

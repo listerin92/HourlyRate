@@ -1,4 +1,5 @@
 ﻿using HourlyRate.Core.Contracts;
+using HourlyRate.Core.Models.Employee;
 using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
@@ -157,10 +158,24 @@ namespace HourlyRate.Controllers
 
             await _costCenterService.UpdateAllCostCenters(companyId);
             return RedirectToAction(nameof(Index), new { model.Id });
-
-
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, AddCostViewModel model)
+        {
+            if ((await _generalCostService.Exists(id)) == false)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            await _generalCostService.Delete(id);
+            var companyId = GetCompanyId();
+
+            await _costCenterService.UpdateAllCostCenters(companyId);
+
+            return RedirectToAction(nameof(Index));
+        }
 
         private Guid GetCompanyId()
         {

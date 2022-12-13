@@ -51,7 +51,9 @@ else
                                 //TODO: Not Implemented Edit & Delete
                                 <div class="dropdown-menu dropdown-menu-right hide" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; -ms-transform: translate3d(0px, 21.3333px, 0px); -webkit-transform: translate3d(0px, 21.3333px, 0px); transform: translate3d(0px, 21.3333px, 0px);" data-popper-placement="bottom-start">
                                     <a asp-controller="General" asp-action="Edit" class="dropdown-item" asp-route-id="@cost.Id">Edit Cost</a>
-                                    <a asp-controller="General" asp-action="Delete" class="dropdown-item" asp-route-id="@cost.Id">Delete Delete</a>
+                                    <form method="post" asp-controller="General" asp-action="Delete" asp-route-id="@cost.Id">
+                                        <a onclick="$(this).closest('form').submit()" class="dropdown-item">Delete General Cost</a>
+                                    </form>
                                 </div>
                             }
                         </div>

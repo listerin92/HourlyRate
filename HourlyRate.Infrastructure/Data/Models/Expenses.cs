@@ -49,5 +49,6 @@ namespace HourlyRate.Infrastructure.Data.Models
         public int? CostCenterId { get; set; }
 
         public CostCenter? CostCenter { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

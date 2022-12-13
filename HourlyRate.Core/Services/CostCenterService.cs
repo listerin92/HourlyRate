@@ -461,7 +461,8 @@ namespace HourlyRate.Core.Services
         {
             var totalIndirectCost = allExpenses
                 .Where(c => c.CostCategoryId == costCategoryId
-                            && c.FinancialYearId == activeFinancialYearId)
+                            && c.FinancialYearId == activeFinancialYearId
+                            && c.IsDeleted == false)
                 .Select(r => r.Amount).Sum();
             return totalIndirectCost;
         }
@@ -536,7 +537,8 @@ namespace HourlyRate.Core.Services
             var directGeneraDepreciationCost = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                             && c.CostCategoryId == costCategoryId
-                            && c.FinancialYearId == activeFinancialYearId)
+                            && c.FinancialYearId == activeFinancialYearId
+                            && c.IsDeleted == false)
                 .Select(r => r.Amount).Sum();
 
             currentCostCenter.DirectDepreciationCost = directGeneraDepreciationCost;
@@ -559,7 +561,8 @@ namespace HourlyRate.Core.Services
             var directRepairCost = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                                  && c.CostCategoryId == costCategoryId
-                                 && c.FinancialYearId == activeFinancialYearId)
+                                 && c.FinancialYearId == activeFinancialYearId
+                                 && c.IsDeleted == false)
                 .Select(r => r.Amount).Sum();
             currentCostCenter.DirectRepairCost = directRepairCost;
             return directRepairCost;
@@ -579,6 +582,7 @@ namespace HourlyRate.Core.Services
             var currentCostGeneralConsumables = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id &&
                             c.ConsumableId != null &&
+                            c.IsDeleted == false &&
                             c.FinancialYearId == activeFinancialYearId);
 
             currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
@@ -590,8 +594,10 @@ namespace HourlyRate.Core.Services
             int activeFinancialYearId, CostCenter currentCostCenter)
         {
             var currentCostCenterEmployees = allExpenses
-                .Where(c => c.CostCenterId == currentCostCenter.Id && c.EmployeeId != null &&
-                            c.FinancialYearId == activeFinancialYearId);
+                .Where(c => c.CostCenterId == currentCostCenter.Id 
+                            && c.EmployeeId != null
+                            && c.FinancialYearId == activeFinancialYearId
+                            && c.Employee.IsEmployee == true);
             currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
             decimal totalDirectCostSum = currentCostCenter.DirectWagesCost;
             return totalDirectCostSum;

@@ -14,7 +14,7 @@ namespace HourlyRate.Core.Contracts
         Task<int> CreateCostCategory(AddCostCategoryViewModel model, Guid companyId);
         Task<AddCostViewModel> GeneralCostDetailsById(int id, Guid companyId);
         Task Edit(AddCostViewModel model, Guid companyId);
-
+        Task Delete(int generalCostId);
 
 
     }
