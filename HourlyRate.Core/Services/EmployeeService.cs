@@ -122,7 +122,9 @@ namespace HourlyRate.Core.Services
 
             try
             {
-                var matchedCostCenter = _dbContext.CostCenters.FirstOrDefault(c => c.DepartmentId == employee!.DepartmentId);
+                var matchedCostCenter = _dbContext.CostCenters
+                    .FirstOrDefault(c => c.DepartmentId == employee!.DepartmentId
+                    && c.FinancialYearId == activeFinancialYearId);
 
                 {
                     expense.EmployeeId = employeeId;

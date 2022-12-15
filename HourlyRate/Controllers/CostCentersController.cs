@@ -2,6 +2,7 @@
 using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
+using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,8 @@ namespace HourlyRate.Controllers
             {
                 var companyId = GetCompanyId();
                 var model = await _costCenterService.AllCostCenters(companyId);
+                await _costCenterService.UpdateAllCostCenters(companyId);
+
 
                 return View(model);
             }
@@ -35,11 +38,12 @@ namespace HourlyRate.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
+
             var model = new AddCostCenterViewModel()
             {
                 EmployeeDepartments = await _costCenterService.AllDepartments()
             };
-            
+
             return View(model);
         }
 
@@ -49,6 +53,8 @@ namespace HourlyRate.Controllers
 
             if (!ModelState.IsValid)
             {
+                model.EmployeeDepartments = await _costCenterService.AllDepartments();
+
                 return View(model);
 
             }
@@ -120,13 +126,13 @@ namespace HourlyRate.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            
+
             var companyId = GetCompanyId();
 
             await _costCenterService.Delete(id, companyId);
 
             await _costCenterService.UpdateAllCostCenters(companyId);
-            
+
 
             return RedirectToAction(nameof(Index));
         }

@@ -59,7 +59,7 @@ namespace HourlyRate.Core.Services
             var activeYearId = ActiveFinancialYearId();
 
 
-
+            //TODO: not checked for unique names of cost centers 
             var employeeNo = _context.Expenses
                 .Where(f => f.FinancialYearId == activeYearId)
                 .Count(e => e.Employee.DepartmentId == ccModel.DepartmentId);
@@ -101,6 +101,9 @@ namespace HourlyRate.Core.Services
         public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
         {
             var currentFinancialYearId = ActiveFinancialYearId();
+            
+            //TODO: not checked for unique names of cost centers it will not work for equal names.
+
             var getCostCenter = _context.CostCenters
                 .First(cc => cc.Name == ccModel.Name && cc.FinancialYearId == currentFinancialYearId);
 
@@ -237,7 +240,7 @@ namespace HourlyRate.Core.Services
             var allExpenses = _context.Expenses
                 .Where(e => e.FinancialYearId == activeFinancialYearId);
             var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses, activeFinancialYearId);
-
+            allCostCenters.Reverse();
             foreach (var costCenter in allCostCenters)
             {
                 var totalDirectCostSum = 0.0m;
@@ -488,9 +491,18 @@ namespace HourlyRate.Core.Services
         {
             if (currentCostCenter.IsUsingWater)
             {
-                currentCostCenter.WaterTotalIndex = tDirectCostOfCcUsingWater / currentCostCenter.TotalMixCosts;
-                return currentCostCenter.IndirectWaterCost =
-                    totalWaterCost / currentCostCenter.WaterTotalIndex;
+                try
+                {
+                    currentCostCenter.WaterTotalIndex = tDirectCostOfCcUsingWater / currentCostCenter.TotalMixCosts;
+                    return currentCostCenter.IndirectWaterCost =
+                        totalWaterCost / currentCostCenter.WaterTotalIndex;
+                }
+                catch (DivideByZeroException)
+                {
+
+                    currentCostCenter.WaterTotalIndex = 0;
+                    return currentCostCenter.IndirectWaterCost = 0;
+                }
 
             }
 
