@@ -17,9 +17,9 @@ namespace HourlyRate.Core.Contracts
         Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel);
         Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId);
         Task UpdateAllCostCenters(Guid companyId);
-        decimal TotalSalaryMaintenanceDepartment(DbSet<Expenses> allExpenses, int activeFinancialYearId);
+        decimal TotalSalaryMaintenanceDepartment(IQueryable<Expenses> allExpenses, int activeFinancialYearId);
 
-        decimal GetSumOfTotalIndirectCostOfCc(DbSet<Expenses> allExpenses, int activeFinancialYearId,
+        decimal GetSumOfTotalIndirectCostOfCc(IQueryable<Expenses> allExpenses, int activeFinancialYearId,
             int costCategoryId);
 
         int ActiveFinancialYearId();
@@ -33,22 +33,22 @@ namespace HourlyRate.Core.Contracts
         decimal TotalRentSpace(List<CostCenter> allCostCenters);
         decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters);
 
-        decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses,
+        decimal CurrentCostCenterDepreciationSum(IQueryable<Expenses> allExpenses,
             int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
 
-        decimal RentCostTotal(DbSet<Expenses> allExpenses, int costCategoryId);
+        decimal RentCostTotal(IQueryable<Expenses> allExpenses, int costCategoryId);
 
         Task Delete(int costCenterId, Guid companyId);
 
-        decimal CurrentCostCenterDirectRepairSum(DbSet<Expenses> allExpenses,
+        decimal CurrentCostCenterDirectRepairSum(IQueryable<Expenses> allExpenses,
             int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
 
-        decimal CurrentCostCenterConsumablesTotal(DbSet<Expenses> allExpenses, int activeFinancialYearId, CostCenter currentCostCenter);
+        decimal CurrentCostCenterConsumablesTotal(IQueryable<Expenses> allExpenses, int activeFinancialYearId, CostCenter currentCostCenter);
 
-        decimal CurrentCostCenterEmployeesWagesSum(DbSet<Expenses> allExpenses,
+        decimal CurrentCostCenterEmployeesWagesSum(IQueryable<Expenses> allExpenses,
             int activeFinancialYearId, CostCenter currentCostCenter);
 
-        int CurrentEmployeeCount(DbSet<Expenses> allExpenses, int activeFinancialYearId,
+        int CurrentEmployeeCount(IQueryable<Expenses> allExpenses, int activeFinancialYearId,
             CostCenter currentCostCenter);
     }
 }
