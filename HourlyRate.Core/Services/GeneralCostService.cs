@@ -38,8 +38,13 @@ namespace HourlyRate.Core.Services
 
         public async Task<IEnumerable<GeneralCostCenterViewModel>> AllCostCentersTypes()
         {
+            var activeFinancialYearId = ActiveFinancialYearId();
+
 
             return await _repo.AllReadonly<CostCenter>()
+                .Where(c => c.IsActive == true
+                         && c.FinancialYearId == activeFinancialYearId || c.FinancialYearId == 20)
+                
                 .OrderBy(c => c.Name)
                 .Select(c => new GeneralCostCenterViewModel()
                 {

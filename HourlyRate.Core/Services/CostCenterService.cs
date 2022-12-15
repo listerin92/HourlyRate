@@ -59,7 +59,9 @@ namespace HourlyRate.Core.Services
             var currentFinancialYearId = ActiveFinancialYearId();
 
             var getCostCenter = _context.CostCenters
-                .FirstOrDefault(cc => cc.Name == ccModel.Name && cc.FinancialYearId == currentFinancialYearId);
+                .FirstOrDefault(cc => cc.Name == ccModel.Name
+                                      && cc.FinancialYearId == currentFinancialYearId
+                                      && cc.IsActive == true);
 
             if (getCostCenter != null)
             {
@@ -111,11 +113,14 @@ namespace HourlyRate.Core.Services
             //TODO: not checked for unique names of cost centers it will not work for equal names.
 
             var getCostCenter = _context.CostCenters
-                .First(cc => cc.Name == ccModel.Name && cc.FinancialYearId == currentFinancialYearId);
+                .First(cc => cc.Name == ccModel.Name 
+                             && cc.FinancialYearId == currentFinancialYearId
+                             && cc.IsActive == true);
 
             var employeeExpenses = _context.Expenses
                 .Where(e => e.Employee!.Department!.Id == getCostCenter.DepartmentId
-                && e.FinancialYearId == currentFinancialYearId);
+                && e.FinancialYearId == currentFinancialYearId
+                && e.Employee.IsEmployee == true);
 
             foreach (var e in employeeExpenses)
             {
