@@ -306,11 +306,11 @@ namespace HourlyRate.Core.Services
                 }
 
                 //----WaterIndex - Total Direct Of CC Using Water / Current Total Direct 
-                var tDirectCostOfCcUsingWater = allCostCenters.Where(s => s.IsUsingWater == true)
+                var tDirectMixCostOfCcUsingWater = allCostCenters.Where(s => s.IsUsingWater == true)
                     .Sum(s => s.TotalMixCosts);
                 var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 1);
 
-                totalIndirectCostSum += SetWaterCost(costCenter, tDirectCostOfCcUsingWater, totalWaterCost);
+                totalIndirectCostSum += SetWaterCost(costCenter, tDirectMixCostOfCcUsingWater, totalWaterCost);
 
                 //-------Taxes
                 var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 10);

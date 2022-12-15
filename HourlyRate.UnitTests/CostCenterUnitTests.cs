@@ -104,7 +104,7 @@ namespace HourlyRate.UnitTests
                     TotalDirectCosts = 279011,
                     DirectElectricityCost = 0,
                     RentCost = 0,
-                    TotalMixCosts = 0,
+                    TotalMixCosts = 279011,
                     IndirectHeatingCost =0,
                     TotalIndex = 0,
                     IsUsingWater = true,
@@ -288,7 +288,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void SetWaterCostTest()
         {
-            var directCostOfCcUsingWater = costCenter1.TotalDirectCosts;
+            var directCostOfCcUsingWater = costCenter1.TotalMixCosts;
             var totalWaterCost = 1000m;
             var result = service.SetWaterCost(costCenter1, directCostOfCcUsingWater, totalWaterCost);
             Assert.That(actual: result, Is.EqualTo(expected: 1000m));
