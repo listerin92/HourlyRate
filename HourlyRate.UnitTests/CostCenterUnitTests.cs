@@ -25,7 +25,7 @@ namespace HourlyRate.UnitTests
         private List<CostCenter> allCostCenters;
         private CostCenter costCenter1;
 
-        private DbSet<Expenses> allExpenses;
+        private IQueryable<Expenses> allExpenses;
 
         [OneTimeSetUp]
         public void TestInitialize()
@@ -171,7 +171,8 @@ namespace HourlyRate.UnitTests
 
 
             allCostCenters = _dbContext!.CostCenters.ToList();
-            allExpenses = _dbContext!.Expenses;
+            allExpenses = _dbContext!.Expenses.Where(e => e.FinancialYearId == 1
+                                                          && e.IsDeleted == false);
             costCenter1 = _dbContext!.CostCenters.First(cc => cc.Id == 1);
 
         }
@@ -254,7 +255,7 @@ namespace HourlyRate.UnitTests
         {
 
 
-            var result = service.TotalSalaryMaintenanceDepartment(allExpenses, 1);
+            var result = service.TotalSalaryMaintenanceDepartment(allExpenses);
 
 
             Assert.That(actual: result, Is.EqualTo(expected: 1000));
@@ -265,7 +266,7 @@ namespace HourlyRate.UnitTests
 
             var activeFinancialYearId = service.ActiveFinancialYearId();
 
-            var result = service.GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 1);
+            var result = service.GetSumOfTotalIndirectCostOfCc(allExpenses, 1);
 
             Assert.That(actual: result, Is.EqualTo(expected: 2566m));
         }
@@ -326,7 +327,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentCostCenterDepreciationSumTest()
         {
-            var result = service.CurrentCostCenterDepreciationSum(allExpenses, 1, costCenter1, 8);
+            var result = service.CurrentCostCenterDepreciationSum(allExpenses,  costCenter1, 8);
             Assert.That(actual: result, Is.EqualTo(expected: 9999m));
 
         }
@@ -334,7 +335,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentCostCenterDirectRepairSumTest()
         {
-            var result = service.CurrentCostCenterDirectRepairSum(allExpenses, 1, costCenter1, 7);
+            var result = service.CurrentCostCenterDirectRepairSum(allExpenses,  costCenter1, 7);
             Assert.That(actual: result, Is.EqualTo(expected: 1111m));
 
         }
@@ -342,7 +343,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentCostCenterConsumablesTotalTest()
         {
-            var result = service.CurrentCostCenterConsumablesTotal(allExpenses, 1, costCenter1);
+            var result = service.CurrentCostCenterConsumablesTotal(allExpenses, costCenter1);
             Assert.That(actual: result, Is.EqualTo(expected: 2222m));
 
         }
@@ -350,7 +351,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentCostCenterEmployeesWagesSumTest()
         {
-            var result = service.CurrentCostCenterEmployeesWagesSum(allExpenses, 1, costCenter1);
+            var result = service.CurrentCostCenterEmployeesWagesSum(allExpenses, costCenter1);
             Assert.That(actual: result, Is.EqualTo(expected: 1000m));
 
         }
@@ -358,7 +359,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void CurrentEmployeeCountTest()
         {
-            var result = service.CurrentEmployeeCount(allExpenses, 1, costCenter1);
+            var result = service.CurrentEmployeeCount(allExpenses, costCenter1);
             Assert.That(actual: result, Is.EqualTo(expected: 2));
 
         }

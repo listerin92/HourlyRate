@@ -113,7 +113,7 @@ namespace HourlyRate.Core.Services
             //TODO: not checked for unique names of cost centers it will not work for equal names.
 
             var getCostCenter = _context.CostCenters
-                .First(cc => cc.Name == ccModel.Name 
+                .First(cc => cc.Name == ccModel.Name
                              && cc.FinancialYearId == currentFinancialYearId
                              && cc.IsActive == true);
 
@@ -190,7 +190,9 @@ namespace HourlyRate.Core.Services
 
 
             var allCostCentersUpdated = _context.CostCenters
-                .Where(c => c.CompanyId == companyId && c.Name != "None" && c.FinancialYearId == currentYear && c.IsActive == true)
+                .Where(c => c.CompanyId == companyId && c.Name != "None"
+                                                     && c.FinancialYearId == currentYear
+                                                     && c.IsActive == true)
                 .Select(c => new CostCenterViewModel()
                 {
                     Id = c.Id,
@@ -249,8 +251,9 @@ namespace HourlyRate.Core.Services
                             c.IsActive == true).ToList();
 
             var allExpenses = _context.Expenses
-                .Where(e => e.FinancialYearId == activeFinancialYearId);
-            var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses, activeFinancialYearId);
+                .Where(e => e.FinancialYearId == activeFinancialYearId
+                                    && e.IsDeleted == false);
+            var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses);
             allCostCenters.Reverse();
             foreach (var costCenter in allCostCenters)
             {
@@ -260,20 +263,20 @@ namespace HourlyRate.Core.Services
 
 
                 //----------- Employees count wages
-                costCenter.DirectAllocatedStuff = CurrentEmployeeCount(allExpenses, activeFinancialYearId, costCenter);
+                costCenter.DirectAllocatedStuff = CurrentEmployeeCount(allExpenses, costCenter);
 
                 //---------- EmployeesWages
-                totalDirectCostSum += CurrentCostCenterEmployeesWagesSum(allExpenses, activeFinancialYearId, costCenter);
+                totalDirectCostSum += CurrentCostCenterEmployeesWagesSum(allExpenses, costCenter);
 
                 //----------- Consumables
-                totalDirectCostSum += CurrentCostCenterConsumablesTotal(allExpenses, activeFinancialYearId, costCenter);
+                totalDirectCostSum += CurrentCostCenterConsumablesTotal(allExpenses, costCenter);
 
                 //---------- Repair
 
-                totalDirectCostSum += CurrentCostCenterDirectRepairSum(allExpenses, activeFinancialYearId, costCenter, 7);
+                totalDirectCostSum += CurrentCostCenterDirectRepairSum(allExpenses, costCenter, 7);
 
                 //----------- Direct Depreciation
-                totalDirectCostSum += CurrentCostCenterDepreciationSum(allExpenses, activeFinancialYearId, costCenter, 8);
+                totalDirectCostSum += CurrentCostCenterDepreciationSum(allExpenses, costCenter, 8);
 
 
                 //--------Total Direct Cost
@@ -289,7 +292,7 @@ namespace HourlyRate.Core.Services
                 //-----------Electricity
 
                 //All Electricity bills through the year
-                var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 2);
+                var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 2);
 
                 //indirectly calculated power consumption for a year 
                 costCenter.TotalPowerConsumption = costCenter.AnnualChargeableHours * costCenter.AvgPowerConsumptionKwh;
@@ -301,7 +304,7 @@ namespace HourlyRate.Core.Services
                 totalMixCostSum += costCenter.DirectElectricityCost;
 
                 //---------Heating
-                var heatingCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 9);
+                var heatingCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 9);
 
                 var heatingPerSqM = heatingCost / totalRentSpace;
                 costCenter.IndirectHeatingCost = costCenter.FloorSpace * heatingPerSqM;
@@ -325,12 +328,12 @@ namespace HourlyRate.Core.Services
                 //----WaterIndex - Total Direct Of CC Using Water / Current Total Direct 
                 var tDirectMixCostOfCcUsingWater = allCostCenters.Where(s => s.IsUsingWater == true)
                     .Sum(s => s.TotalMixCosts);
-                var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 1);
+                var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses,  1);
 
                 totalIndirectCostSum += SetWaterCost(costCenter, tDirectMixCostOfCcUsingWater, totalWaterCost);
 
                 //-------Taxes
-                var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 10);
+                var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses,  10);
                 try
                 {
                     costCenter.IndirectTaxes = taxCosts / costCenter.TotalIndex;
@@ -342,7 +345,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectTaxes;
 
                 // ---- Phones
-                var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 3);
+                var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses,  3);
                 try
                 {
                     costCenter.IndirectPhonesCost = phonesCosts / costCenter.TotalIndex;
@@ -354,7 +357,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectPhonesCost;
 
                 // -----Other
-                var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 4);
+                var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses,  4);
                 try
                 {
                     costCenter.IndirectOtherCost = otherCosts / costCenter.TotalIndex;
@@ -366,7 +369,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectOtherCost;
 
                 //------General Administration
-                var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 5);
+                var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses,  5);
                 try
                 {
                     costCenter.IndirectAdministrationWagesCost = administrationCost / costCenter.TotalIndex;
@@ -390,7 +393,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectMaintenanceWagesCost;
 
                 //---------- Indirect Depreciation
-                var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 11);
+                var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses,  11);
                 try
                 {
                     costCenter.IndirectDepreciationCost = indirectDepreciationCost / costCenter.TotalIndex;
@@ -472,20 +475,18 @@ namespace HourlyRate.Core.Services
             await _context.SaveChangesAsync();
         }
 
-        public decimal TotalSalaryMaintenanceDepartment(IQueryable<Expenses> allExpenses, int activeFinancialYearId)
+        public decimal TotalSalaryMaintenanceDepartment(IQueryable<Expenses> allExpenses)
         {
             var employeesFromMaintenanceDept = allExpenses
-                .Where(e => e.Employee!.Department.Name == "Maintenance"
-                            && e.FinancialYearId == activeFinancialYearId).ToList();
+                .Where(e => e.Employee!.Department.Name == "Maintenance").ToList();
 
             return employeesFromMaintenanceDept.Sum(s => s.Amount);
         }
 
-        public decimal GetSumOfTotalIndirectCostOfCc(IQueryable<Expenses> allExpenses, int activeFinancialYearId, int costCategoryId)
+        public decimal GetSumOfTotalIndirectCostOfCc(IQueryable<Expenses> allExpenses, int costCategoryId)
         {
             var totalIndirectCost = allExpenses
                 .Where(c => c.CostCategoryId == costCategoryId
-                            && c.FinancialYearId == activeFinancialYearId
                             && c.IsDeleted == false)
                 .Select(r => r.Amount).Sum();
             return totalIndirectCost;
@@ -564,13 +565,12 @@ namespace HourlyRate.Core.Services
         }
 
         public decimal CurrentCostCenterDepreciationSum(IQueryable<Expenses> allExpenses,
-            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId)
+             CostCenter currentCostCenter, int costCategoryId)
         {
 
             var directGeneraDepreciationCost = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                             && c.CostCategoryId == costCategoryId
-                            && c.FinancialYearId == activeFinancialYearId
                             && c.IsDeleted == false)
                 .Select(r => r.Amount).Sum();
 
@@ -589,12 +589,11 @@ namespace HourlyRate.Core.Services
         /// <param name="costCategoryId"></param>
         /// <returns>Return Sum</returns>
         public decimal CurrentCostCenterDirectRepairSum(IQueryable<Expenses> allExpenses,
-            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId)
+            CostCenter currentCostCenter, int costCategoryId)
         {
             var directRepairCost = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                                  && c.CostCategoryId == costCategoryId
-                                 && c.FinancialYearId == activeFinancialYearId
                                  && c.IsDeleted == false)
                 .Select(r => r.Amount).Sum();
             currentCostCenter.DirectRepairCost = directRepairCost;
@@ -610,13 +609,12 @@ namespace HourlyRate.Core.Services
         /// <param name="currentCostCenter"></param>
         /// <returns>Return Sum</returns>
         public decimal CurrentCostCenterConsumablesTotal(IQueryable<Expenses> allExpenses,
-            int activeFinancialYearId, CostCenter currentCostCenter)
+             CostCenter currentCostCenter)
         {
             var currentCostGeneralConsumables = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id &&
                             c.ConsumableId != null &&
-                            c.IsDeleted == false &&
-                            c.FinancialYearId == activeFinancialYearId);
+                            c.IsDeleted == false);
 
             currentCostCenter.DirectGeneraConsumablesCost = currentCostGeneralConsumables.Sum(c => c.Amount);
             decimal totalDirectCostSum = currentCostCenter.DirectGeneraConsumablesCost;
@@ -624,12 +622,11 @@ namespace HourlyRate.Core.Services
         }
 
         public decimal CurrentCostCenterEmployeesWagesSum(IQueryable<Expenses> allExpenses,
-            int activeFinancialYearId, CostCenter currentCostCenter)
+            CostCenter currentCostCenter)
         {
             var currentCostCenterEmployees = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                             && c.EmployeeId != null
-                            && c.FinancialYearId == activeFinancialYearId
                             && c.Employee.IsEmployee == true);
             currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
             decimal totalDirectCostSum = currentCostCenter.DirectWagesCost;
@@ -643,13 +640,12 @@ namespace HourlyRate.Core.Services
         /// <param name="activeFinancialYearId"></param>
         /// <param name="currentCostCenter"></param>
         /// <returns></returns>
-        public int CurrentEmployeeCount(IQueryable<Expenses> allExpenses, int activeFinancialYearId,
+        public int CurrentEmployeeCount(IQueryable<Expenses> allExpenses,
             CostCenter currentCostCenter)
         {
             var currentCostCenterEmployees = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                             && c.EmployeeId != null
-                            && c.FinancialYearId == activeFinancialYearId
                             && c.Employee.IsEmployee == true);
 
             return currentCostCenterEmployees.Count();

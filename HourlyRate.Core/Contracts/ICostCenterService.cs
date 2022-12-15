@@ -17,10 +17,9 @@ namespace HourlyRate.Core.Contracts
         Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel);
         Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId);
         Task UpdateAllCostCenters(Guid companyId);
-        decimal TotalSalaryMaintenanceDepartment(IQueryable<Expenses> allExpenses, int activeFinancialYearId);
+        decimal TotalSalaryMaintenanceDepartment(IQueryable<Expenses> allExpenses);
 
-        decimal GetSumOfTotalIndirectCostOfCc(IQueryable<Expenses> allExpenses, int activeFinancialYearId,
-            int costCategoryId);
+        decimal GetSumOfTotalIndirectCostOfCc(IQueryable<Expenses> allExpenses, int costCategoryId);
 
         int ActiveFinancialYearId();
         decimal SumTotalDirectMixCosts(List<CostCenter> allCostCenters);
@@ -33,22 +32,18 @@ namespace HourlyRate.Core.Contracts
         decimal TotalRentSpace(List<CostCenter> allCostCenters);
         decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters);
 
-        decimal CurrentCostCenterDepreciationSum(IQueryable<Expenses> allExpenses,
-            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
+        decimal CurrentCostCenterDepreciationSum(IQueryable<Expenses> allExpenses, CostCenter currentCostCenter, int costCategoryId);
 
         decimal RentCostTotal(IQueryable<Expenses> allExpenses, int costCategoryId);
 
         Task Delete(int costCenterId, Guid companyId);
 
-        decimal CurrentCostCenterDirectRepairSum(IQueryable<Expenses> allExpenses,
-            int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId);
+        decimal CurrentCostCenterDirectRepairSum(IQueryable<Expenses> allExpenses, CostCenter currentCostCenter, int costCategoryId);
 
-        decimal CurrentCostCenterConsumablesTotal(IQueryable<Expenses> allExpenses, int activeFinancialYearId, CostCenter currentCostCenter);
+        decimal CurrentCostCenterConsumablesTotal(IQueryable<Expenses> allExpenses, CostCenter currentCostCenter);
 
-        decimal CurrentCostCenterEmployeesWagesSum(IQueryable<Expenses> allExpenses,
-            int activeFinancialYearId, CostCenter currentCostCenter);
+        decimal CurrentCostCenterEmployeesWagesSum(IQueryable<Expenses> allExpenses, CostCenter currentCostCenter);
 
-        int CurrentEmployeeCount(IQueryable<Expenses> allExpenses, int activeFinancialYearId,
-            CostCenter currentCostCenter);
+        int CurrentEmployeeCount(IQueryable<Expenses> allExpenses, CostCenter currentCostCenter);
     }
 }
