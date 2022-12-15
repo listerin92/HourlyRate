@@ -43,9 +43,11 @@ namespace HourlyRate.Areas.Admin.Data
         {
             var oldFinancialYear =  _context.FinancialYears.First(f => f.IsActive);
             oldFinancialYear.IsActive = false;
+            _context.FinancialYears.Update(oldFinancialYear);
 
             var newFinancialYear = _context.FinancialYears.First(f => f.Id == id);
             newFinancialYear.IsActive = true;
+            _context.FinancialYears.Update(newFinancialYear);
 
             await _context.SaveChangesAsync();
 

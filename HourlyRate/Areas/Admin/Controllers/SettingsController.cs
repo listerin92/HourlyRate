@@ -38,9 +38,9 @@ namespace HourlyRate.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, FinancialYearsViewModel model)
+        public async Task<IActionResult> Edit(int id, FinancialYearsViewModel model)
         {
-            _settingsService.Edit(model.Id, model);
+           await _settingsService.Edit(model.Id, model);
 
             return RedirectToAction(nameof(Index), "Home", new { area = "" });
         }
