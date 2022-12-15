@@ -291,10 +291,8 @@ namespace HourlyRate.Core.Services
 
                 //-----------Electricity
 
-                //All Electricity bills through the year
                 var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 2);
 
-                //indirectly calculated power consumption for a year 
                 costCenter.TotalPowerConsumption = costCenter.AnnualChargeableHours * costCenter.AvgPowerConsumptionKwh;
 
                 var electricityPricePerKwhIndirectlyCalculated = ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
