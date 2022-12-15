@@ -60,7 +60,19 @@ namespace HourlyRate.Controllers
             }
             var companyId = GetCompanyId();
 
-            await _costCenterService.AddCostCenter(model, companyId);
+            try
+            {
+                await _costCenterService.AddCostCenter(model, companyId);
+            }
+            catch (ArgumentException)
+            {
+                ModelState.AddModelError(nameof(model.Name), "Name already exists");
+
+                model.EmployeeDepartments = await _costCenterService.AllDepartments();
+
+                return View(model);
+            }
+
             await _costCenterService.AddCostCenterToEmployee(model);
             await _costCenterService.UpdateAllCostCenters(companyId);
 

@@ -56,20 +56,26 @@ namespace HourlyRate.Core.Services
 
         public async Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId)
         {
-            var activeYearId = ActiveFinancialYearId();
+            var currentFinancialYearId = ActiveFinancialYearId();
 
+            var getCostCenter = _context.CostCenters
+                .FirstOrDefault(cc => cc.Name == ccModel.Name && cc.FinancialYearId == currentFinancialYearId);
 
-            //TODO: not checked for unique names of cost centers 
+            if (getCostCenter != null)
+            {
+                throw new ArgumentException("Name already exists");
+            }
+
             var employeeNo = _context.Expenses
-                .Where(f => f.FinancialYearId == activeYearId)
+                .Where(f => f.FinancialYearId == currentFinancialYearId)
                 .Count(e => e.Employee.DepartmentId == ccModel.DepartmentId);
 
             var employeSalary = _context.Expenses
                 .Where(e => e.Employee!.Department!.Id == ccModel.DepartmentId
-                && e.FinancialYearId == activeYearId)
+                && e.FinancialYearId == currentFinancialYearId)
                 .Sum(e => e.Amount);
 
-
+            //TODO: Check if departmentId is already assigned ?? 
             var costCenter = new CostCenter()
             {
                 Name = ccModel.Name,
@@ -82,7 +88,7 @@ namespace HourlyRate.Core.Services
                 DirectAllocatedStuff = employeeNo,
                 DirectWagesCost = employeSalary,
                 CompanyId = companyId,
-                FinancialYearId = activeYearId,
+                FinancialYearId = currentFinancialYearId,
                 IsActive = true,
 
             };
@@ -101,7 +107,7 @@ namespace HourlyRate.Core.Services
         public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
         {
             var currentFinancialYearId = ActiveFinancialYearId();
-            
+
             //TODO: not checked for unique names of cost centers it will not work for equal names.
 
             var getCostCenter = _context.CostCenters
