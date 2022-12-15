@@ -23,7 +23,7 @@ namespace HourlyRate.Core.Contracts
             int costCategoryId);
 
         int ActiveFinancialYearId();
-        decimal SumTotalDirectCosts(List<CostCenter> allCostCenters);
+        decimal SumTotalDirectMixCosts(List<CostCenter> allCostCenters);
 
         decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
             decimal totalWaterCost);

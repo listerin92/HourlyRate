@@ -17,7 +17,7 @@ namespace HourlyRate.Core.Services
         {
             _context = context;
         }
-
+        //TODO: To check for active Financial Year everywhere? added as a parameter to all service methods ?!
         public async Task<bool> Exists(int id)
         {
             return await _context.CostCenters
@@ -295,10 +295,10 @@ namespace HourlyRate.Core.Services
 
                 //--------Total Index - Total Direct Cost / Current Total Direct cost
 
-                var sumTotalDirectCosts = SumTotalDirectCosts(allCostCenters);
+                var sumTotalDirectMixCosts = SumTotalDirectMixCosts(allCostCenters);
                 try
                 {
-                    costCenter.TotalIndex = sumTotalDirectCosts / costCenter.TotalDirectCosts;
+                    costCenter.TotalIndex = sumTotalDirectMixCosts / costCenter.TotalMixCosts;
                 }
                 catch (DivideByZeroException)
                 {
@@ -307,7 +307,7 @@ namespace HourlyRate.Core.Services
 
                 //----WaterIndex - Total Direct Of CC Using Water / Current Total Direct 
                 var tDirectCostOfCcUsingWater = allCostCenters.Where(s => s.IsUsingWater == true)
-                    .Sum(s => s.TotalDirectCosts);
+                    .Sum(s => s.TotalMixCosts);
                 var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, activeFinancialYearId, 1);
 
                 totalIndirectCostSum += SetWaterCost(costCenter, tDirectCostOfCcUsingWater, totalWaterCost);
@@ -386,9 +386,9 @@ namespace HourlyRate.Core.Services
 
                 //--------- Total Costs
 
-                costCenter.TotalCosts = costCenter.TotalDirectCosts + costCenter.IndirectTotalCosts;
-
                 costCenter.IndirectTotalCosts = totalIndirectCostSum;
+                costCenter.TotalCosts = costCenter.TotalMixCosts + costCenter.IndirectTotalCosts;
+
 
                 //-------- Wages per Month
                 costCenter.WagesPerMonth =
@@ -474,9 +474,9 @@ namespace HourlyRate.Core.Services
             return totalIndirectCost;
         }
 
-        public decimal SumTotalDirectCosts(List<CostCenter> allCostCenters)
+        public decimal SumTotalDirectMixCosts(List<CostCenter> allCostCenters)
         {
-            var sumTotalDirectCosts = allCostCenters.Sum(s => s.TotalDirectCosts);
+            var sumTotalDirectCosts = allCostCenters.Sum(s => s.TotalMixCosts);
             return sumTotalDirectCosts;
         }
 
@@ -485,7 +485,7 @@ namespace HourlyRate.Core.Services
         {
             if (currentCostCenter.IsUsingWater)
             {
-                currentCostCenter.WaterTotalIndex = tDirectCostOfCcUsingWater / currentCostCenter.TotalDirectCosts;
+                currentCostCenter.WaterTotalIndex = tDirectCostOfCcUsingWater / currentCostCenter.TotalMixCosts;
                 return currentCostCenter.IndirectWaterCost =
                     totalWaterCost / currentCostCenter.WaterTotalIndex;
 

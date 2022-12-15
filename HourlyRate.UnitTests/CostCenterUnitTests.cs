@@ -273,7 +273,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void SumTotalDirectCosts()
         {
-            var result = service.SumTotalDirectCosts(allCostCenters);
+            var result = service.SumTotalDirectMixCosts(allCostCenters);
             Assert.That(actual: result, Is.EqualTo(expected: 279011m));
         }
 
