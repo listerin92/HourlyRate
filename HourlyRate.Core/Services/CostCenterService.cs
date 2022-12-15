@@ -60,11 +60,13 @@ namespace HourlyRate.Core.Services
 
 
 
-            var employeeNo = _context.Employees
-                .Count(e => e.DepartmentId == ccModel.DepartmentId);
+            var employeeNo = _context.Expenses
+                .Where(f => f.FinancialYearId == activeYearId)
+                .Count(e => e.Employee.DepartmentId == ccModel.DepartmentId);
 
             var employeSalary = _context.Expenses
-                .Where(e => e.Employee!.Department!.Id == ccModel.DepartmentId)
+                .Where(e => e.Employee!.Department!.Id == ccModel.DepartmentId
+                && e.FinancialYearId == activeYearId)
                 .Sum(e => e.Amount);
 
 
@@ -89,6 +91,8 @@ namespace HourlyRate.Core.Services
             await _context.SaveChangesAsync();
 
         }
+
+        
         /// <summary>
         /// Add Cost Center To Employee Expenses(Salary)
         /// </summary>
@@ -96,11 +100,13 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
         {
+            var currentFinancialYearId = ActiveFinancialYearId();
             var getCostCenter = _context.CostCenters
-                .First(cc => cc.Name == ccModel.Name);
+                .First(cc => cc.Name == ccModel.Name && cc.FinancialYearId == currentFinancialYearId);
 
             var employeeExpenses = _context.Expenses
-                .Where(e => e.Employee!.Department!.Id == getCostCenter.DepartmentId);
+                .Where(e => e.Employee!.Department!.Id == getCostCenter.DepartmentId
+                && e.FinancialYearId == currentFinancialYearId);
 
             foreach (var e in employeeExpenses)
             {
@@ -288,6 +294,7 @@ namespace HourlyRate.Core.Services
                 costCenter.TotalMixCosts = totalMixCostSum;
 
                 //--------Total Index - Total Direct Cost / Current Total Direct cost
+
                 var sumTotalDirectCosts = SumTotalDirectCosts(allCostCenters);
                 try
                 {
@@ -530,7 +537,7 @@ namespace HourlyRate.Core.Services
             return totalRentSpace;
         }
 
-        public decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses, 
+        public decimal CurrentCostCenterDepreciationSum(DbSet<Expenses> allExpenses,
             int activeFinancialYearId, CostCenter currentCostCenter, int costCategoryId)
         {
 
@@ -594,7 +601,7 @@ namespace HourlyRate.Core.Services
             int activeFinancialYearId, CostCenter currentCostCenter)
         {
             var currentCostCenterEmployees = allExpenses
-                .Where(c => c.CostCenterId == currentCostCenter.Id 
+                .Where(c => c.CostCenterId == currentCostCenter.Id
                             && c.EmployeeId != null
                             && c.FinancialYearId == activeFinancialYearId
                             && c.Employee.IsEmployee == true);
@@ -614,8 +621,8 @@ namespace HourlyRate.Core.Services
             CostCenter currentCostCenter)
         {
             var currentCostCenterEmployees = allExpenses
-                .Where(c => c.CostCenterId == currentCostCenter.Id 
-                            && c.EmployeeId != null 
+                .Where(c => c.CostCenterId == currentCostCenter.Id
+                            && c.EmployeeId != null
                             && c.FinancialYearId == activeFinancialYearId
                             && c.Employee.IsEmployee == true);
 
