@@ -1,8 +1,6 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.CostCenter;
-using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
-using HourlyRate.Infrastructure.Data.Models.Employee;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +19,8 @@ namespace HourlyRate.Controllers
             _costCenterService = costCenterService;
             _userManager = userManager;
         }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Index()
         {
             if (User.Identity?.IsAuthenticated ?? false)
@@ -48,6 +48,7 @@ namespace HourlyRate.Controllers
         }
 
         [HttpPost]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Add(AddCostCenterViewModel model)
         {
 

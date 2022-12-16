@@ -141,7 +141,7 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId)
         {
-
+            //TODO: Bug, need to calculated indexes in add otherwise need a second update
             var costCenter = _context.CostCenters
                 .Where(costCenter => costCenter.CompanyId == companyId && costCenter.Id == costCenterId)
                 .Select(costCenter => new CostCenter()
@@ -161,6 +161,7 @@ namespace HourlyRate.Core.Services
 
             _context.CostCenters.Update(costCenter);
             await _context.SaveChangesAsync();
+
 
 
         }
