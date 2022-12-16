@@ -1,8 +1,12 @@
 ﻿using HourlyRate.Core.Contracts;
+using HourlyRate.Core.Models;
 using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Infrastructure.Data.Models.Account;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace HourlyRate.Controllers
 {
@@ -10,12 +14,15 @@ namespace HourlyRate.Controllers
     {
         private readonly UserManager<UserIdentityExt> _userManager;
         private readonly ICostCenterService _costCenterService;
+        private readonly ILogger _logger;
+
         public CostCentersController(
              ICostCenterService costCenterService
             , ILogger<CostCentersController> logger
             , UserManager<UserIdentityExt> userManager
             )
         {
+            _logger = logger;
             _costCenterService = costCenterService;
             _userManager = userManager;
         }
@@ -154,6 +161,16 @@ namespace HourlyRate.Controllers
         {
             var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
             return companyId;
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            var feature = this.HttpContext.Features.Get<IExceptionHandlerFeature>();
+
+            _logger.LogError(feature.Error, "TraceIdentifier: {0}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
+
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
