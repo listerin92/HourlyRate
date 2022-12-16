@@ -108,7 +108,7 @@ namespace HourlyRate.UnitTests
                     IndirectHeatingCost =0,
                     TotalIndex = 0,
                     IsUsingWater = true,
-                    WaterTotalIndex = 0,
+                    WaterTotalIndex = 1,
                     IndirectWaterCost = 0,
                     IndirectTaxes = 0,
                     IndirectPhonesCost = 0,
@@ -235,7 +235,7 @@ namespace HourlyRate.UnitTests
         {
 
 
-            service.AddCostCenterToEmployee(modelAddCostCenterToEmployee);
+            service.AddCostCenterToEmployeeExpenses(modelAddCostCenterToEmployee);
 
             var expensesByEmployeeForGivenCostCenter =
                 _dbContext!.Expenses
@@ -289,9 +289,8 @@ namespace HourlyRate.UnitTests
         [Test]
         public void SetWaterCostTest()
         {
-            var directCostOfCcUsingWater = costCenter1.TotalMixCosts;
             var totalWaterCost = 1000m;
-            var result = service.SetWaterCost(costCenter1, directCostOfCcUsingWater, totalWaterCost);
+            var result = service.SetWaterCost(costCenter1, totalWaterCost);
             Assert.That(actual: result, Is.EqualTo(expected: 1000m));
 
         }

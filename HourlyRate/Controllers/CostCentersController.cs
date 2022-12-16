@@ -71,6 +71,9 @@ namespace HourlyRate.Controllers
             try
             {
                 await _costCenterService.AddCostCenter(model, companyId);
+                await _costCenterService.AddCostCenterToEmployeeExpenses(model);
+                await _costCenterService.UpdateAllCostCenters(companyId);
+                await _costCenterService.UpdateAllCostCenters(companyId); //TODO: need to fix this
             }
             catch (ArgumentException)
             {
@@ -81,8 +84,6 @@ namespace HourlyRate.Controllers
                 return View(model);
             }
 
-            await _costCenterService.AddCostCenterToEmployee(model);
-            await _costCenterService.UpdateAllCostCenters(companyId);
 
             return RedirectToAction(nameof(Index));
 

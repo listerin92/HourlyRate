@@ -14,7 +14,7 @@ namespace HourlyRate.Core.Contracts
 
         Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId);
         Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId);
-        Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel);
+        Task AddCostCenterToEmployeeExpenses(AddCostCenterViewModel ccModel);
         Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId);
         Task UpdateAllCostCenters(Guid companyId);
         decimal TotalSalaryMaintenanceDepartment(IQueryable<Expenses> allExpenses);
@@ -24,8 +24,7 @@ namespace HourlyRate.Core.Contracts
         int ActiveFinancialYearId();
         decimal SumTotalDirectMixCosts(List<CostCenter> allCostCenters);
 
-        decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
-            decimal totalWaterCost);
+        decimal SetWaterCost(CostCenter currentCostCenter, decimal totalWaterCost);
 
         decimal CurrentCostCenterRent(decimal rentCost, decimal totalRentSpace, CostCenter currentCostCenter);
 

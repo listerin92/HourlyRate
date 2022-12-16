@@ -57,7 +57,7 @@ namespace HourlyRate.Core.Services
 
         public async Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId)
         {
-            
+
 
             var getCostCenter = _context.CostCenters
                 .FirstOrDefault(cc => cc.Name == ccModel.Name
@@ -107,9 +107,9 @@ namespace HourlyRate.Core.Services
         /// </summary>
         /// <param name="ccModel"></param>
         /// <returns></returns>
-        public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
+        public async Task AddCostCenterToEmployeeExpenses(AddCostCenterViewModel ccModel)
         {
-            
+
             //Unique name of cost center is checked when is created
             var getCostCenter = _context.CostCenters
                 .First(cc => cc.Name == ccModel.Name
@@ -239,7 +239,7 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task UpdateAllCostCenters(Guid companyId)
         {
-            
+
             var allCostCenters = _context.CostCenters
                 .Where(c =>
                             c.CompanyId == companyId &&
@@ -250,7 +250,7 @@ namespace HourlyRate.Core.Services
             var allExpenses = _context.Expenses
                 .Where(e => e.FinancialYearId == _currentFinancialYearId
                                     && e.IsDeleted == false);
-            allCostCenters.Reverse();
+
             foreach (var costCenter in allCostCenters)
             {
                 var totalDirectCostSum = 0.0m;
@@ -267,7 +267,7 @@ namespace HourlyRate.Core.Services
                 //3---------- Repair
 
                 totalDirectCostSum += CurrentCostCenterDirectRepairSum(allExpenses, costCenter, 7);
-                
+
                 //4----------- Consumables
                 totalDirectCostSum += CurrentCostCenterConsumablesTotal(allExpenses, costCenter);
 
@@ -308,7 +308,6 @@ namespace HourlyRate.Core.Services
                 //10--------------Total Mix Cost
                 costCenter.TotalMixCosts = totalMixCostSum + totalDirectCostSum;
 
-                
                 //11--------Total Index - Total Direct Cost / Current Total Direct cost
                 //TODO: current cost center TotalMixCosts and TotalWaterIndex is not written in the db on newly crated cc
 
@@ -327,10 +326,12 @@ namespace HourlyRate.Core.Services
                 var tDirectMixCostOfCcUsingWater = allCostCenters
                     .Where(s => s.IsUsingWater == true)
                     .Sum(s => s.TotalMixCosts);
-
+                costCenter.WaterTotalIndex = tDirectMixCostOfCcUsingWater / costCenter.TotalMixCosts;
                 var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 1);
+
+
                 //13--- Water Cost
-                totalIndirectCostSum += SetWaterCost(costCenter, tDirectMixCostOfCcUsingWater, totalWaterCost);
+                totalIndirectCostSum += SetWaterCost(costCenter, totalWaterCost);
 
                 //14-------Taxes
                 var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 10);
@@ -342,6 +343,7 @@ namespace HourlyRate.Core.Services
                 {
                     costCenter.IndirectTaxes = 0;
                 }
+
                 totalIndirectCostSum += costCenter.IndirectTaxes;
 
                 //15---- Phones
@@ -354,6 +356,7 @@ namespace HourlyRate.Core.Services
                 {
                     costCenter.IndirectPhonesCost = 0;
                 }
+
                 totalIndirectCostSum += costCenter.IndirectPhonesCost;
 
                 //16-----Other
@@ -366,6 +369,7 @@ namespace HourlyRate.Core.Services
                 {
                     costCenter.IndirectOtherCost = 0;
                 }
+
                 totalIndirectCostSum += costCenter.IndirectOtherCost;
 
                 //17------General Administration
@@ -378,6 +382,7 @@ namespace HourlyRate.Core.Services
                 {
                     costCenter.IndirectAdministrationWagesCost = 0;
                 }
+
                 totalIndirectCostSum += costCenter.IndirectAdministrationWagesCost;
 
 
@@ -392,6 +397,7 @@ namespace HourlyRate.Core.Services
                 {
                     costCenter.IndirectMaintenanceWagesCost = 0;
                 }
+
                 totalIndirectCostSum += costCenter.IndirectMaintenanceWagesCost;
 
                 //19---------- Indirect Depreciation
@@ -404,6 +410,7 @@ namespace HourlyRate.Core.Services
                 {
                     costCenter.IndirectDepreciationCost = 0;
                 }
+
                 totalIndirectCostSum += costCenter.IndirectDepreciationCost;
 
                 //20--------- Total Costs
@@ -421,9 +428,9 @@ namespace HourlyRate.Core.Services
                 //--------Machine per Month
                 costCenter.MachinesPerMonth =
                     (costCenter.DirectRepairCost +
-                    costCenter.DirectGeneraConsumablesCost +
-                    costCenter.DirectDepreciationCost +
-                    costCenter.IndirectDepreciationCost) / 12;
+                     costCenter.DirectGeneraConsumablesCost +
+                     costCenter.DirectDepreciationCost +
+                     costCenter.IndirectDepreciationCost) / 12;
 
                 //---------- Overheads per Month
                 costCenter.OverheadsPerMonth =
@@ -469,9 +476,10 @@ namespace HourlyRate.Core.Services
                     costCenter.OverheadsPerHour;
 
                 _context.CostCenters.Update(costCenter);
-            }
 
+            }
             await _context.SaveChangesAsync();
+
         }
 
         public decimal TotalSalaryMaintenanceDepartment(IQueryable<Expenses> allExpenses)
@@ -497,14 +505,12 @@ namespace HourlyRate.Core.Services
             return sumTotalDirectCosts;
         }
 
-        public decimal SetWaterCost(CostCenter currentCostCenter, decimal tDirectCostOfCcUsingWater,
-            decimal totalWaterCost)
+        public decimal SetWaterCost(CostCenter currentCostCenter, decimal totalWaterCost)
         {
             if (currentCostCenter.IsUsingWater)
             {
                 try
                 {
-                    currentCostCenter.WaterTotalIndex = tDirectCostOfCcUsingWater / currentCostCenter.TotalMixCosts;
                     return currentCostCenter.IndirectWaterCost =
                         totalWaterCost / currentCostCenter.WaterTotalIndex;
                 }
@@ -563,6 +569,13 @@ namespace HourlyRate.Core.Services
             return totalRentSpace;
         }
 
+        /// <summary>
+        /// Calculate CurrentCostCenter Direct Depreciation Sum
+        /// </summary>
+        /// <param name="allExpenses"></param>
+        /// <param name="currentCostCenter"></param>
+        /// <param name="costCategoryId"></param>
+        /// <returns>Return CurrentCostCenter Direct Depreciation Sum</returns>
         public decimal CurrentCostCenterDepreciationSum(IQueryable<Expenses> allExpenses,
              CostCenter currentCostCenter, int costCategoryId)
         {
@@ -583,7 +596,6 @@ namespace HourlyRate.Core.Services
         /// Calculate All Cost of Repairs Directly assign to Current Cost Center
         /// </summary>
         /// <param name="allExpenses"></param>
-        /// <param name="activeFinancialYearId"></param>
         /// <param name="currentCostCenter"></param>
         /// <param name="costCategoryId"></param>
         /// <returns>Return Sum</returns>
@@ -620,6 +632,12 @@ namespace HourlyRate.Core.Services
             return totalDirectCostSum;
         }
 
+        /// <summary>
+        /// Calculate CurrentCostCenter Employee Wages
+        /// </summary>
+        /// <param name="allExpenses"></param>
+        /// <param name="currentCostCenter"></param>
+        /// <returns>Return CurrentCostCenter Total Wages</returns>
         public decimal CurrentCostCenterEmployeesWagesSum(IQueryable<Expenses> allExpenses,
             CostCenter currentCostCenter)
         {
