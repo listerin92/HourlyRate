@@ -71,7 +71,7 @@ namespace HourlyRate.Core.Services
             return await _repo.AllReadonly<Department>()
                 .AnyAsync(c => c.Id == departmentId);
         }
-
+        //
         public async Task<int> CreateEmployee(EmployeeViewModel model, Guid companyId)
         {
             var employee = new Employee()

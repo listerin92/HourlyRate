@@ -38,7 +38,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromSeconds(5);
     options.Cookie.HttpOnly = true;
 });
-
+builder.Services.AddResponseCaching();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("My Policy", policy =>
@@ -64,6 +64,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseResponseCaching();
 
 app.UseRouting();
 

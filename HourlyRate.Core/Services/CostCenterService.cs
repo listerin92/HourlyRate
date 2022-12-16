@@ -10,14 +10,15 @@ namespace HourlyRate.Core.Services
     public class CostCenterService : ICostCenterService
     {
         private readonly ApplicationDbContext _context;
+        private readonly int _currentFinancialYearId;
 
         public CostCenterService(
             ApplicationDbContext context
         )
         {
             _context = context;
+            _currentFinancialYearId = ActiveFinancialYearId();
         }
-        //TODO: To check for active Financial Year everywhere? added as a parameter to all service methods ?!
         public async Task<bool> Exists(int id)
         {
             return await _context.CostCenters
@@ -56,11 +57,11 @@ namespace HourlyRate.Core.Services
 
         public async Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId)
         {
-            var currentFinancialYearId = ActiveFinancialYearId();
+            
 
             var getCostCenter = _context.CostCenters
                 .FirstOrDefault(cc => cc.Name == ccModel.Name
-                                      && cc.FinancialYearId == currentFinancialYearId
+                                      && cc.FinancialYearId == _currentFinancialYearId
                                       && cc.IsActive == true);
 
             if (getCostCenter != null)
@@ -69,12 +70,12 @@ namespace HourlyRate.Core.Services
             }
 
             var employeeNo = _context.Expenses
-                .Where(f => f.FinancialYearId == currentFinancialYearId)
-                .Count(e => e.Employee.DepartmentId == ccModel.DepartmentId);
+                .Where(f => f.FinancialYearId == _currentFinancialYearId)
+                .Count(e => e.Employee!.DepartmentId == ccModel.DepartmentId);
 
             var employeSalary = _context.Expenses
                 .Where(e => e.Employee!.Department!.Id == ccModel.DepartmentId
-                && e.FinancialYearId == currentFinancialYearId)
+                && e.FinancialYearId == _currentFinancialYearId)
                 .Sum(e => e.Amount);
 
             //TODO: Check if departmentId is already assigned ?? 
@@ -90,7 +91,7 @@ namespace HourlyRate.Core.Services
                 DirectAllocatedStuff = employeeNo,
                 DirectWagesCost = employeSalary,
                 CompanyId = companyId,
-                FinancialYearId = currentFinancialYearId,
+                FinancialYearId = _currentFinancialYearId,
                 IsActive = true,
 
             };
@@ -108,18 +109,17 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task AddCostCenterToEmployee(AddCostCenterViewModel ccModel)
         {
-            var currentFinancialYearId = ActiveFinancialYearId();
-
+            
             //TODO: not checked for unique names of cost centers it will not work for equal names.
 
             var getCostCenter = _context.CostCenters
                 .First(cc => cc.Name == ccModel.Name
-                             && cc.FinancialYearId == currentFinancialYearId
+                             && cc.FinancialYearId == _currentFinancialYearId
                              && cc.IsActive == true);
 
             var employeeExpenses = _context.Expenses
                 .Where(e => e.Employee!.Department!.Id == getCostCenter.DepartmentId
-                && e.FinancialYearId == currentFinancialYearId
+                && e.FinancialYearId == _currentFinancialYearId
                 && e.Employee.IsEmployee == true);
 
             foreach (var e in employeeExpenses)
@@ -141,7 +141,6 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task Edit(int costCenterId, AddCostCenterViewModel model, Guid companyId)
         {
-            var activeYearId = ActiveFinancialYearId();
 
             var costCenter = _context.CostCenters
                 .Where(costCenter => costCenter.CompanyId == companyId && costCenter.Id == costCenterId)
@@ -156,7 +155,7 @@ namespace HourlyRate.Core.Services
                     DepartmentId = model.DepartmentId,
                     IsUsingWater = model.IsUsingWater,
                     CompanyId = companyId,
-                    FinancialYearId = activeYearId,
+                    FinancialYearId = _currentFinancialYearId,
                     IsActive = model.IsActive,
                 }).First();
 
@@ -183,15 +182,13 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
-            var currentYear = ActiveFinancialYearId();
-
             var defaultCurrency = _context.Companies
                 .First(c => c.Id == companyId).DefaultCurrency;
 
 
             var allCostCentersUpdated = _context.CostCenters
                 .Where(c => c.CompanyId == companyId && c.Name != "None"
-                                                     && c.FinancialYearId == currentYear
+                                                     && c.FinancialYearId == _currentFinancialYearId
                                                      && c.IsActive == true)
                 .Select(c => new CostCenterViewModel()
                 {
@@ -242,16 +239,16 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task UpdateAllCostCenters(Guid companyId)
         {
-            var activeFinancialYearId = ActiveFinancialYearId();
+            
             var allCostCenters = _context.CostCenters
                 .Where(c =>
                             c.CompanyId == companyId &&
                             c.Name != "None" &&
-                            c.FinancialYearId == activeFinancialYearId &&
+                            c.FinancialYearId == _currentFinancialYearId &&
                             c.IsActive == true).ToList();
 
             var allExpenses = _context.Expenses
-                .Where(e => e.FinancialYearId == activeFinancialYearId
+                .Where(e => e.FinancialYearId == _currentFinancialYearId
                                     && e.IsDeleted == false);
             var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses);
             allCostCenters.Reverse();
@@ -324,14 +321,16 @@ namespace HourlyRate.Core.Services
                 }
 
                 //----WaterIndex - Total Direct Of CC Using Water / Current Total Direct 
-                var tDirectMixCostOfCcUsingWater = allCostCenters.Where(s => s.IsUsingWater == true)
+                var tDirectMixCostOfCcUsingWater = allCostCenters
+                    .Where(s => s.IsUsingWater == true)
                     .Sum(s => s.TotalMixCosts);
-                var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses,  1);
+
+                var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 1);
 
                 totalIndirectCostSum += SetWaterCost(costCenter, tDirectMixCostOfCcUsingWater, totalWaterCost);
 
                 //-------Taxes
-                var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses,  10);
+                var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 10);
                 try
                 {
                     costCenter.IndirectTaxes = taxCosts / costCenter.TotalIndex;
@@ -343,7 +342,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectTaxes;
 
                 // ---- Phones
-                var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses,  3);
+                var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 3);
                 try
                 {
                     costCenter.IndirectPhonesCost = phonesCosts / costCenter.TotalIndex;
@@ -355,7 +354,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectPhonesCost;
 
                 // -----Other
-                var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses,  4);
+                var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 4);
                 try
                 {
                     costCenter.IndirectOtherCost = otherCosts / costCenter.TotalIndex;
@@ -367,7 +366,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectOtherCost;
 
                 //------General Administration
-                var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses,  5);
+                var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 5);
                 try
                 {
                     costCenter.IndirectAdministrationWagesCost = administrationCost / costCenter.TotalIndex;
@@ -391,7 +390,7 @@ namespace HourlyRate.Core.Services
                 totalIndirectCostSum += costCenter.IndirectMaintenanceWagesCost;
 
                 //---------- Indirect Depreciation
-                var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses,  11);
+                var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 11);
                 try
                 {
                     costCenter.IndirectDepreciationCost = indirectDepreciationCost / costCenter.TotalIndex;
@@ -422,7 +421,6 @@ namespace HourlyRate.Core.Services
                     costCenter.IndirectDepreciationCost) / 12;
 
                 //---------- Overheads per Month
-                //TODO: -----missing indirect consumables
                 costCenter.OverheadsPerMonth =
                     (costCenter.DirectGeneraConsumablesCost +
                      costCenter.RentCost +
@@ -449,7 +447,6 @@ namespace HourlyRate.Core.Services
                     costCenter.AnnualChargeableHours;
 
                 //---------- Overheads per Hour
-                //TODO: -----missing indirect consumables
                 costCenter.OverheadsPerHour =
                     (costCenter.DirectGeneraConsumablesCost +
                      costCenter.RentCost +
@@ -468,7 +465,6 @@ namespace HourlyRate.Core.Services
 
                 _context.CostCenters.Update(costCenter);
             }
-
 
             await _context.SaveChangesAsync();
         }
