@@ -616,7 +616,6 @@ namespace HourlyRate.Core.Services
         /// Calculate All Cost of Consumables assign to Current Cost Center
         /// </summary>
         /// <param name="allExpenses"></param>
-        /// <param name="activeFinancialYearId"></param>
         /// <param name="currentCostCenter"></param>
         /// <returns>Return Sum</returns>
         public decimal CurrentCostCenterConsumablesTotal(IQueryable<Expenses> allExpenses,
@@ -644,7 +643,7 @@ namespace HourlyRate.Core.Services
             var currentCostCenterEmployees = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                             && c.EmployeeId != null
-                            && c.Employee.IsEmployee == true);
+                            && c.Employee!.IsEmployee == true);
             currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
             decimal totalDirectCostSum = currentCostCenter.DirectWagesCost;
             return totalDirectCostSum;
@@ -654,7 +653,6 @@ namespace HourlyRate.Core.Services
         /// CountA
         /// </summary>
         /// <param name="allExpenses"></param>
-        /// <param name="activeFinancialYearId"></param>
         /// <param name="currentCostCenter"></param>
         /// <returns></returns>
         public int CurrentEmployeeCount(IQueryable<Expenses> allExpenses,
@@ -663,7 +661,7 @@ namespace HourlyRate.Core.Services
             var currentCostCenterEmployees = allExpenses
                 .Where(c => c.CostCenterId == currentCostCenter.Id
                             && c.EmployeeId != null
-                            && c.Employee.IsEmployee == true);
+                            && c.Employee!.IsEmployee == true);
 
             return currentCostCenterEmployees.Count();
         }

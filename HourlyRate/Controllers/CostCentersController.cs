@@ -73,7 +73,7 @@ namespace HourlyRate.Controllers
                 await _costCenterService.AddCostCenter(model, companyId);
                 await _costCenterService.AddCostCenterToEmployeeExpenses(model);
                 await _costCenterService.UpdateAllCostCenters(companyId);
-                await _costCenterService.UpdateAllCostCenters(companyId); //TODO: need to fix this
+                await _costCenterService.UpdateAllCostCenters(companyId); //need to fix this
             }
             catch (ArgumentException)
             {
@@ -169,7 +169,7 @@ namespace HourlyRate.Controllers
         {
             var feature = this.HttpContext.Features.Get<IExceptionHandlerFeature>();
 
-            _logger.LogError(feature.Error, "TraceIdentifier: {0}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
+            _logger.LogError(feature!.Error, "TraceIdentifier: {0}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
 
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

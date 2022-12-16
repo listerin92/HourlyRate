@@ -1,6 +1,5 @@
 ﻿using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.Employee;
-using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;
 using HourlyRate.Infrastructure.Data.Models.Employee;
@@ -11,13 +10,12 @@ namespace HourlyRate.Core.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IRepository _repo;
-        private readonly ApplicationDbContext _dbContext;
+       // private readonly ApplicationDbContext _dbContext;
 
         public EmployeeService(IRepository repo
-            , ApplicationDbContext dbContext
             )
         {
-            _dbContext = dbContext;
+            //_dbContext = dbContext;
             _repo = repo;
         }
 
@@ -117,12 +115,12 @@ namespace HourlyRate.Core.Services
         public async Task CreateExpensesByEmployee(int employeeId, decimal amount, Guid companyId)
         {
             var activeFinancialYearId = ActiveFinancialYearId();
-            var employee = _dbContext.Employees.FirstOrDefault(e => e.Id == employeeId);
+            var employee = _repo.AllReadonly<Employee>().FirstOrDefault(e => e.Id == employeeId);
             var expense = new Expenses();
 
             try
             {
-                var matchedCostCenter = _dbContext.CostCenters
+                var matchedCostCenter = _repo.AllReadonly<CostCenter>()
                     .FirstOrDefault(c => c.DepartmentId == employee!.DepartmentId
                     && c.FinancialYearId == activeFinancialYearId
                     && c.IsActive == true);
@@ -189,7 +187,7 @@ namespace HourlyRate.Core.Services
 
         public async Task<Expenses> GetEmployeeSalary(int employeeId)
         {
-            var salary = await _dbContext.Expenses.FirstAsync(s => s.EmployeeId == employeeId);
+            var salary = await _repo.AllReadonly<Expenses>().FirstAsync(s => s.EmployeeId == employeeId);
 
             return salary;
         }
