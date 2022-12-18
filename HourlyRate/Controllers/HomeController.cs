@@ -45,5 +45,12 @@ public class HomeController : Controller
         return RedirectToAction(nameof(Index));
 
     }
+
+    [Route("/Home/HandleError/{code:int}")]
+    public IActionResult HandleError(int code)
+    {
+        ViewData["ErrorMessage"] = $"{code}";
+        return View("~/Views/Shared/ErrorPage.cshtml");
+    }
 }
 
