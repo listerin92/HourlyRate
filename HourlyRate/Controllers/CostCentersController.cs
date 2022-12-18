@@ -5,7 +5,6 @@ using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace HourlyRate.Controllers

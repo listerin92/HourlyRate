@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using HourlyRate.Infrastructure.Data.Models.Account
+@using HourlyRate.Core.Constants
 
 @inject SignInManager<UserIdentityExt> SignInManager
 @inject UserManager<UserIdentityExt> UserManager
@@ -21,126 +22,131 @@ else
     <h1 class="page-header">Cost Centers</h1>
 }
 
-@if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
+@if (this.User?.Identity != null && this.User.Identity.IsAuthenticated && User.IsInRole(RoleConstants.Administrator))
 {
     <div class="card-header pb-2">
         <a asp-controller="CostCenters" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add Cost Center</a>
 
+    </div>
+}
 
+<div class="card-deck" style="display: flex; flex-wrap: wrap; margin-left: -15px; margin-right: -15px;">
+    @foreach (var cc in Model)
+    {
+        <div class="card w-420px" style="display: flex; margin-left: 15px; margin-right: 15px; margin-top: 15px;">
+            <div class="text-blue fs-16px mb-2" style="margin-left: 15px; margin-top: 15px"><b>@cc.Name</b></div>
+            <div class="card-body">
+                <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="text-muted" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
 
-        <div class="card-deck" style="display: flex; flex-wrap: wrap; margin-left: -15px; margin-right: -15px;">
-            @foreach (var cc in Model)
-            {
-                <div class="card w-420px" style="display: flex; margin-left: 15px; margin-right: 15px; margin-top: 15px;">
-                    <div class="text-blue fs-16px mb-2" style="margin-left: 15px; margin-top: 15px"><b>@cc.Name</b></div>
-                    <div class="card-body">
-                        <div class="dropdown">
-                            <a href="#" data-bs-toggle="dropdown" class="text-muted" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right" style="">
-                                <a asp-controller="CostCenters" asp-action="Edit" class="dropdown-item" asp-route-id="@cc.Id">Edit Cost Center</a>
-                                <form method="post" asp-controller="CostCenters" asp-action="Delete" asp-route-id="@cc.Id">
-                                    <a onclick="$(this).closest('form').submit()" class="dropdown-item">Delete Cost Center</a>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            <div class="list-group-item d-flex align-items-center">
-                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                    <i class="fa fa-book fa-lg"></i>
-                                </div>
-                                <div class="flex-fill ps-3 pe-3">
-                                    <div class="fw-600">Cost Center - General</div>
-                                    <div class="fs-14px text-muted">Floor space(SqM) - @cc.FloorSpace.ToString("n0")</div>
-                                    <div class="fs-14px text-muted">KWh - @cc.AvgPowerConsumptionKwh.ToString("n2")</div>
-                                    <div class="fs-14px text-muted">Annual available hours - @cc.AnnualHours.ToString("n")</div>
-                                    <div class="fs-14px text-muted">Annual chargeable hours - @cc.AnnualChargeableHours.ToString("n")</div>
-                                    <div class="fs-14px text-muted">Total power consumption (kW) - @cc.TotalPowerConsumption.ToString("n2")</div>
-                                    <div class="fs-14px text-muted">Direct Staff - @cc.DirectAllocatedStuff</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            <div class="list-group-item d-flex align-items-center">
-                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                    <i class="fa fa-cog fa-lg"></i>
-                                </div>
-                                <div class="flex-fill ps-3 pe-3">
-                                    <div class="fw-600">Direct Costs</div>
-                                    <div class="fs-14px text-muted">Direct wages - @cc.DirectWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Direct repairs - @cc.DirectRepairCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">General consumables - @cc.DirectGeneraConsumablesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Direct Depreciation - @cc.DirectDepreciationCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fw-600">Total Direct Costs - @cc.TotalDirectCosts.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Occupation costs - @cc.RentCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Power cost - @cc.DirectElectricityCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Heating cost - @cc.IndirectHeatingCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fw-600">Total Mix Costs - @cc.TotalMixCosts.ToString("n2") @cc.DefaultCurrency.</div>
+                    @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated && User.IsInRole(RoleConstants.Administrator))
+                    {
 
-                                </div>
-                            </div>
+                        <div class="dropdown-menu dropdown-menu-right" style="">
+                            <a asp-controller="CostCenters" asp-action="Edit" class="dropdown-item" asp-route-id="@cc.Id">Edit Cost Center</a>
+                            <form method="post" asp-controller="CostCenters" asp-action="Delete" asp-route-id="@cc.Id">
+                                <a onclick="$(this).closest('form').submit()" class="dropdown-item">Delete Cost Center</a>
+                            </form>
                         </div>
-                        <div class="list-group">
-                            <div class="list-group-item d-flex align-items-center">
-                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                    <i class="fa fa-cogs fa-lg"></i>
-                                </div>
-                                <div class="flex-fill ps-3 pe-3">
-                                    <div class="fw-600">Indexes</div>
-                                    <div class="fs-14px text-muted">Total Direct Ration - @cc.TotalIndex.ToString("n2")</div>
-                                    <div class="fs-14px text-muted">Water Ration - @cc.WaterTotalIndex.ToString("n2")</div>
-                                </div>
-                            </div>
+                    }
+
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item d-flex align-items-center">
+                        <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                            <i class="fa fa-book fa-lg"></i>
                         </div>
-                        <div class="list-group">
-                            <div class="list-group-item d-flex align-items-center">
-                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                    <i class="fa fa-cogs fa-lg"></i>
-                                </div>
-                                <div class="flex-fill ps-3 pe-3">
-                                    <div class="fw-600">Indirect Costs</div>
-                                    <div class="fs-14px text-muted">Water - @cc.IndirectWaterCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Taxes - @cc.IndirectTaxes.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Phones - @cc.IndirectPhonesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Other costs - @cc.IndirectOtherCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Administration costs - @cc.IndirectAdministrationWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Maintenance wages - @cc.IndirectMaintenanceWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Absorb depreciation costs - @cc.IndirectDepreciationCost.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fw-600">Total Indirect Costs - @cc.IndirectTotalCosts.ToString("n2") @cc.DefaultCurrency.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            <div class="list-group-item d-flex align-items-center">
-                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
-                                    <i class="fa fa-cogs fa-lg"></i>
-                                </div>
-                                <div class="flex-fill ps-3 pe-3">
-                                    <div class="fs-14px text-muted">Wages Avg. per month - @cc.WagesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Machines Avg. per month - @cc.MachinesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Overheads Avg. per month - @cc.OverheadsPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fw-600">Total Yearly Cost - @cc.TotalCosts.ToString("n2") @cc.DefaultCurrency.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            <div class="list-group-item d-flex align-items-center">
-                                <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
-                                    <i class="fa fa-cogs fa-lg"></i>
-                                </div>
-                                <div class="flex-fill ps-3 pe-3">
-                                    <div class="fs-14px text-muted">Wages Avg. per hour - @cc.WagesPerHour.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Machines Avg. per hour - @cc.MachinesPerHour.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fs-14px text-muted">Overheads Avg. per hour - @cc.OverheadsPerHour.ToString("n2") @cc.DefaultCurrency.</div>
-                                    <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate.ToString("n2") @cc.DefaultCurrency.</div>
-                                </div>
-                            </div>
+                        <div class="flex-fill ps-3 pe-3">
+                            <div class="fw-600">Cost Center - General</div>
+                            <div class="fs-14px text-muted">Floor space(SqM) - @cc.FloorSpace.ToString("n0")</div>
+                            <div class="fs-14px text-muted">KWh - @cc.AvgPowerConsumptionKwh.ToString("n2")</div>
+                            <div class="fs-14px text-muted">Annual available hours - @cc.AnnualHours.ToString("n")</div>
+                            <div class="fs-14px text-muted">Annual chargeable hours - @cc.AnnualChargeableHours.ToString("n")</div>
+                            <div class="fs-14px text-muted">Total power consumption (kW) - @cc.TotalPowerConsumption.ToString("n2")</div>
+                            <div class="fs-14px text-muted">Direct Staff - @cc.DirectAllocatedStuff</div>
                         </div>
                     </div>
                 </div>
-            }
+                <div class="list-group">
+                    <div class="list-group-item d-flex align-items-center">
+                        <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                            <i class="fa fa-cog fa-lg"></i>
+                        </div>
+                        <div class="flex-fill ps-3 pe-3">
+                            <div class="fw-600">Direct Costs</div>
+                            <div class="fs-14px text-muted">Direct wages - @cc.DirectWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Direct repairs - @cc.DirectRepairCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">General consumables - @cc.DirectGeneraConsumablesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Direct Depreciation - @cc.DirectDepreciationCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fw-600">Total Direct Costs - @cc.TotalDirectCosts.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Occupation costs - @cc.RentCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Power cost - @cc.DirectElectricityCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Heating cost - @cc.IndirectHeatingCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fw-600">Total Mix Costs - @cc.TotalMixCosts.ToString("n2") @cc.DefaultCurrency.</div>
 
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item d-flex align-items-center">
+                        <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                            <i class="fa fa-cogs fa-lg"></i>
+                        </div>
+                        <div class="flex-fill ps-3 pe-3">
+                            <div class="fw-600">Indexes</div>
+                            <div class="fs-14px text-muted">Total Direct Ration - @cc.TotalIndex.ToString("n2")</div>
+                            <div class="fs-14px text-muted">Water Ration - @cc.WaterTotalIndex.ToString("n2")</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item d-flex align-items-center">
+                        <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                            <i class="fa fa-cogs fa-lg"></i>
+                        </div>
+                        <div class="flex-fill ps-3 pe-3">
+                            <div class="fw-600">Indirect Costs</div>
+                            <div class="fs-14px text-muted">Water - @cc.IndirectWaterCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Taxes - @cc.IndirectTaxes.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Phones - @cc.IndirectPhonesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Other costs - @cc.IndirectOtherCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Administration costs - @cc.IndirectAdministrationWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Maintenance wages - @cc.IndirectMaintenanceWagesCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Absorb depreciation costs - @cc.IndirectDepreciationCost.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fw-600">Total Indirect Costs - @cc.IndirectTotalCosts.ToString("n2") @cc.DefaultCurrency.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item d-flex align-items-center">
+                        <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-black text-white rounded-2 ms-n1">
+                            <i class="fa fa-cogs fa-lg"></i>
+                        </div>
+                        <div class="flex-fill ps-3 pe-3">
+                            <div class="fs-14px text-muted">Wages Avg. per month - @cc.WagesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Machines Avg. per month - @cc.MachinesPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Overheads Avg. per month - @cc.OverheadsPerMonth.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fw-600">Total Yearly Cost - @cc.TotalCosts.ToString("n2") @cc.DefaultCurrency.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item d-flex align-items-center">
+                        <div class="w-40px h-40px d-flex align-items-center justify-content-center bg-gradient-orange text-white rounded-2 ms-n1">
+                            <i class="fa fa-cogs fa-lg"></i>
+                        </div>
+                        <div class="flex-fill ps-3 pe-3">
+                            <div class="fs-14px text-muted">Wages Avg. per hour - @cc.WagesPerHour.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Machines Avg. per hour - @cc.MachinesPerHour.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fs-14px text-muted">Overheads Avg. per hour - @cc.OverheadsPerHour.ToString("n2") @cc.DefaultCurrency.</div>
+                            <div class="fw-600">Total hourly cost rate - @cc.TotalHourlyCostRate.ToString("n2") @cc.DefaultCurrency.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    }
 
 
-    </div>
-}
+
+</div>

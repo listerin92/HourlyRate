@@ -1,7 +1,5 @@
 ﻿using HourlyRate.Core.Contracts;
-using HourlyRate.Core.Models.Employee;
 using HourlyRate.Core.Models.GeneralCost;
-using HourlyRate.Core.Services;
 using HourlyRate.Infrastructure.Data.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +16,7 @@ namespace HourlyRate.Controllers
 
         public GeneralController(
             IGeneralCostService generalCostService
-        , UserManager<UserIdentityExt> userManager
+            , UserManager<UserIdentityExt> userManager
             , ICostCenterService costCenterService
 
         )

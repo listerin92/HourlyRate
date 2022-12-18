@@ -188,8 +188,8 @@ namespace HourlyRate.Core.Services
 
             var allCostCentersUpdated = _context.CostCenters
                 .Where(c => c.CompanyId == companyId && c.Name != "None"
-                                                     && c.FinancialYearId == _currentFinancialYearId
-                                                     && c.IsActive == true)
+                                                 && c.FinancialYearId == _currentFinancialYearId
+                                                 && c.IsActive == true)
                 .Select(c => new CostCenterViewModel()
                 {
                     Id = c.Id,
@@ -326,7 +326,14 @@ namespace HourlyRate.Core.Services
                 var tDirectMixCostOfCcUsingWater = allCostCenters
                     .Where(s => s.IsUsingWater == true)
                     .Sum(s => s.TotalMixCosts);
-                costCenter.WaterTotalIndex = tDirectMixCostOfCcUsingWater / costCenter.TotalMixCosts;
+                try
+                {
+                    costCenter.WaterTotalIndex = tDirectMixCostOfCcUsingWater / costCenter.TotalMixCosts;
+                }
+                catch (DivideByZeroException)
+                {
+                    costCenter.WaterTotalIndex = 0;
+                }
                 var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 1);
 
 
