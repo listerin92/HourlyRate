@@ -1,5 +1,4 @@
 ﻿using HourlyRate.Core.Contracts;
-using HourlyRate.Core.Models.Employee;
 using HourlyRate.Core.Models.GeneralCost;
 using HourlyRate.Infrastructure.Data.Common;
 using HourlyRate.Infrastructure.Data.Models;

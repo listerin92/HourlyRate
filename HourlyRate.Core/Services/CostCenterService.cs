@@ -3,6 +3,8 @@ using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Core.Models.Employee;
 using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Models;
+using HourlyRate.Infrastructure.Spektar;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace HourlyRate.Core.Services
@@ -10,12 +12,15 @@ namespace HourlyRate.Core.Services
     public class CostCenterService : ICostCenterService
     {
         private readonly ApplicationDbContext _context;
+        private readonly SPEKTAR_NEWContext _spektarNewContext;
         private readonly int _currentFinancialYearId;
 
         public CostCenterService(
             ApplicationDbContext context
+                ,SPEKTAR_NEWContext spektarNewContext
         )
         {
+            _spektarNewContext = spektarNewContext;
             _context = context;
             _currentFinancialYearId = ActiveFinancialYearId();
         }
@@ -57,7 +62,6 @@ namespace HourlyRate.Core.Services
 
         public async Task AddCostCenter(AddCostCenterViewModel ccModel, Guid companyId)
         {
-
 
             var getCostCenter = _context.CostCenters
                 .FirstOrDefault(cc => cc.Name == ccModel.Name
@@ -182,6 +186,8 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
+            var klabas = TestSpektar();
+
             var defaultCurrency = _context.Companies
                 .First(c => c.Id == companyId).DefaultCurrency;
 
@@ -239,6 +245,7 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task UpdateAllCostCenters(Guid companyId)
         {
+            var names = TestSpektar();
 
             var allCostCenters = _context.CostCenters
                 .Where(c =>
@@ -292,7 +299,8 @@ namespace HourlyRate.Core.Services
 
                 costCenter.TotalPowerConsumption = costCenter.AnnualChargeableHours * costCenter.AvgPowerConsumptionKwh;
 
-                var electricityPricePerKwhIndirectlyCalculated = ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
+                var electricityPricePerKwhIndirectlyCalculated =
+                    ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
 
                 costCenter.DirectElectricityCost = costCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
 
@@ -313,14 +321,15 @@ namespace HourlyRate.Core.Services
 
                 var sumTotalDirectMixCosts = SumTotalDirectMixCosts(allCostCenters);
 
-                try
+                if (costCenter.TotalMixCosts != 0)
                 {
                     costCenter.TotalIndex = sumTotalDirectMixCosts / costCenter.TotalMixCosts;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.TotalIndex = 0;
                 }
+
 
                 //12----WaterIndex - Total Direct Of CC Using Water / Current Total Direct 
                 var tDirectMixCostOfCcUsingWater = allCostCenters
@@ -673,5 +682,42 @@ namespace HourlyRate.Core.Services
             return currentCostCenterEmployees.Count();
         }
 
+        public void TestSpektar()
+        {
+            //const string connectionString = "Data Source=LUZTERIN-PC;Initial Catalog=SPEKTAR_NEW;Integrated Security=True";
+            //SqlConnection connection = new(connectionString);
+            //const string query = @"SELECT * FROM order___";
+
+
+            //connection.Open();
+            //var sqlCommand = new SqlCommand(query, connection);
+
+            //var reader = sqlCommand.ExecuteReader();
+            //var names = new List<string?>();
+            //while (reader.Read())
+            //{
+            //    names.Add(reader["omschr__"].ToString());
+            //}
+            //reader.Close();
+            //connection.Close();
+
+            var result = _spektarNewContext
+                .ordrub__
+                .Include(o => o.Rubrik)
+                .Select(s => new
+                {
+                    s.ord__ref,
+                    s.rbk__ref,
+                    s.Rubrik.oms_rbk_,
+                    s.Rubrik.rbk_vdt3,
+                    s.duur____,
+                    s.lonen___,
+                    s.machines,
+                    s.overhead,
+                    s.papier__,
+
+                }).ToList();
+
+        }
     }
 }

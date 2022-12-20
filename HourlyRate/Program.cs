@@ -1,6 +1,7 @@
 using HourlyRate.Extensions;
 using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Models.Account;
+using HourlyRate.Infrastructure.Spektar;
 using HouseRentingSystem.ModelBinders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+var connectionString2 = builder.Configuration.GetConnectionString("SPEKTAR");
+builder.Services.AddDbContext<SPEKTAR_NEWContext>(options =>
+    options.UseSqlServer(connectionString2));
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<UserIdentityExt>(options =>

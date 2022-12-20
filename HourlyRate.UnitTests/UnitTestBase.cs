@@ -2,6 +2,7 @@
 using HourlyRate.Infrastructure.Data.Models;
 using HourlyRate.Infrastructure.Data.Models.CostCategories;
 using HourlyRate.Infrastructure.Data.Models.Employee;
+using HourlyRate.Infrastructure.Spektar;
 using Microsoft.EntityFrameworkCore;
 
 namespace HourlyRate.UnitTests
@@ -10,14 +11,14 @@ namespace HourlyRate.UnitTests
     {
 
         protected ApplicationDbContext? DbContext;
-
+        protected Guid CompanyId;
+        protected IEnumerable<Department>? Departments;
+        protected SPEKTAR_NEWContext SpektarNewContext;
         private IEnumerable<Expenses>? _expenses;
         private IEnumerable<Employee>? _employees;
-        protected IEnumerable<Department>? Departments;
         private IEnumerable<CostCategory>? _costCategory;
         private IEnumerable<FinancialYear>? _financialYears;
         private IEnumerable<CostCenter>? _costCenter;
-        protected Guid CompanyId;
 
 
 

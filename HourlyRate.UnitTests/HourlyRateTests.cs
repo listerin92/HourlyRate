@@ -20,7 +20,7 @@ namespace HourlyRate.UnitTests
         public void TestInitialize()
         {
 
-            _service = new CostCenterService(DbContext!);
+            _service = new CostCenterService(DbContext!, SpektarNewContext);
 
 
             _allCostCenters = DbContext!.CostCenters.ToList();
