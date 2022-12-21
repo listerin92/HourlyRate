@@ -1,10 +1,12 @@
-﻿using HourlyRate.Core.Contracts;
+﻿using System.Globalization;
+using HourlyRate.Core.Contracts;
 using HourlyRate.Core.Models.CostCenter;
 using HourlyRate.Core.Models.Employee;
+using HourlyRate.Core.Models.Spektar;
 using HourlyRate.Infrastructure.Data;
 using HourlyRate.Infrastructure.Data.Models;
 using HourlyRate.Infrastructure.Spektar;
-using Microsoft.Data.SqlClient;
+using HourlyRate.Infrastructure.Spektar.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HourlyRate.Core.Services
@@ -17,7 +19,7 @@ namespace HourlyRate.Core.Services
 
         public CostCenterService(
             ApplicationDbContext context
-                ,SPEKTAR_NEWContext spektarNewContext
+                , SPEKTAR_NEWContext spektarNewContext
         )
         {
             _spektarNewContext = spektarNewContext;
@@ -186,7 +188,7 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
-            var klabas = TestSpektar();
+            var result = TestSpektar();
 
             var defaultCurrency = _context.Companies
                 .First(c => c.Id == companyId).DefaultCurrency;
@@ -245,7 +247,6 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task UpdateAllCostCenters(Guid companyId)
         {
-            var names = TestSpektar();
 
             var allCostCenters = _context.CostCenters
                 .Where(c =>
@@ -682,7 +683,7 @@ namespace HourlyRate.Core.Services
             return currentCostCenterEmployees.Count();
         }
 
-        public void TestSpektar()
+        public List<SpektarCostCategoryViewModel> TestSpektar()
         {
             //const string connectionString = "Data Source=LUZTERIN-PC;Initial Catalog=SPEKTAR_NEW;Integrated Security=True";
             //SqlConnection connection = new(connectionString);
@@ -700,24 +701,29 @@ namespace HourlyRate.Core.Services
             //}
             //reader.Close();
             //connection.Close();
+            //var sumWages = _spektarNewContext.order___
+            //    .Where(o => o.dat_open >= DateTime.ParseExact("2022-10-01", "yyyy-mm-dd", CultureInfo.InvariantCulture) && o.open____ == "N")
+            //    .Sum(o => o.ordrub__.lonen___);
 
             var result = _spektarNewContext
                 .ordrub__
-                .Include(o => o.Rubrik)
-                .Select(s => new
+                .Where(o => o.order___.dat_open 
+                            >= DateTime.ParseExact("2022-12-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                            && o.order___.open____ == "N" &&(o.lonen___ != 0 || o.machines != 0 || o.overhead != 0))
+                .GroupBy(g => new { g.rubrik__.rbk__ref, g.rubrik__.oms_rbk_ })
+                .Select(g => new SpektarCostCategoryViewModel
                 {
-                    s.ord__ref,
-                    s.rbk__ref,
-                    s.Rubrik.oms_rbk_,
-                    s.Rubrik.rbk_vdt3,
-                    s.duur____,
-                    s.lonen___,
-                    s.machines,
-                    s.overhead,
-                    s.papier__,
+                    CostCategoryId = g.Key.rbk__ref,
+                    CostCategory = g.Key.oms_rbk_,
+                    Wages = g.Sum(s => s.lonen___),
+                    Machines = g.Sum(s => s.machines),
+                    Overhead = g.Sum(s => s.overhead),
+                })
+                .OrderBy(o => o.CostCategoryId)
+                .ToList();
 
-                }).ToList();
 
+            return result;
         }
     }
 }

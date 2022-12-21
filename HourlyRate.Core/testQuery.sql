@@ -25,39 +25,27 @@ JOIN rubrik__ ON ordrub__.rbk__ref = rubrik__.rbk__ref
 JOIN klabas__ ON order___.kla__ref = klabas__.kla__ref
 WHERE order___.dat_open >= '2022/12/01' AND order___.open____ = 'N' AND order___.ord__ref = 064275
 
-select	 r.rbk__ref
-		,r.oms_rbk_
-		,r.rbk_vdt3
-		,o.ord__ref
-		,o.duur____
-		,o.lonen___
-		,o.machines
-		,o.overhead
-		,o.aantal__
-		,o.papier__
-		,o.grdvrb__
-		,o.aant_pap
-		,o.aant_grd
+SELECT	 
+		 --o.ord__ref AS JonNumber
+		r.rbk__ref AS CostCategoryId
+		--,r.rbk_vdt3 AS 'Cost Category Type'
+		,r.oms_rbk_ AS 'Cost Category'
+		,SUM(o.duur____) AS duration
+		,SUM(o.lonen___) AS Wages
+		,SUM(o.machines) AS Machines
+		,SUM(o.overhead) AS Overhead
+		,SUM(o.lonen___ + o.machines + o.overhead) AS Total
+		--,o.aantal__ AS Quantity
+		--,o.papier__ AS Paper
+		--,o.grdvrb__ AS MaterialCost
+		--,o.aant_pap AS QuantityPaper
+		--,o.aant_grd AS QuantityMaterial
+		
 FROM ordrub__ AS o
 JOIN rubrik__ AS r ON o.rbk__ref = r.rbk__ref
-where ord__ref = '064275' 
-
-select	 
-		 o.ord__ref
-		,r.rbk__ref
-		,r.oms_rbk_
-		,r.rbk_vdt3
-		,o.duur____
-		,o.lonen___
-		,o.machines
-		,o.overhead
-		,o.aantal__
-		,o.papier__
-		,o.grdvrb__
-		,o.aant_pap
-		,o.aant_grd
-		,v.*
-FROM ordrub__ AS o
-JOIN rubrik__ AS r ON o.rbk__ref = r.rbk__ref
-JOIN v4kkst__ AS v ON o.rbk__ref = v.rbk__ref
-where ord__ref = '064275' 
+JOIN order___ AS ord ON ord.ord__ref = o.ord__ref
+--JOIN v4kkst__ AS v ON o.rbk__ref = v.rbk__ref
+--where ord__ref = '064275' 
+WHERE ord.dat_open >= '2022/12/01' AND ord.open____ = 'N' AND(ordrub__.lonen___ != 0 AND ordrub__.machines !=0 AND ordrub__.overhead !=0)
+GROUP BY r.oms_rbk_, r.rbk__ref
+ORDER BY CostCategoryId

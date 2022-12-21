@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HourlyRate.Infrastructure.Spektar.Models
 {
-    public partial class ordrub__
+    public class ordrub__
     {
+        [ForeignKey(nameof(rubrik__))]
         public string rbk__ref { get; set; } = null!;
+        public rubrik__ rubrik__ { get; set; }
+
+
+        [ForeignKey(nameof(order___))]
         public string ord__ref { get; set; } = null!;
+        public order___ order___ { get; set; }
+
         public string suborder { get; set; } = null!;
         public string gord_ref { get; set; } = null!;
         public string produktf { get; set; } = null!;
@@ -37,6 +45,6 @@ namespace HourlyRate.Infrastructure.Spektar.Models
         public double vst___tn { get; set; }
         public string hlpgrpnk { get; set; } = null!;
         public int rowid { get; set; }
-        public rubrik__ Rubrik { get; set; }
+
     }
 }

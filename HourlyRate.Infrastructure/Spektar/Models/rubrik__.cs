@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HourlyRate.Infrastructure.Spektar.Models
 {
-    public partial class rubrik__
+    public class rubrik__
     {
         public string rbk__ref { get; set; } = null!;
         public string oms_rbk_ { get; set; } = null!;
