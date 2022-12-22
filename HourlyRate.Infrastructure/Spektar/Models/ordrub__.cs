@@ -8,12 +8,14 @@ namespace HourlyRate.Infrastructure.Spektar.Models
     {
         [ForeignKey(nameof(rubrik__))]
         public string rbk__ref { get; set; } = null!;
-        public rubrik__ rubrik__ { get; set; }
+
+        public rubrik__ rubrik__ { get; set; } = null!;
 
 
         [ForeignKey(nameof(order___))]
         public string ord__ref { get; set; } = null!;
-        public order___ order___ { get; set; }
+
+        public order___ order___ { get; set; } = null!;
 
         public string suborder { get; set; } = null!;
         public string gord_ref { get; set; } = null!;

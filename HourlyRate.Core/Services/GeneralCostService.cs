@@ -41,9 +41,9 @@ namespace HourlyRate.Core.Services
 
 
             return await _repo.AllReadonly<CostCenter>()
-                .Where(c => c.IsActive == true
-                         && c.FinancialYearId == activeFinancialYearId || c.FinancialYearId == 20)
-                
+                .Where(c => c.IsActive == true &&
+                    c.FinancialYearId == activeFinancialYearId ||
+                    c.FinancialYearId == 20)
                 .OrderBy(c => c.Name)
                 .Select(c => new GeneralCostCenterViewModel()
                 {
@@ -58,7 +58,8 @@ namespace HourlyRate.Core.Services
             var currentYear = ActiveFinancialYear();
 
             var allGeneralCost = await _repo.AllReadonly<Expenses>()
-               .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId && y.CostCategoryId != null && y.IsDeleted == false)
+               .Where(y => y.FinancialYear.Year == currentYear && y.CompanyId == companyId &&
+                           y.CostCategoryId != null && y.IsDeleted == false)
                .Select(c => new CostViewModel()
                {
                    Id = c.Id,

@@ -6,7 +6,7 @@ namespace HourlyRate.Infrastructure.Spektar.Models
     public class order___
     {
         public string ord__ref { get; set; } = null!;
-        public ordrub__ ordrub__ { get; set; }
+        public ordrub__ ordrub__ { get; set; } = null!;
 
         public string ord__rpn { get; set; } = null!;
         public string jobnr_vw { get; set; } = null!;

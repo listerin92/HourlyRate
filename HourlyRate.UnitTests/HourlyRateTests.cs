@@ -20,7 +20,7 @@ namespace HourlyRate.UnitTests
         public void TestInitialize()
         {
 
-            _service = new CostCenterService(DbContext!, SpektarNewContext);
+            _service = new CostCenterService(DbContext!, SpektarNewContext!);
 
 
             _allCostCenters = DbContext!.CostCenters.ToList();
@@ -186,7 +186,7 @@ namespace HourlyRate.UnitTests
         [Test]
         public void RentCostTotalTest()
         {
-            var result = _service.RentCostTotal(_allExpenses!, 6);
+            var result = _service.SumPerCostCategoryForAllCostCenters(_allExpenses!, 6);
             Assert.That(actual: result, Is.EqualTo(expected: 5555));
 
 

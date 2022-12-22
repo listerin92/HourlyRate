@@ -13,7 +13,7 @@ namespace HourlyRate.UnitTests
         protected ApplicationDbContext? DbContext;
         protected Guid CompanyId;
         protected IEnumerable<Department>? Departments;
-        protected SPEKTAR_NEWContext SpektarNewContext;
+        protected SPEKTAR_NEWContext? SpektarNewContext;
         private IEnumerable<Expenses>? _expenses;
         private IEnumerable<Employee>? _employees;
         private IEnumerable<CostCategory>? _costCategory;

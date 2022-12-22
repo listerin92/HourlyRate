@@ -33,7 +33,7 @@ namespace HourlyRate.Core.Contracts
 
         decimal CurrentCostCenterDepreciationSum(IQueryable<Expenses> allExpenses, CostCenter currentCostCenter, int costCategoryId);
 
-        decimal RentCostTotal(IQueryable<Expenses> allExpenses, int costCategoryId);
+        decimal SumPerCostCategoryForAllCostCenters(IQueryable<Expenses> allExpenses, int costCategoryId);
 
         Task Delete(int costCenterId, Guid companyId);
 

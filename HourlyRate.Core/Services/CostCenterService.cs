@@ -188,7 +188,7 @@ namespace HourlyRate.Core.Services
         /// <returns></returns>
         public async Task<IEnumerable<CostCenterViewModel>> AllCostCenters(Guid companyId)
         {
-            var result = TestSpektar();
+            var result = CostPerCostCategoryPerPeriod();
 
             var defaultCurrency = _context.Companies
                 .First(c => c.Id == companyId).DefaultCurrency;
@@ -290,7 +290,7 @@ namespace HourlyRate.Core.Services
                 //7-------------Rent
                 var totalRentSpace = TotalRentSpace(allCostCenters);
 
-                var rentCost = RentCostTotal(allExpenses, 6);
+                var rentCost = SumPerCostCategoryForAllCostCenters(allExpenses, 6);
 
                 totalMixCostSum += CurrentCostCenterRent(rentCost, totalRentSpace, costCenter);
 
@@ -336,11 +336,12 @@ namespace HourlyRate.Core.Services
                 var tDirectMixCostOfCcUsingWater = allCostCenters
                     .Where(s => s.IsUsingWater == true)
                     .Sum(s => s.TotalMixCosts);
-                try
+
+                if (costCenter.TotalMixCosts != 0)
                 {
                     costCenter.WaterTotalIndex = tDirectMixCostOfCcUsingWater / costCenter.TotalMixCosts;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.WaterTotalIndex = 0;
                 }
@@ -352,11 +353,12 @@ namespace HourlyRate.Core.Services
 
                 //14-------Taxes
                 var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 10);
-                try
+
+                if (costCenter.TotalIndex != 0)
                 {
                     costCenter.IndirectTaxes = taxCosts / costCenter.TotalIndex;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.IndirectTaxes = 0;
                 }
@@ -365,11 +367,11 @@ namespace HourlyRate.Core.Services
 
                 //15---- Phones
                 var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 3);
-                try
+                if (costCenter.TotalIndex != 0)
                 {
                     costCenter.IndirectPhonesCost = phonesCosts / costCenter.TotalIndex;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.IndirectPhonesCost = 0;
                 }
@@ -378,11 +380,11 @@ namespace HourlyRate.Core.Services
 
                 //16-----Other
                 var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 4);
-                try
+                if (costCenter.TotalIndex != 0)
                 {
                     costCenter.IndirectOtherCost = otherCosts / costCenter.TotalIndex;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.IndirectOtherCost = 0;
                 }
@@ -391,11 +393,11 @@ namespace HourlyRate.Core.Services
 
                 //17------General Administration
                 var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 5);
-                try
+                if (costCenter.TotalIndex != 0)
                 {
                     costCenter.IndirectAdministrationWagesCost = administrationCost / costCenter.TotalIndex;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.IndirectAdministrationWagesCost = 0;
                 }
@@ -406,11 +408,11 @@ namespace HourlyRate.Core.Services
                 //18---------- EmployeesMaintenanceWages
                 //indirectly absorb from employee department
                 var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses);
-                try
+                if (costCenter.TotalIndex != 0)
                 {
                     costCenter.IndirectMaintenanceWagesCost = totalSalaryMaintenance / costCenter.TotalIndex;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.IndirectMaintenanceWagesCost = 0;
                 }
@@ -419,11 +421,11 @@ namespace HourlyRate.Core.Services
 
                 //19---------- Indirect Depreciation
                 var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 11);
-                try
+                if (costCenter.TotalIndex != 0)
                 {
                     costCenter.IndirectDepreciationCost = indirectDepreciationCost / costCenter.TotalIndex;
                 }
-                catch (DivideByZeroException)
+                else
                 {
                     costCenter.IndirectDepreciationCost = 0;
                 }
@@ -521,7 +523,12 @@ namespace HourlyRate.Core.Services
             var sumTotalDirectCosts = allCostCenters.Sum(s => s.TotalMixCosts);
             return sumTotalDirectCosts;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentCostCenter"></param>
+        /// <param name="totalWaterCost"></param>
+        /// <returns></returns>
         public decimal SetWaterCost(CostCenter currentCostCenter, decimal totalWaterCost)
         {
             if (currentCostCenter.IsUsingWater)
@@ -544,6 +551,12 @@ namespace HourlyRate.Core.Services
             return currentCostCenter.IndirectWaterCost = 0;
         }
 
+        /// <summary>
+        /// Electricity Cost Per Kw hour
+        /// </summary>
+        /// <param name="totalElectricCost"></param>
+        /// <param name="allCostCenters"></param>
+        /// <returns>Return Indirectly Calculated Electricity cost of Given Cost Centers</returns>
         public decimal ElectricityPricePerKwhIndirectlyCalculated(decimal totalElectricCost, List<CostCenter> allCostCenters)
         {
             var electricityPricePerKwhIndirectlyCalculated = totalElectricCost /
@@ -551,7 +564,13 @@ namespace HourlyRate.Core.Services
             return electricityPricePerKwhIndirectlyCalculated;
         }
 
-
+        /// <summary>
+        /// Current Cost Center Rent
+        /// </summary>
+        /// <param name="rentCost"></param>
+        /// <param name="totalRentSpace"></param>
+        /// <param name="currentCostCenter"></param>
+        /// <returns>Return Rent Cost of Current Cost Center</returns>
         public decimal CurrentCostCenterRent(decimal rentCost, decimal totalRentSpace, CostCenter currentCostCenter)
         {
 
@@ -560,14 +579,26 @@ namespace HourlyRate.Core.Services
             return currentCostCenter.RentCost = currentCostCenter.FloorSpace * rentPerSqM;
         }
 
-        public decimal RentCostTotal(IQueryable<Expenses> allExpenses, int costCategoryId)
+        /// <summary>
+        /// Calculate Sum per CostCategory for All Cost Centers
+        /// </summary>
+        /// <param name="allExpenses"></param>
+        /// <param name="costCategoryId"></param>
+        /// <returns>Return Total Sum</returns>
+        public decimal SumPerCostCategoryForAllCostCenters(IQueryable<Expenses> allExpenses, int costCategoryId)
         {
-            var rentCost = allExpenses
+            var result = allExpenses
                 .Where(c => c.CostCategoryId == costCategoryId)
                 .Select(r => r.Amount).Sum();
-            return rentCost;
+            return result;
         }
 
+        /// <summary>
+        /// Delete CostCenter By Id
+        /// </summary>
+        /// <param name="costCenterId"></param>
+        /// <param name="companyId"></param>
+        /// <returns>Return Task</returns>
         public async Task Delete(int costCenterId, Guid companyId)
         {
             var currentCostCenter = _context.CostCenters.First(cc => cc.Id == costCenterId && cc.CompanyId == companyId);
@@ -662,7 +693,7 @@ namespace HourlyRate.Core.Services
                             && c.EmployeeId != null
                             && c.Employee!.IsEmployee == true);
             currentCostCenter.DirectWagesCost = currentCostCenterEmployees.Sum(a => a.Amount);
-            decimal totalDirectCostSum = currentCostCenter.DirectWagesCost;
+            var totalDirectCostSum = currentCostCenter.DirectWagesCost;
             return totalDirectCostSum;
         }
 
@@ -683,33 +714,22 @@ namespace HourlyRate.Core.Services
             return currentCostCenterEmployees.Count();
         }
 
-        public List<SpektarCostCategoryViewModel> TestSpektar()
+        /// <summary>
+        /// Get Costs Of All CostCategories for a given Period 
+        /// </summary>
+        /// <returns></returns>
+        public List<SpektarCostCategoryViewModel> CostPerCostCategoryPerPeriod()
         {
-            //const string connectionString = "Data Source=LUZTERIN-PC;Initial Catalog=SPEKTAR_NEW;Integrated Security=True";
-            //SqlConnection connection = new(connectionString);
-            //const string query = @"SELECT * FROM order___";
-
-
-            //connection.Open();
-            //var sqlCommand = new SqlCommand(query, connection);
-
-            //var reader = sqlCommand.ExecuteReader();
-            //var names = new List<string?>();
-            //while (reader.Read())
-            //{
-            //    names.Add(reader["omschr__"].ToString());
-            //}
-            //reader.Close();
-            //connection.Close();
-            //var sumWages = _spektarNewContext.order___
-            //    .Where(o => o.dat_open >= DateTime.ParseExact("2022-10-01", "yyyy-mm-dd", CultureInfo.InvariantCulture) && o.open____ == "N")
-            //    .Sum(o => o.ordrub__.lonen___);
-
             var result = _spektarNewContext
                 .ordrub__
-                .Where(o => o.order___.dat_open 
-                            >= DateTime.ParseExact("2022-12-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
-                            && o.order___.open____ == "N" &&(o.lonen___ != 0 || o.machines != 0 || o.overhead != 0))
+                .AsNoTracking()
+                .Where(o => o.order___.dat_open >=
+                            DateTime.ParseExact("2022-12-01", "yyyy-MM-dd", CultureInfo.InvariantCulture) &&
+                                o.order___.dat_open <=
+                                DateTime.ParseExact("2022-12-31", "yyyy-MM-dd", CultureInfo.InvariantCulture) &&
+                            o.order___.open____ == "N"
+                                //&&(o.lonen___ != 0 || o.machines != 0 || o.overhead != 0)
+                                )
                 .GroupBy(g => new { g.rubrik__.rbk__ref, g.rubrik__.oms_rbk_ })
                 .Select(g => new SpektarCostCategoryViewModel
                 {
@@ -721,7 +741,6 @@ namespace HourlyRate.Core.Services
                 })
                 .OrderBy(o => o.CostCategoryId)
                 .ToList();
-
 
             return result;
         }
