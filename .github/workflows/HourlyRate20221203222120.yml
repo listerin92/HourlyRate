@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App HourlyRate20221203222120
+name: Build and test .NET Core application
 
 on:
   push:
@@ -6,8 +6,6 @@ on:
       - master
 
 env:
-  AZURE_WEBAPP_NAME: HourlyRate20221203222120
-  AZURE_WEBAPP_PACKAGE_PATH: HourlyRate/published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: HourlyRate
@@ -16,45 +14,18 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
-      - name: Restore dependencies
+      - name: Restore
         run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
 
-      - name: Build application
+      - name: Build
         run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
 
       - name: Run unit tests
         run: dotnet test HourlyRate.UnitTests/HourlyRate.UnitTests.csproj --no-build --configuration ${{ env.CONFIGURATION }}
-
-      - name: Publish application
-        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2.3.1
-        with:
-          name: webapp
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2.1.1
-        with:
-          name: webapp
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-      - name: Deploy to Azure WebApp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.HourlyRate20221203222120_C72E }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
