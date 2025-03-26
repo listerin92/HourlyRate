@@ -258,6 +258,20 @@ namespace HourlyRate.Core.Services
             var allExpenses = _context.Expenses
                 .Where(e => e.FinancialYearId == _currentFinancialYearId && e.IsDeleted == false);
 
+            var totalRentSpace = TotalRentSpace(allCostCenters);
+            var rentCost = SumPerCostCategoryForAllCostCenters(allExpenses, 6);
+            var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 2);
+            var electricityPricePerKwhIndirectlyCalculated = ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
+            var heatingCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 9);
+            var heatingPerSqM = heatingCost / totalRentSpace;
+            var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 1);
+            var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 10);
+            var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 3);
+            var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 4);
+            var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 5);
+            var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses);
+            var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 11);
+
             foreach (var costCenter in allCostCenters)
             {
                 var totalDirectCostSum = 0.0m;
@@ -292,22 +306,16 @@ namespace HourlyRate.Core.Services
                 _logger.LogInformation("TotalDirectCosts: {TotalDirectCosts}", costCenter.TotalDirectCosts);
 
                 // Rent
-                var totalRentSpace = TotalRentSpace(allCostCenters);
-                var rentCost = SumPerCostCategoryForAllCostCenters(allExpenses, 6);
                 totalMixCostSum += CurrentCostCenterRent(rentCost, totalRentSpace, costCenter);
                 _logger.LogInformation("TotalMixCostSum after Rent: {TotalMixCostSum}", totalMixCostSum);
 
                 // Electricity
-                var totalElectricCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 2);
                 costCenter.TotalPowerConsumption = costCenter.AnnualChargeableHours * costCenter.AvgPowerConsumptionKwh;
-                var electricityPricePerKwhIndirectlyCalculated = ElectricityPricePerKwhIndirectlyCalculated(totalElectricCost, allCostCenters);
                 costCenter.DirectElectricityCost = costCenter.TotalPowerConsumption * electricityPricePerKwhIndirectlyCalculated;
                 totalMixCostSum += costCenter.DirectElectricityCost;
                 _logger.LogInformation("TotalMixCostSum after Electricity: {TotalMixCostSum}", totalMixCostSum);
 
                 // Heating
-                var heatingCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 9);
-                var heatingPerSqM = heatingCost / totalRentSpace;
                 costCenter.IndirectHeatingCost = costCenter.FloorSpace * heatingPerSqM;
                 totalMixCostSum += costCenter.FloorSpace * heatingPerSqM;
                 _logger.LogInformation("TotalMixCostSum after Heating: {TotalMixCostSum}", totalMixCostSum);
@@ -324,42 +332,35 @@ namespace HourlyRate.Core.Services
                 // Water Index and Cost
                 var tDirectMixCostOfCcUsingWater = allCostCenters.Where(s => s.IsUsingWater).Sum(s => s.TotalMixCosts);
                 costCenter.WaterTotalIndex = costCenter.TotalMixCosts != 0 ? tDirectMixCostOfCcUsingWater / costCenter.TotalMixCosts : 0;
-                var totalWaterCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 1);
                 totalIndirectCostSum += SetWaterCost(costCenter, totalWaterCost);
                 _logger.LogInformation("TotalIndirectCostSum after Water Cost: {TotalIndirectCostSum}", totalIndirectCostSum);
 
                 // Taxes
-                var taxCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 10);
                 costCenter.IndirectTaxes = costCenter.TotalIndex != 0 ? taxCosts / costCenter.TotalIndex : 0;
                 totalIndirectCostSum += costCenter.IndirectTaxes;
                 _logger.LogInformation("TotalIndirectCostSum after Taxes: {TotalIndirectCostSum}", totalIndirectCostSum);
 
                 // Phones
-                var phonesCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 3);
                 costCenter.IndirectPhonesCost = costCenter.TotalIndex != 0 ? phonesCosts / costCenter.TotalIndex : 0;
                 totalIndirectCostSum += costCenter.IndirectPhonesCost;
                 _logger.LogInformation("TotalIndirectCostSum after Phones: {TotalIndirectCostSum}", totalIndirectCostSum);
 
                 // Other Costs
-                var otherCosts = GetSumOfTotalIndirectCostOfCc(allExpenses, 4);
                 costCenter.IndirectOtherCost = costCenter.TotalIndex != 0 ? otherCosts / costCenter.TotalIndex : 0;
                 totalIndirectCostSum += costCenter.IndirectOtherCost;
                 _logger.LogInformation("TotalIndirectCostSum after Other Costs: {TotalIndirectCostSum}", totalIndirectCostSum);
 
                 // General Administration
-                var administrationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 5);
                 costCenter.IndirectAdministrationWagesCost = costCenter.TotalIndex != 0 ? administrationCost / costCenter.TotalIndex : 0;
                 totalIndirectCostSum += costCenter.IndirectAdministrationWagesCost;
                 _logger.LogInformation("TotalIndirectCostSum after Administration: {TotalIndirectCostSum}", totalIndirectCostSum);
 
                 // Maintenance Wages
-                var totalSalaryMaintenance = TotalSalaryMaintenanceDepartment(allExpenses);
                 costCenter.IndirectMaintenanceWagesCost = costCenter.TotalIndex != 0 ? totalSalaryMaintenance / costCenter.TotalIndex : 0;
                 totalIndirectCostSum += costCenter.IndirectMaintenanceWagesCost;
                 _logger.LogInformation("TotalIndirectCostSum after Maintenance Wages: {TotalIndirectCostSum}", totalIndirectCostSum);
 
                 // Indirect Depreciation
-                var indirectDepreciationCost = GetSumOfTotalIndirectCostOfCc(allExpenses, 11);
                 costCenter.IndirectDepreciationCost = costCenter.TotalIndex != 0 ? indirectDepreciationCost / costCenter.TotalIndex : 0;
                 totalIndirectCostSum += costCenter.IndirectDepreciationCost;
                 _logger.LogInformation("TotalIndirectCostSum after Indirect Depreciation: {TotalIndirectCostSum}", totalIndirectCostSum);

@@ -59,8 +59,7 @@ namespace HourlyRate.Controllers
             {
                 await _costCenterService.AddCostCenter(model, companyId);
                 await _costCenterService.AddCostCenterToEmployeeExpenses(model);
-                await _costCenterService.UpdateAllCostCenters(companyId);
-                await _costCenterService.UpdateAllCostCenters(companyId); //need to fix this
+                await _costCenterService.UpdateAllCostCenters(companyId); //need to fix this - need to be tested
             }
             catch (ArgumentException)
             {
