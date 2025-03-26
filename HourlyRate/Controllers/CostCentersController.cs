@@ -9,22 +9,15 @@ using System.Diagnostics;
 
 namespace HourlyRate.Controllers
 {
-    public class CostCentersController : Controller
+    public class CostCentersController(
+            ICostCenterService costCenterService,
+            ILogger<CostCentersController> logger,
+            UserManager<UserIdentityExt> userManager
+        ) : Controller
     {
-        private readonly UserManager<UserIdentityExt> _userManager;
-        private readonly ICostCenterService _costCenterService;
-        private readonly ILogger _logger;
-
-        public CostCentersController(
-             ICostCenterService costCenterService
-            , ILogger<CostCentersController> logger
-            , UserManager<UserIdentityExt> userManager
-            )
-        {
-            _logger = logger;
-            _costCenterService = costCenterService;
-            _userManager = userManager;
-        }
+        private readonly UserManager<UserIdentityExt> _userManager = userManager;
+        private readonly ICostCenterService _costCenterService = costCenterService;
+        private readonly ILogger _logger = logger;
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Index()
@@ -35,7 +28,6 @@ namespace HourlyRate.Controllers
                 var model = await _costCenterService.AllCostCenters(companyId);
                 await _costCenterService.UpdateAllCostCenters(companyId);
 
-
                 return View(model);
             }
             return View();
@@ -44,7 +36,6 @@ namespace HourlyRate.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-
             var model = new AddCostCenterViewModel()
             {
                 EmployeeDepartments = await _costCenterService.AllDepartments()
@@ -57,13 +48,10 @@ namespace HourlyRate.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Add(AddCostCenterViewModel model)
         {
-
             if (!ModelState.IsValid)
             {
                 model.EmployeeDepartments = await _costCenterService.AllDepartments();
-
                 return View(model);
-
             }
             var companyId = GetCompanyId();
 
@@ -77,15 +65,11 @@ namespace HourlyRate.Controllers
             catch (ArgumentException)
             {
                 ModelState.AddModelError(nameof(model.Name), "Name already exists");
-
                 model.EmployeeDepartments = await _costCenterService.AllDepartments();
-
                 return View(model);
             }
 
-
             return RedirectToAction(nameof(Index));
-
         }
 
         [HttpGet]
@@ -120,7 +104,6 @@ namespace HourlyRate.Controllers
             if (id != model.Id)
             {
                 return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
-
             }
 
             if (await _costCenterService.Exists(id) == false)
@@ -146,30 +129,29 @@ namespace HourlyRate.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-
             var companyId = GetCompanyId();
 
             await _costCenterService.Delete(id, companyId);
-
             await _costCenterService.UpdateAllCostCenters(companyId);
-
 
             return RedirectToAction(nameof(Index));
         }
 
         private Guid GetCompanyId()
         {
-            var companyId = _userManager.GetUserAsync(User).Result.CompanyId;
-            return companyId;
+            var user = _userManager.GetUserAsync(User).Result;
+            if (user == null || user.CompanyId == Guid.Empty)
+            {
+                throw new InvalidOperationException("User or CompanyId is not valid.");
+            }
+            return user.CompanyId;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             var feature = this.HttpContext.Features.Get<IExceptionHandlerFeature>();
-
-            _logger.LogError(feature!.Error, "TraceIdentifier: {0}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
-
+            _logger.LogError(feature!.Error, "TraceIdentifier: {TraceIdentifier}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

@@ -56,16 +56,21 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
 });
 builder.Services.AddResponseCaching();
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("My Policy", policy =>
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("My Policy", policy =>
     {
         policy.RequireRole("Administrator");
         policy.RequireClaim("CompanyId");
     });
-});
 
 builder.Services.AddApplicationServices();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("My Policy", policy =>
+    {
+        policy.RequireRole("Administrator");
+        policy.RequireClaim("CompanyId");
+    });
 
 var app = builder.Build();
 
@@ -91,6 +96,11 @@ app.UseAuthorization();
 
 app.UseStatusCodePagesWithReExecute("/Home/HandleError/{0}");
 
+app.MapAreaControllerRoute(
+    name: "Identity",
+    areaName: "Identity",
+    pattern: "Identity/{controller=Home}/{action=Index}");
+
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
@@ -99,15 +109,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapAreaControllerRoute(
-            name: "Identity",
-            areaName: "Identity",
-            pattern: "Identity/{controller=Home}/{action=Index}");
-    endpoints.MapControllers();
-});
 app.MapRazorPages();
 
 app.Run();
