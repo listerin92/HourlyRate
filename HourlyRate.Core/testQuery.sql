@@ -24,7 +24,7 @@ JOIN ordrub__ ON ordrub__.ord__ref = order___.ord__ref
 JOIN rubrik__ ON ordrub__.rbk__ref = rubrik__.rbk__ref
 JOIN klabas__ ON order___.kla__ref = klabas__.kla__ref
 WHERE order___.dat_open >= '2022/12/01' AND order___.open____ = 'N' AND order___.ord__ref = 064275
-
+	
 SELECT	 
 		 --o.ord__ref AS JonNumber
 		r.rbk__ref AS CostCategoryId
@@ -46,6 +46,7 @@ JOIN rubrik__ AS r ON o.rbk__ref = r.rbk__ref
 JOIN order___ AS ord ON ord.ord__ref = o.ord__ref
 --JOIN v4kkst__ AS v ON o.rbk__ref = v.rbk__ref
 --where ord__ref = '064275' 
-WHERE ord.dat_open >= '2022/12/01' AND ord.open____ = 'N' AND(ordrub__.lonen___ != 0 AND ordrub__.machines !=0 AND ordrub__.overhead !=0)
+WHERE ord.dat_open >= '2022/01/01' AND ord.open____ = 'N'
+--AND (o.lonen___ != 0 OR o.machines !=0 AND o.overhead !=0)
 GROUP BY r.oms_rbk_, r.rbk__ref
 ORDER BY CostCategoryId

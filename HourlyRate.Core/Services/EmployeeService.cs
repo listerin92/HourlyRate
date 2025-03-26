@@ -91,6 +91,8 @@ namespace HourlyRate.Core.Services
 
         public async Task<int> CreateDepartment(AddEmployeeDepartmentViewModel model, Guid companyId)
         {
+            var activeFinancialYearId = ActiveFinancialYearId();
+
             var checkExist = _repo.AllReadonly<Department>()
                 .FirstOrDefault(c => c.Name == model.Name)
                 ?.Name;

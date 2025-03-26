@@ -1,18 +1,27 @@
-﻿<!DOCTYPE html>
-<html lang="en" @ViewData["HtmlAttribute"]>
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    string appMode = "";
+    if (Context.Request.Cookies.TryGetValue("dark-mode", out string? appModeValue))
+    {
+        appMode = (appModeValue == "dark-mode") ? "dark" : "";
+    }
+}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="@appMode" @ViewData["HtmlAttribute"]>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>HourlyRate | @ViewData["Title"]</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="@ViewData["MetaDescription"]" />
-    <meta name="author" content="@ViewData["MetaAuthor"]" />
-    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="@ViewData["MetaDescription"]">
+    <meta name="author" content="@ViewData["MetaAuthor"]">
+    <meta name="keywords" content="@ViewData["MetaKeywords"]">
 
     @RenderSection("MetaTag", required: false)
 
     <!-- ================== BEGIN core-css ================== -->
-    <link href="~/css/vendor.min.css" rel="stylesheet" />
-    <link href="~/css/app.min.css" rel="stylesheet" />
+    <link href="~/css/vendor.min.css" rel="stylesheet">
+    <link href="~/css/app.min.css" rel="stylesheet">
     <!-- ================== END core-css ================== -->
     @RenderSection("Styles", required: false)
 </head>
@@ -27,6 +36,11 @@
         @if (ViewData["AppWithoutSidebar"] == null)
         {
             <partial name="_Sidebar" />
+        }
+
+        @if (ViewData["AppTopNav"] != null)
+        {
+            <partial name="_TopNav" />
         }
 
         @if (ViewData["AppWithoutContainer"] == null)
@@ -54,11 +68,16 @@
         {
             <partial name="_Footer" />
         }
+
+        <partial name="_ThemePanel" />
     </div>
 
-    <partial name="_ThemePanel" />
-
     <!-- ================== BEGIN core-js ================== -->
+    <script>
+        window.paceOptions = {
+            ajax: { ignoreURLs: ['mainHub', '__browserLink', 'browserLinkSignalR'], trackWebSockets: false }
+        };
+    </script>
     <script src="~/js/vendor.min.js"></script>
     <script src="~/js/app.min.js"></script>
     <!-- ================== END core-js ================== -->

@@ -5,8 +5,20 @@ using HourlyRate.Infrastructure.Spektar;
 using HouseRentingSystem.ModelBinders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Ensure the Logs directory exists
+Directory.CreateDirectory("Logs");
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information() // Ensure Information level logs are captured
+    .WriteTo.Console()
+    .WriteTo.File("Logs/app-.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+builder.Host.UseSerilog(Log.Logger);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -15,7 +27,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 var connectionString2 = builder.Configuration.GetConnectionString("SPEKTAR");
 builder.Services.AddDbContext<SPEKTAR_NEWContext>(options =>
     options.UseSqlServer(connectionString2));
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -98,5 +109,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 app.MapRazorPages();
-    
+
 app.Run();
