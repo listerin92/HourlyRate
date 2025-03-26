@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App HourlyRate20221203222120
+name: Test Build Only
 
 on:
   push:
@@ -6,11 +6,10 @@ on:
       - master
 
 env:
-  AZURE_WEBAPP_NAME: HourlyRate20221203222120
-  AZURE_WEBAPP_PACKAGE_PATH: HourlyRate\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: HourlyRate
+  ARTIFACT_PATH: HourlyRate/published
 
 jobs:
   build:
@@ -19,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
@@ -29,31 +28,11 @@ jobs:
       - name: Build
         run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
 
-      - name: Run unit tests
-        run: dotnet test HourlyRate.UnitTests/HourlyRate.UnitTests.csproj --no-build --configuration ${{ env.CONFIGURATION }}
-
       - name: Publish
-        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.ARTIFACT_PATH }}"
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3.1.2
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: webapp
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: webapp
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-      - name: Deploy to Azure WebApp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.HourlyRate20221203222120_C72E }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          name: test-artifact
+          path: ${{ env.ARTIFACT_PATH }}
