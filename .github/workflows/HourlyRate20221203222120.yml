@@ -1,4 +1,4 @@
-name: Test Build Only
+name: Build and deploy .NET Core application to Web App HourlyRate20221203222120
 
 on:
   push:
@@ -6,33 +6,55 @@ on:
       - master
 
 env:
+  AZURE_WEBAPP_NAME: HourlyRate20221203222120
+  AZURE_WEBAPP_PACKAGE_PATH: HourlyRate/published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: HourlyRate
-  ARTIFACT_PATH: HourlyRate/published
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
-      - name: Restore
+      - name: Restore dependencies
         run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
 
-      - name: Build
+      - name: Build application
         run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
 
-      - name: Publish
-        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.ARTIFACT_PATH }}"
+      - name: Run unit tests
+        run: dotnet test HourlyRate.UnitTests/HourlyRate.UnitTests.csproj --no-build --configuration ${{ env.CONFIGURATION }}
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Publish application
+        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2.3.1
         with:
-          name: test-artifact
-          path: ${{ env.ARTIFACT_PATH }}
+          name: webapp
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2.1.1
+        with:
+          name: webapp
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Deploy to Azure WebApp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.HourlyRate20221203222120_C72E }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
